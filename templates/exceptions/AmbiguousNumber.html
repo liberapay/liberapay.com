@@ -12,7 +12,9 @@
             <div class="inline-block middle">
             <div class="input-group">
                 <label class="input-group-addon" for="other_amount">{{ _("Other amount") }}</label>
-                <input name="{{ input_name }}" value="{{ response.ambiguous_string }}" class="amount form-control" id="other_amount" />
+                <input name="{{ input_name }}" value="{{ response.ambiguous_string }}"
+                       class="amount form-control" id="other_amount"
+                       inputmode="decimal" />
                 <div class="input-group-btn">
                     <button class="btn btn-default">{{ _("Proceed") }}</button>
                 </div>

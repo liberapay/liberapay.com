@@ -86,7 +86,7 @@ title = _("Which account?")
     % if platform.single_domain
     <p>{{ _("Please enter the name of the {0} account you would like to connect:",
             platform.display_name) }}</p>
-    <input class="form-control" name="user_id" required
+    <input class="form-control" name="user_id" required spellcheck="false"
            placeholder="{{ _(
                'Name of the team\'s account on {platform}', platform=platform.display_name
            ) if p and p.kind == 'group' else _(
@@ -97,8 +97,9 @@ title = _("Which account?")
     % else
     <p>{{ _("Please enter the address of the {0} account you would like to connect:",
             platform.display_name) }}</p>
-    <input class="form-control" name="user_id" required
-           placeholder="{{ platform.example_account_address(_) }}" />
+    % set example = platform.example_account_address(_)
+    <input class="form-control" name="user_id" required placeholder="{{ example }}"
+           inputmode="{{ 'url' if '/' in example else 'email' if '@' in example else 'text' }}" />
     % endif
     <br>
     <button class="btn btn-primary">{{ _("Connect") }}</button>
