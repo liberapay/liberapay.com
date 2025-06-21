@@ -20,9 +20,7 @@ if 'new-password' in body or 'action' in body:
         pass  # user logged in via email, allow resetting password
     else:
         try:
-            p2 = Participant.authenticate_with_password(
-                p.id, body.get('cur-password'), context='change_password'
-            )
+            p2 = Participant.authenticate_with_password(p.id, body.get('cur-password'))
         except AccountIsPasswordless:
             pass  # user doesn't have a password yet, allow adding one
         else:

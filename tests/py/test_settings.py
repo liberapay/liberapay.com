@@ -180,25 +180,25 @@ class TestPassword(Harness):
             '/alice/settings/edit', form_data, auth_as=alice, skip_password_check=True,
         )
         assert r.code == 302, r.text
-        assert alice.authenticate_with_password(alice.id, password, context='test')
+        assert alice.authenticate_with_password(alice.id, password)
         form_data['cur-password'] = ''
         form_data['new-password'] = 'password'
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
         assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
-        assert alice.authenticate_with_password(alice.id, password, context='test')
+        assert alice.authenticate_with_password(alice.id, password)
 
         form_data = {'action': 'unset'}
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
         assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
-        assert alice.authenticate_with_password(alice.id, password, context='test')
+        assert alice.authenticate_with_password(alice.id, password)
         form_data['cur-password'] = password
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
         assert not alice.has_password
         with self.assertRaises(AccountIsPasswordless):
-            alice.authenticate_with_password(alice.id, password, context='test')
+            alice.authenticate_with_password(alice.id, password)
 
 
 class TestRecipientSettings(Harness):
