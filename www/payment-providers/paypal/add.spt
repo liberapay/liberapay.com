@@ -57,7 +57,8 @@ title = _("Connecting a {platform} account", platform='PayPal')
     <div class="form-group block-labels-mb-4">
     <label>
         <span>{{ _("Email") }}</span>
-        <input class="form-control" name="email" value="{{ participant.email or '' }}" required />
+        <input class="form-control" name="email" value="{{ participant.email or '' }}"
+               required type="email" autocomplete="email" />
         <div class="help-block">{{ _(
             "A confirmation code will be sent to this email address, unless it's "
             "already linked to your Liberapay account."
