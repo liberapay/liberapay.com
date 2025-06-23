@@ -218,7 +218,7 @@ msgstr "Anda memiliki pembayaran sebesar {amount} yang dijadwalkan pada {payment
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "Anda memiliki {n} pembayaran terjadwal untuk memperbarui donasi Anda, tetapi kami tidak bisa memprosesnya karena tidak ada alat pembayaran yang sah."
+msgstr[0] "Anda memiliki {n} pembayaran terjadwal untuk memperbarui donasi Anda, tetapi kami tidak dapat memprosesnya karena tidak ada alat pembayaran yang sah."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Tanggal pembayaran, jumlah, dan penerima adalah:"
@@ -1028,9 +1028,8 @@ msgstr "\"{0}\" bukan nama komunitas yang benar."
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Anda tidak di izinkan untuk melakukan ini karena akun Anda sedang ditangguhkan."
 
-#, fuzzy
 msgid "Your account lacks a valid email address, please add one."
-msgstr "Akun Anda tidak memiliki alamat surel, pos-el yang valid, silakan tambahkan."
+msgstr "Akun Anda tidak memiliki alamat surel yang valid, silakan tambahkan."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Pembayaran ini tidak dapat diproses karena akun penerima sedang ditangguhkan."
@@ -1244,26 +1243,21 @@ msgstr "Kata sandi"
 msgid "This new password is not safe"
 msgstr "Kata sandi baru ini tidak aman"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "Kata sandi baru yang Anda kirimkan tidak aman karena cocok dengan kata sandi yang umum digunakan."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
 msgstr "Kata sandi baru yang Anda kirimkan tidak aman karena cocok dengan kata sandi yang telah dibobol dalam satu atau beberapa kebocoran data publik."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "Kata sandi baru yang Anda kirimkan tidak aman karena terlalu mudah ditebak."
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "Silakan masukkan kata sandi yang berbeda:"
 
 msgid "New password"
 msgstr "Kata sandi baru"
 
-#, fuzzy
 msgid "Submit"
 msgstr "Kirim"
 
@@ -1809,7 +1803,6 @@ msgstr "Jumlah Pengambilan"
 msgid "Actual Take"
 msgstr "Pengambilan Aktual"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
 msgstr "Di Liberapay, donasi dibayarkan di muka. Kolom ini menunjukkan berapa banyak uang yang telah diterima setiap anggota di muka melalui tim ini. Uang muka bertambah setiap kali anggota menerima pembayaran baru dari donatur melalui tim, dan berkurang setiap minggu."
 
@@ -1820,9 +1813,8 @@ msgstr "Dahulu"
 msgid "Last week: {0}"
 msgstr "Minggu lalu: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "tidak mengambil"
+msgstr "tidak ada pengambilan"
 
 msgid "auto"
 msgstr "otomatis"
@@ -1873,7 +1865,6 @@ msgid "The {currency_name} isn't your preferred currency? {username} also accept
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
 msgstr[0] "{currency_name} bukan mata uang pilihan Anda? {username} juga menerima {n} mata uang lain:"
 
-#, fuzzy
 msgid "supported by PayPal"
 msgstr "didukung oleh PayPal"
 
@@ -1966,49 +1957,38 @@ msgstr "Liberapay dirancang untuk memberikan pendapatan patungan yang stabil kep
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Anda berada dalam mode kotak pasir, jangan masukkan pembayaran atau data pribadi!"
 
-#, fuzzy
 msgid "The credentials have been generated."
 msgstr "Kredensial telah dibuat."
 
-#, fuzzy
 msgid "The credentials have been revoked."
 msgstr "Kredensial telah dicabut."
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Sesi konstan"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
-msgstr "Anda dapat mengunduh informasi pribadi secara otomatis dari akun Anda dengan menyertakan header HTTP berikut ini dalam permintaan Anda:"
+msgstr "Anda dapat mengotomatisasi pengunduhan informasi pribadi dari akun Anda dengan menyertakan header HTTP berikut ini dalam permintaan Anda:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
 msgstr "Sebagai contoh, Anda dapat mengunduh daftar pelanggan Anda yang sedang aktif dengan menjalankan perintah berikut:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
 msgstr "Untuk meminimalkan risiko bagi Anda, kredensial ini hanya dapat digunakan untuk mengambil data, bukan untuk mengubah apa pun di akun Anda, dan kredensial ini akan kedaluwarsa secara otomatis jika tidak digunakan selama satu tahun."
 
-#, fuzzy
 msgid "Revoke credentials"
-msgstr "Mencabut kredensial"
+msgstr "Cabut kredensial"
 
-#, fuzzy
 msgid "The credentials have expired."
 msgstr "Kredensial telah kedaluwarsa."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Membuat ulang kredensial"
+msgstr "Buat ulang kredensial"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "Untuk menyederhanakan pengunduhan otomatis informasi pribadi dari akun Anda, Anda dapat membuat kredensial hanya-baca yang tahan lama."
+msgstr "Untuk menyederhanakan pengunduhan otomatis informasi pribadi dari akun Anda, Anda dapat membuat kredensial hanya-baca yang berjangka lama."
 
-#, fuzzy
 msgid "Generate credentials"
-msgstr "Menghasilkan kredensial"
+msgstr "Buat kredensial"
 
 msgid "Dashboard"
 msgstr "Dasbor"
@@ -2107,7 +2087,6 @@ msgstr "Petunjuk Layanan Pembayaran yang Direvisi"
 msgid "Your new avatar URL is: {0}"
 msgstr "URL avatar baru Anda adalah: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "Profil Anda tidak lagi memiliki avatar."
 
@@ -2957,11 +2936,10 @@ msgstr "Lihat riwayat pendapatan"
 msgid "No data to show."
 msgstr "Tidak ada data untuk ditampilkan."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Pendapatan per minggu (dalam {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
 msgstr "Jumlah pelanggan per minggu"
 
@@ -3415,15 +3393,13 @@ msgstr "Akun ini tidak dapat menerima pembayaran. Untuk memperbaiki ini, masuk k
 msgid "Manage this {platform} account"
 msgstr "Kelola akun {platform} ini"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
 msgstr "Akun ini tidak dapat menerima pembayaran. Untuk memperbaikinya, klik tautan di bawah ini dan selesaikan proses verifikasi."
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
 msgstr "Akun ini tidak dapat menerima pembayaran. Untuk memperbaikinya, klik tautan di bawah ini dan selesaikan proses aktivasi."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate this {platform} account"
 msgstr "Aktifkan akun {platform} ini"
 
@@ -3442,35 +3418,31 @@ msgstr "Hubungkan akun {platform_name} lainnya"
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal memungkinkan menerima uang di banyak negara dibandingkan Stripe, tetapi Paypal tidak terintegrasi dengan baik ke Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Create a {provider} account"
 msgstr "Buat akun {provider}"
 
-#, fuzzy
 msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
 msgstr "Harap pilih negara tempat Anda tinggal atau tempat Anda memiliki bisnis terdaftar, dan konfirmasikan bahwa Anda menyetujui persyaratan Stripe."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
 msgstr "Saya setuju dengan {link_start}Perjanjian Akun Terhubung Stripe{link_end}."
 
-#, fuzzy
 msgid "Create account"
 msgstr "Buat akun"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Kelola akun {provider}"
 
-#, fuzzy
 msgid "Payments"
 msgstr "Pembayaran"
 
-#, fuzzy
 msgid "Payouts"
-msgstr "Pembayaran"
+msgstr "Pengupahan"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate a {provider} account"
 msgstr "Aktifkan akun {provider}"
 
@@ -3563,7 +3535,6 @@ msgstr "Pajak"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Jenis pembayaran ini adalah bentuk dana sumbangan, tidak ada barang atau jasa yang diberikan dalam penukaran, tidak ada biaya pajak yang dipungut oleh Liberapay."
 
-#, fuzzy
 msgid "Income history"
 msgstr "Riwayat pendapatan"
 
@@ -3574,16 +3545,14 @@ msgstr "Anda tidak dapat menerima donasi baru hingga anda melakukan konfigurasi 
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Donasi melalui tim merupakan {income_percent} dari penghasilan anda ({team_income} dari {total_income}) dan {patrons_percent} dari pemberi donor anda ({nteampatrons} dari {npatrons})."
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "Rincian sumbangan pribadi"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Bagian ini tidak termasuk data pada donasi melalui kelompok, Bagian ini hanya menunjukan donasi yang anda terima secara personal."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
-msgstr "Perubahan terbaru pada donasi pribadi"
+msgstr "Perubahan terkini pada donasi pribadi"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
@@ -3605,7 +3574,6 @@ msgstr "Donasi telah diturunkan dari {old_amount} menjadi {new_amount} per mingg
 msgid "A donation of {amount} per week has been restarted."
 msgstr "Donasi dengan jumlah {amount} per minggu telah diaktifkan ulang."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Statistik donasi pribadi"
 
@@ -4151,11 +4119,9 @@ msgstr "Berapa biaya pemrosesan pembayaran?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Biaya bervariasi menurut pemroses pembayaran, metode pembayaran, negara, dan mata uang. Pada tahun lalu, persentase biaya rata-rata adalah {average_fee_stripe} untuk pembayaran yang diproses oleh Stripe dan {average_fee_paypal} untuk pembayaran yang diproses oleh PayPal."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
 msgstr "Bagaimana dan kapan saya menerima uang yang dikirim oleh pelanggan saya?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
 msgstr "Uang yang dikirim oleh donatur langsung masuk ke akun Stripe atau PayPal Anda. Secara default, Stripe akan secara otomatis mengirimkan dana ke rekening bank Anda, sedangkan PayPal hanya menyimpannya sampai Anda membelanjakan atau menariknya."
 
@@ -4194,13 +4160,11 @@ msgstr "Apakah sumbangan melalui Liberapay dapat pengurangan pajak?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Mungkin tidak, tetapi itu tergantung dari aturan pajak di negara Anda."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Apakah akun Liberapay adalah dompet?"
+msgstr "Apakah akun Liberapay sebuah dompet?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "Tidak sejak pertengahan 2018. Uang yang dikirim oleh donatur langsung masuk ke penerima. Sebelumnya, dana disimpan di rekening donatur dan disalurkan sedikit demi sedikit kepada penerima setiap minggu. Sistem tersebut sudah pasti ditinggalkan karena kelemahannya yang sangat signifikan."
+msgstr "Tidak sejak pertengahan 2018. Uang yang dikirim oleh donatur langsung masuk ke penerima. Sebelumnya, dana disimpan dalam rekening donatur dan disalurkan sedikit demi sedikit kepada penerima setiap minggu. Sistem tersebut sudah pasti ditinggalkan karena kelemahannya yang sangat signifikan."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Anda dapat mendapat pembaruan dari kami melalui jejaring sosial kami berikut ini:"
@@ -4571,9 +4535,9 @@ msgstr "Berbagi uang"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Tim tidak memiliki hierarki, semua anggotanya setara dan mengatur bagiannya sendiri."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Anda dapat mengubah pengambilan Anda dari {0}dasbor tim Anda{1}. Dasbor ini berisi tabel yang menunjukkan nominal pengambilan semua anggota, serta perkiraan jumlah uang aktual yang akan dipotong pada akhir siklus mingguan saat ini."
+msgstr "Anda dapat mengubah perolehan Anda dari {0}dasbor tim Anda{1}. Dasbor ini berisi tabel yang menunjukkan nominal pengambilan semua anggota, serta perkiraan jumlah uang aktual yang akan dipotong pada akhir siklus mingguan saat ini."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Pengambilan donasi adalah angka mentah yang dimasukkan sendiri oleh anggota, pengambilan aktual dihitung oleh sistem: pertama menjumlahkan pengambilan donasi, kemudian menghitung persentase yang diwakili setiap pengambilan, dan akhirnya menerapkan persentase tersebut ke pendapatan yang tersedia . Pengambilan ini juga bertindak sebagai nilai maksimum: pengambilan aktual tidak pernah lebih tinggi dari nominal yang diambil, bahkan jika pendapatan tambahan tersedia."
@@ -4590,17 +4554,15 @@ msgstr "Secara asali, pengambilan donasi bagi semua anggota tim disetel ke nilai
 msgid "Regulation of take amounts"
 msgstr "Regulasi jumlah pengambilan"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Ketika \"take throttling\" diaktifkan untuk sebuah tim, para anggotanya tidak dapat meningkatkan take mereka lebih tinggi dari jumlah maksimum yang dihitung berdasarkan nominal take pada akhir siklus mingguan sebelumnya. Mekanisme ini dimaksudkan untuk mendorong kontributor baru untuk bergabung dengan tim, dengan memastikan bahwa mereka tidak akan mengambil bagian yang tidak proporsional dari pendapatan di minggu-minggu pertama mereka."
+msgstr "Ketika \"take throttling\" diaktifkan untuk sebuah tim, para anggotanya tidak dapat meningkatkan perolehan mereka lebih tinggi dari jumlah maksimum yang dihitung berdasarkan nominal take pada akhir siklus mingguan sebelumnya. Mekanisme ini dimaksudkan untuk mendorong kontributor baru untuk bergabung dengan tim, dengan memastikan bahwa mereka tidak akan mengambil bagian yang tidak proporsional dari pendapatan di minggu-minggu pertama mereka."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Batasnya adalah sebagai berikut: Anda selalu dapat meningkatkan take Anda ke {amount} jika berada di bawah batas tersebut, Anda dapat menggandakan take Anda dibandingkan dengan minggu sebelumnya, Anda dapat meningkatkan take Anda untuk mengklaim sisa pendapatan tim, dan Anda dapat meningkatkan take Anda hingga mencapai level take rata-rata pada akhir siklus mingguan sebelumnya. Kemungkinan mana pun yang menghasilkan jumlah tertinggi adalah jumlah maksimum Anda untuk minggu itu."
+msgstr "Batasnya adalah sebagai berikut: Anda selalu dapat meningkatkan perolehan Anda menjadi {amount} jika berada di bawah batas tersebut, Anda dapat menggandakan perolehan Anda dibandingkan dengan minggu sebelumnya, Anda dapat meningkatkan perolehan Anda untuk mengklaim sisa pendapatan tim, dan Anda dapat meningkatkan perolehan Anda hingga mencapai jumlah perolehan rata-rata pada akhir siklus mingguan sebelumnya. Kemungkinan mana pun yang menghasilkan jumlah tertinggi adalah jumlah maksimum Anda untuk minggu itu."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Pengambilan tidak dibatasi jika tim hanya memiliki satu anggota, atau jika pengambilan minggu sebelumnya semuanya nol (yang merupakan kasus untuk tim baru yang telah dibuat selama siklus mingguan saat ini)."
+msgstr "Perolehan tidak dibatasi jika tim hanya memiliki satu anggota, atau jika perolehan minggu sebelumnya semuanya nol (yang merupakan kasus untuk tim baru yang telah dibuat selama siklus mingguan saat ini)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Silakan hubungi pusat dukungan kami jika Anda ingin mengaktifkan atau menonaktifkan batas pengambilan untuk tim yang ada. Jangan lupa sertakan bukti bahwa perubahan tersebut telah disetujui oleh anggota tim lainnya."
