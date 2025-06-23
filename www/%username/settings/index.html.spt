@@ -9,6 +9,9 @@ subhead = _("Account")
 
 is_a_person = participant.kind not in ('group', 'community')
 
+if 'password_mismatch' in request.qs:
+    response.code = 400
+
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/settings.html"
 

@@ -55,7 +55,7 @@ subhead = _("Username")
         <h4 class="no-margin-top">{{ _("Username") }}</h4>
         <p>{{ _("A unique name, required for users who wish to receive donations.") }}</p>
         <div class="form-group">
-            <input name="username" class="form-control"
+            <input name="username" class="form-control" spellcheck="false"
                    value="{{ _username }}" required
                    maxlength="{{ constants.USERNAME_MAX_SIZE }}"
                    placeholder="{{ _('Username') }}"/>
@@ -74,7 +74,7 @@ subhead = _("Username")
             "alongside the username on the public profile page."
         ) }}</p>
         <div class="form-group">
-            <input name="public_name" class="form-control"
+            <input name="public_name" class="form-control" spellcheck="false"
                    value="{{ participant.public_name or '' }}"
                    maxlength="{{ constants.PUBLIC_NAME_MAX_SIZE }}"
                    placeholder="{{ _('Name') }}"/>

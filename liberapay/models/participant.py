@@ -269,13 +269,12 @@ class Participant(Model, MixinTeam):
     # ===================
 
     @classmethod
-    def authenticate_with_password(cls, p_id, password, context='log-in'):
+    def authenticate_with_password(cls, p_id, password):
         """Fetch a participant using its ID, but only if the provided password is valid.
 
         Args:
             p_id (int): the participant's ID
             password (str): the participant's password
-            context (str): the operation that this authentication is part of
 
         Return type: `Participant | None`
 
@@ -288,14 +287,21 @@ class Participant(Model, MixinTeam):
               JOIN participants p ON p.id = s.participant
              WHERE s.participant = %s
                AND s.id = 0
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM notifications n
+                        WHERE n.participant = s.participant
+                          AND n.event = 'password_warning'
+                          AND n.ts > s.mtime
+                        LIMIT 1
+                   )
         """, (p_id,))
         if not r:
             raise AccountIsPasswordless()
         if not password:
             return None
         p, stored_secret, mtime = r
-        if context == 'log-in':
-            cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
+        cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
         request = website.state.get({}).get('request')
         if request:
             cls.db.hit_rate_limit('hash_password.ip-addr', str(request.source), TooManyRequests)
@@ -303,40 +309,27 @@ class Participant(Model, MixinTeam):
         rounds = int(rounds)
         salt, hashed = b64decode(salt), b64decode(hashed)
         if constant_time_compare(cls._hash_password(password, algo, salt, rounds), hashed):
-            if context == 'log-in':
-                password_status = None
-                last_password_check = p.get_last_event_of_type('password-check')
-                if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
-                    last_password_warning = cls.db.one("""
-                        SELECT n.*
-                          FROM notifications n
-                         WHERE n.participant = %s
-                           AND n.event = 'password_warning'
-                           AND n.ts > %s
-                      ORDER BY n.ts DESC
-                         LIMIT 1
-                    """, (p.id, mtime))
-                    if last_password_warning:
-                        password_status = deserialize(last_password_warning.context)[
-                            'password_status'
-                        ]
+            password_status = None
+            last_password_check = p.get_last_event_of_type('password-check')
+            if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
+                pass
+            else:
+                try:
+                    password_status = p.check_password(password)
+                except Exception as e:
+                    website.tell_sentry(e)
                 else:
-                    try:
-                        password_status = p.check_password(password)
-                    except Exception as e:
-                        website.tell_sentry(e)
-                    else:
-                        if password_status != 'okay':
-                            p.notify(
-                                'password_warning',
-                                email=False,
-                                type='warning',
-                                password_status=password_status,
-                            )
-                        p.add_event(website.db, 'password-check', None)
-                if password_status and password_status != 'okay':
-                    raise AccountIsPasswordless()
-                cls.db.decrement_rate_limit('log-in.password', p.id)
+                    if password_status != 'okay':
+                        p.notify(
+                            'password_warning',
+                            email=False,
+                            type='warning',
+                            password_status=password_status,
+                        )
+                    p.add_event(website.db, 'password-check', None)
+            if password_status and password_status != 'okay':
+                raise AccountIsPasswordless()
+            cls.db.decrement_rate_limit('log-in.password', p.id)
             p.authenticated = True
             if len(salt) < 32:
                 # Update the password hash in the DB
