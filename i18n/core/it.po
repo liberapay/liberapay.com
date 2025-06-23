@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Italian "
-"<https://hosted.weblate.org/projects/liberapay/core/it/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2025-06-21 21:01+0000\n"
+"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/liberapay/core/it/>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -1038,7 +1040,6 @@ msgstr "“{0}” non è un nome di comunità valido."
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Non sei autorizzato/a ad effettuare questa operazione perché attualmente il tuo conto è sospeso."
 
-#, fuzzy
 msgid "Your account lacks a valid email address, please add one."
 msgstr "Nel tuo conto manca un indirizzo e-mail valido, aggiungine uno."
 
@@ -1257,26 +1258,21 @@ msgstr "Password"
 msgid "This new password is not safe"
 msgstr "La nuova password non è sicura"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "La nuova password che hai inserito non è sicura perché corrisponde a una password comunemente utilizzata."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
 msgstr "La nuova password che hai inviato non è sicura perché corrisponde a una password che è stata compromessa in una o più fughe di dati pubblici."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "La nuova password che hai inviato non è sicura perché è troppo facile da indovinare."
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "Inserisci una password diversa:"
 
 msgid "New password"
 msgstr "Nuova password"
 
-#, fuzzy
 msgid "Submit"
 msgstr "Invia"
 
@@ -2550,7 +2546,7 @@ msgstr "Attivo"
 
 #, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Prossimo pagamento tra {in_N_weeks_months_or_years}."
+msgstr "Prossimo pagamento in scadenza {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Rinnova adesso"
@@ -3227,7 +3223,7 @@ msgid "This payment must be manually approved by the recipient through {provider
 msgstr "Questo pagamento deve essere approvato manualmente dal ricevente tramite il sito web di {provider}."
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
-msgstr "Il conto del pagatore viene sospeso a causa di un sospetto di frode o di altre azioni non autorizzate."
+msgstr "Il conto del pagatore è sospeso a causa di un sospetto di frode o di altre azioni non autorizzate."
 
 msgid "There were no transactions during this period."
 msgstr "Non c'è stata alcuna transazione durante questo periodo."
@@ -3436,17 +3432,15 @@ msgstr "Questo conto non può ricevere pagamenti. Per rimediare, accedi al tuo c
 msgid "Manage this {platform} account"
 msgstr "Gestisci questo profilo {platform}"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
-msgstr "Questo account non può ricevere pagamenti. Per risolvere il problema, clicca sul link qui sotto e completa la procedura di verifica."
+msgstr "Questo conto non può ricevere pagamenti. Per risolvere il problema, clicca sul link qui sotto e completa la procedura di verifica."
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
-msgstr "Questo account non può ricevere pagamenti. Per risolvere il problema, clicca sul link sottostante e completa la procedura di attivazione."
+msgstr "Questo conto non può ricevere pagamenti. Per risolvere il problema, clicca sul link sottostante e completa la procedura di attivazione."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate this {platform} account"
-msgstr "Attiva questo account {platform}"
+msgstr "Attiva questo profilo{platform}"
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3463,37 +3457,33 @@ msgstr "Collega un altro profilo {platform_name}"
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal ti permette di ricevere denaro in molti più Paesi che Stripe, ma non è altrettanto ben integrato con Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Create a {provider} account"
-msgstr "Crea un account {provider}"
+msgstr "Crea un conto {provider}"
 
-#, fuzzy
 msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
 msgstr "Seleziona il Paese in cui vivi o in cui hai un'attività registrata e conferma di accettare i termini di Stripe."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
-msgstr "Accetto il {link_start}Contratto relativo all'account collegato a Stripe{link_end}."
+msgstr "Accetto il {link_start}Contratto per account Stripe Connect{link_end}."
 
-#, fuzzy
 msgid "Create account"
-msgstr "Creare un account"
+msgstr "Crea il conto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Manage a {provider} account"
-msgstr "Gestisci un account {provider}"
+msgstr "Gestisci un conto {provider}"
 
-#, fuzzy
 msgid "Payments"
 msgstr "Pagamenti"
 
-#, fuzzy
 msgid "Payouts"
-msgstr "Pagamenti"
+msgstr "Versamenti"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate a {provider} account"
-msgstr "Attiva un account {provider}"
+msgstr "Attiva un conto {provider}"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
