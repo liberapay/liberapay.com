@@ -729,7 +729,7 @@ class Participant(Model, MixinTeam):
         A participant who has the 'admin' privilege is considered to have all
         other privileges.
         """
-        return self.privileges & (PRIVILEGES[p] | 1)
+        return bool(self.privileges & (PRIVILEGES[p] | 1))
 
     def is_acting_as(self, privilege):
         """Checks whether the participant can currently use the specified privilege.

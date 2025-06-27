@@ -44,8 +44,8 @@ from liberapay.models.participant import (
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
 from liberapay.payin.cron import (
-    execute_reviewed_payins, execute_scheduled_payins, reschedule_renewals,
-    send_upcoming_debit_notifications,
+    detect_stuck_payins, execute_reviewed_payins, execute_scheduled_payins,
+    reschedule_renewals, send_upcoming_debit_notifications,
 )
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.security.csp import csp_allow
@@ -196,7 +196,8 @@ if conf:
     cron(Daily(hour=5), execute_scheduled_payins, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
     cron(Daily(hour=12), generate_profile_description_missing_notifications, True)
-    cron(Daily(hour=17), paypal.sync_all_pending_payments, True)
+    cron(Daily(hour=13), paypal.sync_all_pending_payments, True)
+    cron(Daily(hour=14), detect_stuck_payins, True)
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
     cron(Daily(hour=19), Participant.delete_old_feedback, True)
     cron(Daily(hour=20), free_up_usernames, True)

@@ -17,7 +17,7 @@ from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
 from ..utils.types import Object
-from .common import prepare_payin, resolve_tip
+from .common import prepare_payin, resolve_tip, update_payin
 from .stripe import charge
 
 
@@ -563,6 +563,28 @@ def _filter_transfers(payer, transfers, automatic):
         else:
             okay_transfers.append(tr)
     return okay_transfers, canceled_transfers, impossible_transfers, actionable_transfers
+
+
+def detect_stuck_payins():
+    """Emit a warning if a payin has been in a non-final state for too long.
+    """
+    payins = website.db.all("""
+        SELECT pi
+          FROM payins pi
+     LEFT JOIN payin_events pe ON pe.payin = pi.id AND pe.status = pi.status
+         WHERE pi.status NOT IN ('succeeded', 'failed')
+           AND coalesce(pe.timestamp, pi.ctime) < (current_timestamp - interval '40 days')
+    """)
+    db = website.db
+    stuck = []
+    for payin in payins:
+        if payin.status in ('pre', 'awaiting_payer_action'):
+            sleep(.2)
+            update_payin(db, payin.id, payin.remote_id, 'failed', 'abandoned by payer')
+        else:
+            stuck.append(payin)
+    if stuck:
+        website.tell_sentry(Exception("found stuck payin(s)"))
 
 
 def execute_reviewed_payins():

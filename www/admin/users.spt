@@ -40,6 +40,34 @@ if request.method == 'POST':
                 updated += 1
                 event_data['marked_as'] = new_value
 
+            mark_patrons = request.body.parse_boolean('mark_patrons', default=False)
+            if mark_patrons:
+                if new_value != 'fraud':
+                    raise response.error(
+                        400,
+                        "`mark_patrons=true` is only acceptable with `mark_as=fraud`"
+                    )
+                r = cursor.all("""
+                    WITH patrons AS (
+                        UPDATE participants
+                           SET marked_as = 'fraud'
+                         WHERE id IN (
+                                   SELECT DISTINCT tipper
+                                     FROM tips
+                                    WHERE tippee = %(p_id)s
+                               )
+                           AND marked_as IS NULL
+                     RETURNING id
+                    )
+                    INSERT INTO events
+                                (participant, type, payload)
+                         SELECT p.id, 'flags_changed', '{"marked_as": "fraud"}'
+                           FROM patrons p
+                      RETURNING id
+                """, dict(p_id=p.id))
+                if r:
+                    updated += len(r)
+
         if event_data:
             if request.body.get('reason'):
                 event_data['reason'] = request.body['reason']

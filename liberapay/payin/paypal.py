@@ -45,7 +45,7 @@ def _extract_error_message(response):
 
 def _init_session():
     # TODO switch to bearer tokens to reduce the risk of exposing the long-lived secret
-    if 'Authentication' in session.headers:
+    if 'Authorization' in session.headers:
         return session
     from base64 import b64encode
     session.headers.update({
