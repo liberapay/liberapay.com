@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Spanish "
-"<https://hosted.weblate.org/projects/liberapay/core/es/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2025-06-25 08:01+0000\n"
+"Last-Translator: Lambda <lambda.hime@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/liberapay/core/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -1094,7 +1096,7 @@ msgid "Internal Server Error"
 msgstr "Error interno del servidor"
 
 msgid "Upstream Error"
-msgstr "Error en origen"
+msgstr "Error al enviar al servidor"
 
 msgid "Service Unavailable"
 msgstr "El servicio no está disponible"
@@ -1256,28 +1258,23 @@ msgstr "Contraseña"
 msgid "This new password is not safe"
 msgstr "Esta nueva contraseña no es segura"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "La nueva contraseña que envió no es segura porque coincide con una contraseña de uso común."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
 msgstr "La nueva contraseña que envió no es segura porque coincide con una contraseña que se vio comprometida en una o más filtraciones de datos públicos."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "La nueva contraseña que ha enviado no es segura porque es demasiado fácil de adivinar."
 
-#, fuzzy
 msgid "Please input a different password:"
-msgstr "Por favor ingrese una contraseña diferente:"
+msgstr "Por favor, ingrese una contraseña diferente:"
 
 msgid "New password"
 msgstr "Contraseña nueva"
 
-#, fuzzy
 msgid "Submit"
-msgstr "Entregar"
+msgstr "Enviar"
 
 msgid "Go back"
 msgstr "Volver"
@@ -1355,7 +1352,7 @@ msgid "Toggle navigation"
 msgstr "Alternar barra de navegación"
 
 msgid "Homepage"
-msgstr "Página de inicio"
+msgstr "Inicio"
 
 msgid "Explore"
 msgstr "Explorar"
@@ -1470,7 +1467,7 @@ msgid "Modify your donation"
 msgstr "Modifica tu donación"
 
 msgid "Pledge"
-msgstr "Prometer donar"
+msgstr "Financiar"
 
 msgid "Donate"
 msgstr "Donar"
@@ -1536,7 +1533,7 @@ msgid "Default avatar"
 msgstr "Avatar predeterminado"
 
 msgid "Find great people to donate to"
-msgstr "Encuentra personas geniales a las que poder donar"
+msgstr "Encuentra grandes personas a las que poder donar"
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr "¿Hay alguien cuyo trabajo aprecies mucho? Comprueba si está en Liberapay"
@@ -1575,7 +1572,7 @@ msgid "Yes"
 msgstr "Sí"
 
 msgid "Ok"
-msgstr "Vale"
+msgstr "De acuerdo"
 
 msgid "Personal Information"
 msgstr "Información Personal"
@@ -1770,7 +1767,7 @@ msgid "Mission accomplished!"
 msgstr "¡Misión cumplida!"
 
 msgid "View income shares"
-msgstr "Conoce cómo se reparten los ingresos"
+msgstr "Ver ingresos de acciones"
 
 msgid "(fork)"
 msgstr "(bifurcación)"
@@ -3435,15 +3432,13 @@ msgstr "Esta cuenta no puede recibir pagos. Para arreglar esto inicia sesión en
 msgid "Manage this {platform} account"
 msgstr "Gestionar esta cuenta de {platform}"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
 msgstr "Esta cuenta no puede recibir pagos. Para solucionarlo, haga clic en el enlace a continuación y complete el proceso de verificación."
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
 msgstr "Esta cuenta no puede recibir pagos. Para solucionarlo, haga clic en el enlace a continuación y complete el proceso de activación."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate this {platform} account"
 msgstr "Activar esta cuenta {platform}"
 
@@ -3462,35 +3457,31 @@ msgstr "Conectar otra cuenta de {platform_name}"
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal permite recibir dinero en muchos más países que Stripe, pero no está tan bien integrado en Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Create a {provider} account"
 msgstr "Crear una cuenta {provider}"
 
-#, fuzzy
 msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
-msgstr "Seleccione el país en el que vive o tiene una empresa registrada y confirme que acepta los términos de Stripe."
+msgstr "Por favor, seleccione el país en el que vive o tiene una empresa registrada y confirme que acepta los términos de Stripe."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
-msgstr "Acepto el {link_start}Acuerdo de cuenta conectada de Stripe{link_end}."
+msgstr "Acepto el {link_start}Acuerdo de Cuenta Conectada de Stripe{link_end}."
 
-#, fuzzy
 msgid "Create account"
-msgstr "Crear una cuenta"
+msgstr "Crear cuenta"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Administrar una cuenta {provider}"
 
-#, fuzzy
 msgid "Payments"
-msgstr "Pagos"
+msgstr "Repartos"
 
-#, fuzzy
 msgid "Payouts"
 msgstr "Pagos"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate a {provider} account"
 msgstr "Activar una cuenta {provider}"
 
@@ -4061,11 +4052,9 @@ msgstr "Placas de {link_open}Shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Usa estos fragmentos de código para añadir una placa a tu sitio web o README:"
 
-#, fuzzy
 msgid "The submitted credentials aren't valid."
 msgstr "Las credenciales enviadas no son válidas."
 
-#, fuzzy
 msgid "You can try again:"
 msgstr "Puedes intentarlo de nuevo:"
 
@@ -4592,7 +4581,7 @@ msgstr "Correo electrónico del equipo (opcional)"
 
 #, python-brace-format
 msgid "Enable {0}limits on team takes{1}"
-msgstr "Habilita {0}límites en las tomas del equipo{1}"
+msgstr "Habilitar {0}límites en la cantidad del ingreso que se puede sacar del equipo{1}"
 
 msgid "Create"
 msgstr "Crear"
@@ -4636,7 +4625,7 @@ msgid "The limit works like this: you can always increase your take to {amount} 
 msgstr "El límite funciona de la siguiente manera: siempre puedes aumentar tus ingresos hasta {amount} si estaba por debajo de esa cantidad, puedes duplicar tus ingresos en comparación con la semana anterior, puedes aumentar tus ingresos para reclamar los ingresos sobrantes del equipo y puede llevar tus ingresos hasta el nivel de la recaudación media al final del ciclo semanal anterior. Cualquiera de estas posibilidades que dé como resultado la cantidad más alta es la recaudación máxima de la semana."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Las tomas no están limitadas si el equipo solo tiene un miembro o si las tomas de la semana anterior fueron todas cero (que es el caso de cualquier equipo nuevo que se haya creado durante el ciclo semanal actual)."
+msgstr "La cantidad sacada de ingresos no está limitada si el equipo está formado solo un miembro o si las tomas de la semana anterior fueron todas cero (que es el caso de cualquier equipo nuevo que se haya creado durante el período semanal actual)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Por favor, contacta al soporte técnico si quieres habilitar o deshabilitar los límites de partes nominales para un equipo existente. No te olvides de incluir una prueba de que el cambio ha sido aprobado por los otros miembros del equipo."
@@ -4814,7 +4803,7 @@ msgid "Do you have someone in mind?"
 msgstr "¿Tienes a alguien en mente?"
 
 msgid "We can help you find pledgees if you connect your accounts:"
-msgstr "Podemos ayudarte a encontrar gente a la que hacer promesas si conectas tus cuentas:"
+msgstr "Podemos ayudarte a encontrar acreedores si conectas tus cuentas:"
 
 #, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
