@@ -60,11 +60,12 @@ if request.method == 'POST':
                      RETURNING id
                     )
                     INSERT INTO events
-                                (participant, type, payload)
+                                (participant, type, payload, recorder)
                          SELECT p.id, 'flags_changed', '{"marked_as": "fraud"}'
+                              , %(admin_id)s
                            FROM patrons p
                       RETURNING id
-                """, dict(p_id=p.id))
+                """, dict(p_id=p.id, admin_id=user.id))
                 if r:
                     updated += len(r)
 
