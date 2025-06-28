@@ -581,10 +581,12 @@ def detect_stuck_payins():
     for payin in payins:
         if payin.status in ('pre', 'awaiting_payer_action'):
             sleep(.2)
+            logger.info(f"marking payin {payin.id} as abandoned by payer")
             update_payin(db, payin.id, payin.remote_id, 'failed', 'abandoned by payer')
         else:
             stuck.append(payin)
     if stuck:
+        logger.error(f"found {len(stuck)} stuck payin(s)")
         website.tell_sentry(Exception("found stuck payin(s)"))
 
 
