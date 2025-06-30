@@ -136,6 +136,20 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(_("Can individuals in Finland use Liberapay to receive donations?"), 'finland') }}
+
+    <dd>{{ _(
+        "Yes, but only donations coming from other countries, as {external_link_start}"
+        "Finnish law strictly regulates money collection within Finland{link_end}. "
+        "To only accept donations from outside Finland, {internal_link_start}go to the "
+        "list of countries you accept donations from{link_end}, deselect Finland, "
+        "and don't forget to click on the Save button.",
+        external_link_start='<a href="https://poliisi.fi/en/crowdfunding-and-money-collection-campaigns">'|safe,
+        internal_link_start='<a href="/about/me/edit/countries/">'|safe,
+        link_end='</a>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("How do I know that my donation won't go to an impostor?"), 'impersonation') }}
 
     <dd>{{ _(
