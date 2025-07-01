@@ -1,11 +1,18 @@
 [---] -/subject
-{{ _("Your payment of {money_amount} has been disputed", money_amount=payin_amount) }}
+{{ _("Your payment is disputed") }}
 
 [---] text/html
+% if recipient_names|default(None)
 <p>{{ _(
-    "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank.",
+    "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank.",
+    money_amount=payin_amount, date=payin_ctime.date(), recipients=recipient_names,
+) }}</p>
+% else
+<p>{{ _(
+    "A charge of {money_amount} initiated on {date} is being reversed by your bank.",
     money_amount=payin_amount, date=payin_ctime.date(),
 ) }}</p>
+% endif
 
 <p>{{ _(
     "The reason provided by your bank is: it was unable to process the payment."

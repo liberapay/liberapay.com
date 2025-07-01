@@ -93,6 +93,7 @@ elif event_object_type == 'charge.dispute':
                 payin_id=payin.id,
                 payin_amount=payin.amount,
                 payin_ctime=payin.ctime,
+                recipient_names=payin.recipient_names,
                 dispute_reason=dispute.reason,
                 dispute_can_be_withdrawn=(
                     dispute.status == 'needs_response' and
