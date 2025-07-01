@@ -199,11 +199,9 @@ msgstr "Acceder a Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Alguien (esperamos que seas tú) solicitó acceso a la cuenta {0} en Liberapay."
 
-msgid "Follow this link to proceed:"
-msgstr "Sigue este enlace para continuar:"
-
-msgid "Log in"
-msgstr "Iniciar sesión"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -265,13 +263,16 @@ msgstr "Hemos detectado que tu contraseña ha sido comprometida: aparece en una 
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Deberías {link_start}cambiar tu contraseña{link_end} ahora."
 
-#, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "Tu pago de {money_amount} ha sido disputado"
+msgid "Your payment is disputed"
+msgstr ""
 
 #, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "La transferencia de {money_amount} que iniciaste el {date} ha sido revertida por tu banco."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "La razón proporcionada por tu banco es la siguiente: no ha podido procesar el pago."
@@ -328,6 +329,14 @@ msgid "Your payment has failed"
 msgstr "Tu pago ha fallado"
 
 #, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "El pago automático de {money_amount} iniciado hoy ha fallado."
 
@@ -358,12 +367,20 @@ msgid "A refund of {money_amount} has been initiated"
 msgstr "Se ha iniciado un reembolso de {money_amount}"
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "Se está reembolsando el pago de {money_amount} que iniciaste el {date}."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Se está reembolsando parcialmente el pago de {money_amount} que iniciaste el {date}."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Motivo: el pago era un duplicado."
@@ -374,8 +391,8 @@ msgstr "Motivo: el pago ha sido considerado fraudulento."
 msgid "Reason: the refund was requested by you."
 msgstr "Motivo: tú solicitaste el reembolso."
 
-msgid "Please contact us to obtain more information."
-msgstr "Contáctanos para obtener más información."
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Pueden pasar varios días laborables hasta que tu dinero vuelva a aparecer en tu cuenta bancaria."
@@ -416,6 +433,14 @@ msgstr "Procesar este tipo de pagos toma {timedelta} de media."
 
 msgid "Your payment has succeeded"
 msgstr "Tu pago ha sido efectuado"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1483,6 +1508,9 @@ msgstr "Todavía no has accedido como {0}."
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "Rellena tu contraseña para autenticarte:"
 
+msgid "Log in"
+msgstr "Iniciar sesión"
+
 msgid "Or log in via email if you've lost your password:"
 msgstr "O inicia sesión por correo electrónico si has perdido tu contraseña:"
 
@@ -1710,16 +1738,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} no ha configurado un método de pago todavía, así que tu donación no puede ser procesada ahora mismo. Te notificaremos cuando sea posible hacer el pago."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Las donaciones a {username} pueden pagarse con tarjeta de crédito o débito ({list_of_card_brands}), o mediante pago domiciliado de una cuenta bancaria en euros (solo para donaciones en euros)."
-
-#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Las donaciones a {username} se procesan a través de PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Las donaciones a {username} pueden abonarse mediante: una tarjeta de crédito o débito ({list_of_card_brands}), una cuenta bancaria en euros (adeudos directo SEPA) o una cuenta PayPal."
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "Tarjeta de pago"
@@ -2073,8 +2107,8 @@ msgstr "¿Cómo funcionan las donaciones recurrentes?"
 msgid "Can I make a one-time donation?"
 msgstr "¿Puedo hacer una donación de una sola vez?"
 
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "Las donaciones de una sola vez aún no están disponibles, pero puede interrumpir su donación inmediatamente después del primer pago."
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 msgid "Will I get a receipt?"
 msgstr "¿Recibiré un recibo?"
@@ -4112,9 +4146,6 @@ msgstr "¿Puedo modificar o parar mis donaciones?"
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
 msgstr "Sí, puedes parar tus donaciones o modificar su cantidad, períodos y modos de renovación cuando quieras desde {link_open}tu página de «Donar»{link_close}. Parar una donación no hace que se reembolse; simplemente cancela futuras donaciones."
 
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapay está diseñado para una financiación estable a largo plazo y solo permite aportaciones recurrentes."
-
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "¿Cuáles son las diferencias entre Liberapay y otras plataformas de crowdfunding recurrente como Patreon?"
 
@@ -4137,6 +4168,13 @@ msgstr "¿Respeta Liberapay las regulaciones financieras?"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Sí. Liberapay tiene su base en Francia y cumple con las regulaciones financieras de la Unión Europea. Todos nuestros procesadores de pago está correctamente licenciados, y nos ayudan a bloquear el fraude, el blanqueo de capitales y la financiación del terrorismo."
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "¿Cómo sé que mi donación no irá a un impostor?"

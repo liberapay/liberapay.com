@@ -204,11 +204,9 @@ msgstr "Увійти в Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Хтось (сподіваємося, ви) запитував доступ до облікового запису {0} в Liberapay."
 
-msgid "Follow this link to proceed:"
-msgstr "Перейдіть за цим посиланням для продовження:"
-
-msgid "Log in"
-msgstr "Увійти"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -271,13 +269,16 @@ msgstr "Ми виявили, що ваш пароль було викрито: �
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Вам необхідно {link_start}змінити свій пароль{link_end} зараз."
 
-#, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "Ваш платіж розміром {money_amount} було оскаржено"
+msgid "Your payment is disputed"
+msgstr ""
 
 #, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "Переказ {money_amount}, який ви ініціювали {date} було скасовано вашим банком."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Причина, вказана вашим банком: не вдалося обробити платіж."
@@ -334,6 +335,14 @@ msgid "Your payment has failed"
 msgstr "Не вдалося здійснити платіж"
 
 #, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "Не вдалося виконати розпочатий сьогодні автоматичний платіж {money_amount}."
 
@@ -364,12 +373,20 @@ msgid "A refund of {money_amount} has been initiated"
 msgstr "Створено запит на повернення коштів обсягом {money_amount}"
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "Запит на повернення коштів, у обсязі {money_amount} від {date}, виконано."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Платіж у обсязі {money_amount} від {date} частково повернено."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Причина: дублікат платежу."
@@ -380,8 +397,8 @@ msgstr "Причина: платіж визнано шахрайським."
 msgid "Reason: the refund was requested by you."
 msgstr "Причина: Ви створили запит на повернення коштів."
 
-msgid "Please contact us to obtain more information."
-msgstr "Зв'яжіться з нами, щоб отримати докладніші відомості."
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Потрібно кілька робочих днів аби повернуті гроші з'явилися на вашому банківському рахунку."
@@ -422,6 +439,14 @@ msgstr "Обробка такого виду платежу в середньо�
 
 msgid "Your payment has succeeded"
 msgstr "Ваш платіж виконано"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1503,6 +1528,9 @@ msgstr "Ви все ще не увійшли як {0}."
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "Уведіть свій пароль для автентифікації:"
 
+msgid "Log in"
+msgstr "Увійти"
+
 msgid "Or log in via email if you've lost your password:"
 msgstr "Або увійдіть за допомогою е-пошти, якщо ви втратили пароль:"
 
@@ -1730,16 +1758,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} ще не налаштував жодного способу оплати, тож нарахування вашого внеску зараз неможливе. Ми повідомимо вас, коли оплата стане можливою."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Внески для {username} можна сплатити за допомогою кредитної або дебетової картки ({list_of_card_brands}), або прямим списанням коштів з банківського рахунку в євро (лише для внесків у євро)."
-
-#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Внески для {username} обробляються через PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Внески для {username} можна сплатити за допомогою: кредитної або дебетової картки ({list_of_card_brands}), банківського рахунку в євро (SEPA Direct Debit) або рахунку PayPal."
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "Платіжна картка"
@@ -2096,8 +2130,8 @@ msgstr "Як працюють повторювані внески?"
 msgid "Can I make a one-time donation?"
 msgstr "Чи можу я допомогти одноразово?"
 
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "Одноразові внески ще не підтримуються належним чином, але ви можете припинити допомогу одразу після першого платежу."
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 msgid "Will I get a receipt?"
 msgstr "Чи отримаю я квитанцію?"
@@ -4169,9 +4203,6 @@ msgstr "Чи можу я змінити чи зупинити свої внес�
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
 msgstr "Так, ви можете будь-коли припинити робити внески або змінити їх суми, повторюваність та режими поновлення {link_open}на сторінці “Витрати”{link_close}. Припинення допомоги не призводить до відшкодування, це просто скасовує майбутні поновлення."
 
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapay призначено для довготривалого стабільного фінансування та підтримує лише повторювані внески."
-
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "В чому різниця між Liberapay та іншими сайтами періодичного краудфандингу, як Patreon?"
 
@@ -4194,6 +4225,13 @@ msgstr "Чи дотримується Liberapay фінансового регл�
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Так. Liberapay базовано у Франції та підпорядковується фінансовому регламенту Євросоюзу. Усі наші платіжні системи ліцензовано належним чином, вони допомагають нам боротися з шахрайством та фінансуванням тероризму."
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Як я зможу дізнатися що мій внесок не піде самозванцю?"

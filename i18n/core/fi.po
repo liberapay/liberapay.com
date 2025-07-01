@@ -199,11 +199,9 @@ msgstr "Kirjaudu Liberapay-palveluun"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Joku (toivottavasti sinä) on pyytänyt käyttöoikeuksia tiliin {0} Liberapay-palvelussa."
 
-msgid "Follow this link to proceed:"
-msgstr "Jatka klikkaamalla tätä linkkiä:"
-
-msgid "Log in"
-msgstr "Kirjautuminen"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -265,13 +263,16 @@ msgstr "Salasanasi on turvaton. Se esiintyy monissa julki vuotaneissa salasanati
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Sinun tulisi pikimmiten {link_start}vaihtaa salasanasi{link_end}."
 
-#, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "{money_amount} maksusi on riitautettu"
+msgid "Your payment is disputed"
+msgstr ""
 
 #, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "Pankkisi on kumonnut {money_amount} siirtosi, jonka toimeenpanit {date}."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Pankin esittämä syy on: se ei kyennyt käsittelemään maksua."
@@ -328,6 +329,14 @@ msgid "Your payment has failed"
 msgstr "Maksusi epäonnistui"
 
 #, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "Tänään aloitettu {money_amount} automaattinen maksu on epäonnistunut."
 
@@ -358,12 +367,20 @@ msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount} hyvitys on aloitettu"
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "Hyvitetään {date} aloittamasi {money_amount} maksu."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Hyvitetään {date} aloittamasi {money_amount} maksu osittain."
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Syy: maksu oli kaksoiskappale."
@@ -374,8 +391,8 @@ msgstr "Syy: maksu todettiin vilpilliseksi."
 msgid "Reason: the refund was requested by you."
 msgstr "Syy: pyysit itse hyvitystä."
 
-msgid "Please contact us to obtain more information."
-msgstr "Ota meihin yhteyttä, mikäli haluat lisää tietoa."
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Rahojen saapumisessa pankkitilille voi kestää muutama työpäivä."
@@ -416,6 +433,14 @@ msgstr "Tämäntyyppisen maksun käsittelyssä kestää tyypillisesti {timedelta
 
 msgid "Your payment has succeeded"
 msgstr "Maksusi onnistui"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1489,6 +1514,9 @@ msgstr "Et edelleenkään ole kirjautunut tunnuksella {0}."
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "Syötä salasanasi tunnistautuaksesi:"
 
+msgid "Log in"
+msgstr "Kirjautuminen"
+
 msgid "Or log in via email if you've lost your password:"
 msgstr "Tai kirjaudu sähköpostisi avulla, mikäli olet kadottanut salasanasi:"
 
@@ -1716,16 +1744,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa luotto- tai pankkikortilla ({list_of_card_brands}) tai suoraveloituksena euromääräiseltä pankkitililtä (vain euromääräiset lahjoitukset)."
-
-#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Lahjoitukset käyttäjälle {username} voi maksaa luotto- tai pankkikortilla ({list_of_card_brands}), euromääräisellä pankkitilillä (SEPA-suoraveloitus) tai PayPal-tilillä."
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "Maksukortti"
@@ -2079,8 +2113,8 @@ msgstr "Miten toistuvat lahjoitukset toimivat?"
 msgid "Can I make a one-time donation?"
 msgstr "Voinko tehdä kertaluonteisen lahjoituksen?"
 
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "Kertaluonteiset lahjoitukset eivät vielä ole mahdollisia, mutta voit keskeyttää lahjoituksesi heti ensimmäisen maksun jälkeen."
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 msgid "Will I get a receipt?"
 msgstr "Saanko kuitin?"
@@ -4128,9 +4162,6 @@ msgstr "Voinko muuttaa tai keskeyttää lahjoitukseni?"
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
 msgstr "Kyllä, voit pysäyttää lahjoituksesi tai muuttaa niiden määriä, aikavälejä ja uusimistapoja milloin vain {link_open}”Antaminen”-sivusi{link_close} kautta. Lahjoituksen pysäyttäminen ei aiheuta hyvityksiä, vaan ainoastaan peruuttaa tulevat uusimiset."
 
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapayn tarkoitus on tarjota pitkällä tähtäimellä vakaa rahoitus, ja vain toistuvat lahjoitukset ovat mahdollisia palvelussa."
-
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "Miten Liberapay-palvelu eroaa muista toistuvien yhteisörahoitusten järjestelmistä kuten Patreon?"
 
@@ -4153,6 +4184,13 @@ msgstr "Noudattaako Liberapay varainhoitoasetuksia ja -lakeja?"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Kyllä. Liberapay toimii Ranskasta käsin ja noudattaa Euroopan Unionin varainhoitoasetuksia. Maksunkäsittelijöillämme on asianmukaiset luvat, ja he auttavat torjumaan petoksia, rahanpesua sekä terrorismin rahoitusta."
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Mistä tiedän, ettei lahjoitukseni mene huijarille, joka esiintyy toisena henkilönä?"

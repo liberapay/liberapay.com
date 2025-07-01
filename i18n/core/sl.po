@@ -221,13 +221,9 @@ msgstr "Prijavite se v Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Nekdo (upam, da vi) je zahteval dostop do računa {0} na Liberapayu."
 
-#, fuzzy
-msgid "Follow this link to proceed:"
-msgstr "Če želite nadaljevati, sledite tej povezavi:"
-
-#, fuzzy
-msgid "Log in"
-msgstr "Prijava"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -297,13 +293,16 @@ msgstr "Ugotovili smo, da je bilo vaše geslo ogroženo: pojavlja se v enem ali 
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Zdaj morate {link_start}spremeniti geslo{link_end}."
 
-#, fuzzy, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "Vaše plačilo {money_amount} je bilo sporno."
+msgid "Your payment is disputed"
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "Vaša banka je stornirala prenos {money_amount}, ki ste ga sprožili na spletni strani {date}."
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -373,6 +372,14 @@ msgstr "Da bi banki pomagali ugotoviti, kaj se je zgodilo, ji lahko pošljete ko
 msgid "Your payment has failed"
 msgstr "Vaše plačilo je bilo neuspešno"
 
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "Danes sproženo samodejno plačilo {money_amount} je bilo neuspešno."
@@ -405,13 +412,21 @@ msgstr "Poskusi znova"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Začelo se je vračilo {money_amount}."
 
-#, fuzzy, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "Povračilo plačila v višini {money_amount}, ki ste ga sprožili na spletni strani {date}, se vrne."
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Plačilo v višini {money_amount}, ki ste ga sprožili na spletni strani {date}, se delno povrne."
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -425,9 +440,8 @@ msgstr "Razlog: plačilo je bilo ocenjeno kot goljufivo."
 msgid "Reason: the refund was requested by you."
 msgstr "Razlog: vračilo ste zahtevali vi."
 
-#, fuzzy
-msgid "Please contact us to obtain more information."
-msgstr "Za več informacij se obrnite na nas."
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 #, fuzzy
 msgid "It can take several business days for the funds to reappear in your bank account."
@@ -472,6 +486,14 @@ msgstr "Obdelava tovrstnih plačil v povprečju traja {timedelta}."
 #, fuzzy
 msgid "Your payment has succeeded"
 msgstr "Vaše plačilo je bilo uspešno"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1742,6 +1764,10 @@ msgid "Please fill in your password to authenticate yourself:"
 msgstr "Za preverjanje pristnosti vnesite geslo:"
 
 #, fuzzy
+msgid "Log in"
+msgstr "Prijava"
+
+#, fuzzy
 msgid "Or log in via email if you've lost your password:"
 msgstr "Če ste izgubili geslo, se prijavite prek e-pošte:"
 
@@ -2038,16 +2064,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} še ni konfiguriral nobenega načina plačila, zato vaše donacije trenutno ni mogoče obdelati. Ko bo plačilo mogoče, vas bomo o tem obvestili."
 
 #, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Donacije na {username} lahko plačate s kreditno ali debetno kartico ({list_of_card_brands}) ali z direktno obremenitvijo evrskega bančnega računa (samo za donacije v eurih)."
-
-#, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donacije za {username} se obdelujejo prek sistema PayPal."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donacije za {username} lahko plačate s kreditno ali debetno kartico ({list_of_card_brands}), bančnim računom v eurih (direktna obremenitev SEPA) ali računom PayPal."
+#, python-brace-format
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 #, fuzzy
 msgid "Payment Card"
@@ -2481,9 +2513,8 @@ msgstr "Kako delujejo ponavljajoče se donacije?"
 msgid "Can I make a one-time donation?"
 msgstr "Ali lahko naredim enkratno donacijo?"
 
-#, fuzzy
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "Enkratne donacije še niso ustrezno podprte, vendar lahko donacijo prekinete takoj po prvem plačilu."
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 #, fuzzy
 msgid "Will I get a receipt?"
@@ -4948,10 +4979,6 @@ msgid "Yes, you can stop your donations or modify their amounts, periods and ren
 msgstr "Da, kadar koli lahko ustavite donacije ali spremenite njihove zneske, obdobja in načine obnovitve na strani {link_open}v razdelku \"Donacije\"{link_close}. Zaustavitev donacije ne povzroči povračila, temveč le prekliče prihodnja podaljšanja."
 
 #, fuzzy
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapay je zasnovan za dolgoročno stabilno financiranje in podpira le ponavljajoča se darila."
-
-#, fuzzy
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "Kakšne so razlike med Liberapayem in drugimi platformami za množično financiranje, kot je Patreon?"
 
@@ -4978,6 +5005,13 @@ msgstr "Ali Liberapay spoštuje finančne predpise?"
 #, fuzzy
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Da. Liberapay ima sedež v Franciji in izpolnjuje finančne predpise Evropske unije. Vsi naši obdelovalci plačil imajo ustrezno licenco in nam pomagajo preprečevati goljufije, pranje denarja in financiranje terorizma."
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 #, fuzzy
 msgid "How do I know that my donation won't go to an impostor?"

@@ -194,11 +194,9 @@ msgstr "Liberapayへのログイン"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "誰か（おそらくあなた）がLiberapayの{0}アカウントへのアクセスを要求しました。"
 
-msgid "Follow this link to proceed:"
-msgstr "続行するにはこのリンクをクリックしてください："
-
-msgid "Log in"
-msgstr "ログイン"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -259,13 +257,16 @@ msgstr "お使いのパスワードの安全性が破られていることを検
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "すぐに{link_start}パスワードを変更{link_end}してください。"
 
-#, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "あなたの{money_amount}の支払いに対して異議が申し立てられました"
+msgid "Your payment is disputed"
+msgstr ""
 
 #, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "{date}に開始された{money_amount}の送金が銀行によって取り消されました。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "提示された理由：支払いを処理できませんでした。"
@@ -322,6 +323,14 @@ msgid "Your payment has failed"
 msgstr "支払いに失敗しました"
 
 #, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "本日開始した{money_amount}の自動支払いが失敗しました。"
 
@@ -352,12 +361,20 @@ msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount}の払い戻しを開始しました"
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "あなたが{date}に開始した{money_amount}の支払いは、現在払い戻し中です。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "あなたが{date}に開始した{money_amount}の支払いは部分的に払い戻されました。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 msgid "Reason: the payment was a duplicate."
 msgstr "理由：支払いが重複したため。"
@@ -368,8 +385,8 @@ msgstr "理由：支払いが詐欺だと見なされたため。"
 msgid "Reason: the refund was requested by you."
 msgstr "理由：あなたが払い戻しを請求したため。"
 
-msgid "Please contact us to obtain more information."
-msgstr "詳細な情報についてはお問い合わせください。"
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "資金が銀行口座に戻るまでには数営業日かかることがあります。"
@@ -410,6 +427,14 @@ msgstr "この種類の支払いは平均で{timedelta}かかります。"
 
 msgid "Your payment has succeeded"
 msgstr "支払いに成功しました"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1474,6 +1499,9 @@ msgstr "まだ{0}としてログインしていません。"
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "パスワードを入力して、本人認証を行ってください。"
 
+msgid "Log in"
+msgstr "ログイン"
+
 msgid "Or log in via email if you've lost your password:"
 msgstr "または、パスワードを紛失した場合は、メールでログインしてください。"
 
@@ -1701,16 +1729,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username}さんはまだ支払い方法を設定していないため、寄付を今すぐには処理できません。支払いが可能になった際に通知を送信します。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "{username} への寄付は、クレジットカードまたはデビットカード（{list_of_card_brands}）、またはユーロ銀行口座からの自動振替（ユーロ建ての寄付のみ）でお支払いいただけます。"
-
-#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "{username}さんへの寄付はPayPalにより処理されます。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "{username} への寄付は、クレジットカードまたはデビットカード（{list_of_card_brands}）、ユーロ銀行口座（SEPA口座振替）、PayPalのいずれかを使用してお支払いいただけます。"
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "支払いカード"
@@ -2063,8 +2097,8 @@ msgstr "継続的な寄付とは、どのような仕組みでしょうか？"
 msgid "Can I make a one-time donation?"
 msgstr "1回限りの寄付はできますか？"
 
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "1回限りの寄付はまだ適切にサポートされていませんが、最初の支払いが行われた後、すぐに寄付を中止することができます。"
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 msgid "Will I get a receipt?"
 msgstr "領収書はもらえますか？"
@@ -4084,9 +4118,6 @@ msgstr "寄付の変更・停止はできますか？"
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
 msgstr "はい。寄付の停止や、金額、期間、更新モードの変更は、いつでも{link_open}あなたの「寄付」ページ{link_close}から行うことができます。なお、寄付を停止しても返金は行われず、今後の更新がキャンセルされるだけです。"
 
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapayは、長期にわたる安定した資金源として機能するように設計されているため、継続的な寄付しか受け付けていません。"
-
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "Liberapayとその他の継続的なクラウドファンディングサイト、例えばPatreonとの違いは何ですか？"
 
@@ -4109,6 +4140,13 @@ msgstr "Liberapayは金融規則を遵守していますか？"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "はい。Liberapayはフランスに拠点を置き、EUの金融規則に準拠しています。私たちの決済サービスはすべて適切にライセンスされており、詐欺、マネーロンダリング、テロ資金供与を阻止することに役立っています。"
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "私の寄付が詐欺グループに渡っていないことはどのように分かりますか？"

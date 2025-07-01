@@ -194,11 +194,9 @@ msgstr "登录 Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "有人请求访问 Liberapay 上的 {0} 账户。"
 
-msgid "Follow this link to proceed:"
-msgstr "点击此链接继续："
-
-msgid "Log in"
-msgstr "登录"
+#, python-brace-format
+msgid "Follow this link to proceed: {link}"
+msgstr ""
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -259,13 +257,16 @@ msgstr "我们检测到您的密码已经曝光：出现在至少一个公开泄
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "您应当立即{link_start}更改您的密码{link_end}。"
 
-#, python-brace-format
-msgid "Your payment of {money_amount} has been disputed"
-msgstr "您的 {money_amount} 付款出现争议"
+msgid "Your payment is disputed"
+msgstr ""
 
 #, python-brace-format
-msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "您于 {date} 发起的 {money_amount} 转账已被您的银行撤回。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
+msgstr ""
+
+#, python-brace-format
+msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
+msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "您的银行提供的原因：它无法处理这笔付款。"
@@ -322,6 +323,14 @@ msgid "Your payment has failed"
 msgstr "您的支付未能完成"
 
 #, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
+msgstr ""
+
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
 msgstr "今天发起的 {money_amount} 自动付款失败。"
 
@@ -352,12 +361,20 @@ msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount} 的退款已发起"
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "您在 {date} 支付的 {money_amount} 正在退回。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
+msgstr ""
 
 #, python-brace-format
-msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "您在 {date} 支付的 {money_amount} 正被部分退回。"
+msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
+msgstr ""
 
 msgid "Reason: the payment was a duplicate."
 msgstr "原因：重复付款。"
@@ -368,8 +385,8 @@ msgstr "原因：此笔支付被认定是欺诈交易。"
 msgid "Reason: the refund was requested by you."
 msgstr "原因：由您发起的退款请求。"
 
-msgid "Please contact us to obtain more information."
-msgstr "请联系我们来获取更多信息。"
+msgid "You can contact us if you need information on the reason."
+msgstr ""
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "资金可能需要数个工作日才会返还到您的银行账户。"
@@ -410,6 +427,14 @@ msgstr "处理此类支付平均需要 {timedelta} 时间。"
 
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付顺利完成"
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
+msgstr ""
+
+#, python-brace-format
+msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
+msgstr ""
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1468,6 +1493,9 @@ msgstr "您仍未登录为 {0}。"
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "请填写您的密码以验证自己的身份："
 
+msgid "Log in"
+msgstr "登录"
+
 msgid "Or log in via email if you've lost your password:"
 msgstr "或者，如果您丢失了密码，请通过电子邮件登录："
 
@@ -1695,16 +1723,22 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} 尚未设置任何支付方式，所以您目前无法进行捐款。当对方可接受付款时，我们会通知您。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "向 {username} 的捐赠可以使用信用卡或借记卡 ({list_of_card_brands}) 支付，也可以通过欧元银行账户的直接借记（仅限欧元捐赠）。"
-
-#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "给 {username} 捐款经由 PayPal 处理。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "向 {username} 的捐赠可以使用：信用卡或借记卡 ({list_of_card_brands})、欧元银行账户（SEPA 直接借记）或 PayPal 账户。"
+msgid "a credit or debit card ({list_of_card_brands})"
+msgstr ""
+
+msgid "a euro bank account (SEPA Direct Debit)"
+msgstr ""
+
+msgid "a PayPal account"
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "付款卡"
@@ -2055,8 +2089,8 @@ msgstr "定期捐款如何运转？"
 msgid "Can I make a one-time donation?"
 msgstr "我能进行一次性捐款吗？"
 
-msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr "目前暂不支持一次性捐助，不过您可以在首次付款后立即终止捐款。"
+msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
+msgstr ""
 
 msgid "Will I get a receipt?"
 msgstr "我会得到一张收据吗？"
@@ -4068,9 +4102,6 @@ msgstr "我可以修改或停止自己的捐款吗？"
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
 msgstr "是的，您可以随时经{link_open}您的“捐赠”页面{link_close}停止捐款或修改捐款金额、期限和续订模式。停止捐款不会触发任何退款，只会取消未来的续订。"
 
-msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr "Liberapay 在设计上是为了长期稳定的资助，因此只支持周期性捐赠。"
-
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "Liberapay 与市面上其他众筹平台（如 Patreon）有什么不同？"
 
@@ -4093,6 +4124,13 @@ msgstr "Liberapay 是否遵守金融法规？"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "是的。Liberapay 总部位于法国，遵守欧盟的金融法规。我们的支付处理商皆有适当的执照，并会帮助我们阻止诈欺、洗钱和恐怖主义融资。"
+
+msgid "Can individuals in Finland use Liberapay to receive donations?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
+msgstr ""
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "如何确保我的捐款不会到骗子手中？"
