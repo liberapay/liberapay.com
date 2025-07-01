@@ -6,9 +6,8 @@
     "Someone (hopefully you) requested access to the {0} account on Liberapay.", username
 ) }}</p>
 
-<p>{{ _("Follow this link to proceed:") }}</p>
-
-<p><a href="{{ participant.url('settings/', log_in='required') }}" style="{{ button_style('primary') }}">{{ _("Log in") }}</a></p>
+% set url = participant.url('settings/', log_in='required')
+<p>{{ _("Follow this link to proceed: {link}", link=('<a href="{0}">{0}</a>'|safe).format(url)) }}</p>
 
 <p>{{ _("Please note that the link is only valid for {0}.", link_validity) }}</p>
 
@@ -16,8 +15,6 @@
 {{ _("Someone (hopefully you) requested access to the {0} account on Liberapay.",
      username) }}
 
-{{ _("Follow this link to proceed:") }}
-
-{{ participant.url('settings/', log_in='required') }}
+{{ _("Follow this link to proceed: {link}", link=participant.url('settings/', log_in='required')) }}
 
 {{ _("Please note that the link is only valid for {0}.", link_validity) }}

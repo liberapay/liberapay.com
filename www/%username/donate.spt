@@ -79,7 +79,9 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
         % endif
     % endif
 
-    {{ tip_form(tippee=participant) }}
+    % set tip = user.get_tip_to(participant)
+    % set form_currency, accepted_currencies = user.get_currencies_for(participant, tip)
+    {{ tip_form(tippee=participant, tip=tip) }}
     <br>
 
     % set e_accounts = participant.get_accounts_elsewhere(url_required=True)
@@ -98,7 +100,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 
     <h3>{{ _("Frequently Asked Questions") }}</h3>
 
-    % if len(participant.accepted_currencies_set) == 1
+    % if len(accepted_currencies) == 1
     <h4>{{ _("Can I donate in another currency?") }}</h4>
     <p>{{ _(
         "No, {username} only accepts payments in {currency}.",
@@ -107,7 +109,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     % endif
 
     <h4>{{ _("What payment methods are available?") }}</h4>
-    <p>{{ describe_payment_methods(participant) }}</p>
+    <p>{{ describe_payment_methods(participant, form_currency) }}</p>
 
     <h4>{{ _("How do recurrent donations work?") }}</h4>
     <p>{{ _(
@@ -126,7 +128,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     <h4>{{ _("Can I make a one-time donation?") }}</h4>
     <p>{{ _(
         "One-time donations aren't properly supported yet, but you can discontinue "
-        "your donation immediately after the first payment."
+        "your donation immediately after initiating the first payment."
     ) }}</p>
 
     <h4>{{ _("Will I get a receipt?") }}</h4>

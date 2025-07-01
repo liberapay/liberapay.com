@@ -2133,7 +2133,12 @@ class Participant(Model, MixinTeam):
             tippee = tippee.participant
         tip_currency = tip.amount.currency
         accepted = tippee.accepted_currencies_set
-        if tip_currency in accepted:
+        requested_currency = None
+        if (request := website.state.get({}).get('request')):
+            requested_currency = request.qs.get('currency')
+        if requested_currency in accepted:
+            return requested_currency, accepted
+        elif tip_currency in accepted:
             return tip_currency, accepted
         else:
             fallback_currency = tippee.main_currency
@@ -3512,7 +3517,7 @@ class Participant(Model, MixinTeam):
                   JOIN participants p ON p.id = t.member
                   JOIN payment_accounts a ON a.participant = t.member
                  WHERE t.team = %(tippee)s
-                   AND t.member <> %(tipper)s
+                   AND coalesce(t.member <> %(tipper)s, true)
                    AND t.amount <> 0
                    AND p.is_suspended IS NOT TRUE
                    AND a.provider = 'stripe'

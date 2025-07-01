@@ -2693,7 +2693,7 @@ class TestRefundsStripe(EmailHarness):
         # Check that the notification was sent
         emails = self.get_emails()
         assert len(emails) == 1
-        assert emails[0]['subject'] == "Your payment of €400.00 has been disputed"
+        assert emails[0]['subject'] == "Your payment is disputed"
         # Check that the receipt for this payment has been voided
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200

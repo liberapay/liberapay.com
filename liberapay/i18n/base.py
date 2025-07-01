@@ -458,10 +458,10 @@ def make_currencies_map():
             if (other_currency := r.get(country)):
                 if other_currency.startswith(country):
                     if currency.startswith(country):
-                        raise Exception(
+                        website.exception(Exception(
                             f"found more than one currency for territory {country}: "
                             f"{currency} and {other_currency}"
-                        )
+                        ))
                     else:
                         continue
             r[country] = currency
@@ -471,9 +471,9 @@ def make_currencies_map():
     mapped_currencies = set(r.values())
     for currency in CURRENCIES:
         if currency not in mapped_currencies:
-            raise Exception(
+            website.exception(Exception(
                 f"currency {currency} isn't associated to any territories"
-            )
+            ))
     return r
 
 CURRENCIES_MAP = make_currencies_map()

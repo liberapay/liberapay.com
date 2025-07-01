@@ -423,7 +423,8 @@ def execute_scheduled_payins():
             if payin.status in ('failed', 'succeeded'):
                 payer.notify(
                     'payin_' + payin.status,
-                    payin=payin._asdict(),
+                    payin=payin.__dict__,
+                    recipient_names=payin.recipient_names,
                     provider='Stripe',
                     email_unverified_address=True,
                     idem_key=str(payin.id),

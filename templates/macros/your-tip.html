@@ -9,9 +9,6 @@
     % set tip = tip or user.get_tip_to(tippee_p, currency)
     % set tip_currency = tip.amount.currency
     % set new_currency, accepted_currencies = user.get_currencies_for(tippee, tip)
-    % if request.qs.get('currency') in accepted_currencies
-        % set new_currency = request.qs['currency']
-    % endif
     % if not tippee_is_stub
         % set patron_countries = tippee.recipient_settings.patron_countries
         % set source_country = request.source_country

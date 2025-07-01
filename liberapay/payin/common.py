@@ -46,7 +46,7 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
             `False` means that the payer has initiated the operation just now
 
     Returns:
-        Record: the row created in the `payins` table
+        Payin: the row created in the `payins` table
 
     Raises:
         AccountSuspended: if the payer's account is suspended
@@ -79,7 +79,7 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
             INSERT INTO payins
                    (payer, amount, route, status, off_session)
             VALUES (%s, %s, %s, 'pre', %s)
-         RETURNING *
+         RETURNING payins
         """, (payer.id, amount, route.id, off_session))
         cursor.run("""
             INSERT INTO payin_events
@@ -109,11 +109,11 @@ def update_payin(
         error (str): if the charge failed, an error message to show to the payer
 
     Returns:
-        Record: the row updated in the `payins` table
+        Payin: the row updated in the `payins` table
 
     """
     with db.get_cursor() as cursor:
-        payin = cursor.one("""
+        payin, old_status = cursor.one("""
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
@@ -123,15 +123,15 @@ def update_payin(
                  , intent_id = coalesce(intent_id, %(intent_id)s)
                  , refunded_amount = coalesce(%(refunded_amount)s, refunded_amount)
              WHERE id = %(payin_id)s
-         RETURNING *
+         RETURNING payins
                  , (SELECT status FROM payins WHERE id = %(payin_id)s) AS old_status
-        """, locals())
+        """, locals(), default=(None, None))
         if not payin:
             return
         if remote_id and payin.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {payin.remote_id!r} != {remote_id!r}")
 
-        if status != payin.old_status:
+        if status != old_status:
             cursor.run("""
                 INSERT INTO payin_events
                        (payin, status, error, timestamp)
@@ -970,12 +970,13 @@ def record_payin_refund(
             refund.ctime > (utcnow() - timedelta(hours=24))
         )
     if notify:
-        payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
+        payin = db.one("SELECT pi FROM payins pi WHERE pi.id = %s", (refund.payin,))
         payer = db.Participant.from_id(payin.payer)
         payer.notify(
             'payin_refund_initiated',
             payin_amount=payin.amount,
             payin_ctime=payin.ctime,
+            recipient_names=payin.recipient_names,
             refund_amount=refund.amount,
             refund_reason=refund.reason,
             email_unverified_address=True,

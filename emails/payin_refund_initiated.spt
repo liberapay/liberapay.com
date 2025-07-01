@@ -2,13 +2,23 @@
 {{ _("A refund of {money_amount} has been initiated", money_amount=refund_amount) }}
 
 [---] text/html
+% if recipient_names|default(None)
 <p>{{ _(
-    "The payment of {money_amount} that you initiated on {date} is being refunded.",
+    "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you.",
+    money_amount=payin_amount, date=payin_ctime.date(), recipients=recipient_names,
+) if refund_amount == payin_amount else _(
+    "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you.",
+    money_amount=payin_amount, date=payin_ctime.date(), recipients=recipient_names,
+) }}</p>
+% else
+<p>{{ _(
+    "A payment of {money_amount} initiated on {date} is being refunded to you.",
     money_amount=payin_amount, date=payin_ctime.date(),
 ) if refund_amount == payin_amount else _(
-    "The payment of {money_amount} that you initiated on {date} is being partially refunded.",
+    "A payment of {money_amount} initiated on {date} is being partly refunded to you.",
     money_amount=payin_amount, date=payin_ctime.date(),
 ) }}</p>
+% endif
 
 <p>{{ _(
     "Reason: the payment was a duplicate.",
@@ -17,7 +27,7 @@
 ) if refund_reason == 'fraud' else _(
     "Reason: the refund was requested by you.",
 ) if refund_reason == 'requested_by_payer' else _(
-    "Please contact us to obtain more information.",
+    "You can contact us if you need information on the reason.",
 ) }}</p>
 
 <p>{{ _("It can take several business days for the funds to reappear in your bank account.") }}</p>
