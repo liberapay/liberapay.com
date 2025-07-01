@@ -34,6 +34,14 @@ class Website(_Website):
         next_payday = today + timedelta(days=days_till_wednesday)
         return last_payday, next_payday
 
+    def exception(self, exception):
+        if (tell_sentry := getattr(self, 'tell_sentry', None)):
+            return tell_sentry(exception)
+        elif self.env.sentry_reraise:
+            raise exception
+        else:
+            self.logger.error(str(exception))
+
     def link(self, path, text):
         return self._html_link % (path, text)
 
