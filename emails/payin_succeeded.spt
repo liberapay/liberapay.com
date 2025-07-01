@@ -2,7 +2,15 @@
 {{ _("Your payment has succeeded") }}
 
 [---] text/html
-% if payin.off_session|default(False)
+% if recipient_names|default(None)
+<p>{{ _(
+    "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded.",
+    money_amount=payin.amount, recipients=recipient_names,
+) if payin.ctime.date() == notification_ts.date() else _(
+    "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded.",
+    money_amount=payin.amount, date=payin.ctime.date(), recipients=recipient_names,
+) }}</p>
+% elif payin.off_session|default(False)
 <p>{{ _(
     "The automatic payment of {money_amount} initiated today has succeeded.",
     money_amount=payin.amount,
