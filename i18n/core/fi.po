@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Finnish "
-"<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2025-07-01 15:42+0000\n"
+"Last-Translator: Google Cloud Translation Advanced <noreply-mt-google-translate-api-v3@weblate.org>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -199,9 +201,9 @@ msgstr "Kirjaudu Liberapay-palveluun"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Joku (toivottavasti sinä) on pyytänyt käyttöoikeuksia tiliin {0} Liberapay-palvelussa."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Jatka tätä linkkiä seuraamalla: {link}"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -263,16 +265,17 @@ msgstr "Salasanasi on turvaton. Se esiintyy monissa julki vuotaneissa salasanati
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Sinun tulisi pikimmiten {link_start}vaihtaa salasanasi{link_end}."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Maksusi on kiistetty"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Pankkisi peruuttaa parhaillaan {date} veloitusta {money_amount} , jolla rahoitetaan lahjoitustasi vastaanottajalle {recipients} ."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Pankkisi peruuttaa {money_amount} suuruisen veloituksen, joka tehtiin {date}"
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Pankin esittämä syy on: se ei kyennyt käsittelemään maksua."
@@ -328,13 +331,13 @@ msgstr "Auttaaksesi pankkiasi tapahtuneen selvittelyssä voit lähettää heille
 msgid "Your payment has failed"
 msgstr "Maksusi epäonnistui"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Tänään aloitettu maksu {money_amount} lahjoituksesi rahoittamiseksi vastaanottajalle {recipients} epäonnistui."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "{money_amount} -maksu, joka tehtiin {date} lahjoituksesi rahoittamiseksi vastaanottajille {recipients} epäonnistui."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -366,21 +369,21 @@ msgstr "Yritä uudelleen"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount} hyvitys on aloitettu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Sinulle hyvitetään {money_amount} suuruinen veloitus, joka tehtiin {date} lahjoituksesi rahoittamiseksi {recipients} :lle."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Summa {money_amount} joka veloitettiin {date} lahjoituksesi rahoittamiseksi vastaanottajille {recipients} palautetaan sinulle osittain."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Sinulle palautetaan {money_amount} suuruinen maksu, joka tehtiin {date}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Maksu {money_amount} joka tehtiin {date} hyvitetään sinulle osittain."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Syy: maksu oli kaksoiskappale."
@@ -391,8 +394,9 @@ msgstr "Syy: maksu todettiin vilpilliseksi."
 msgid "Reason: the refund was requested by you."
 msgstr "Syy: pyysit itse hyvitystä."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Voit ottaa meihin yhteyttä, jos tarvitset tietoa syystä."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Rahojen saapumisessa pankkitilille voi kestää muutama työpäivä."
@@ -434,13 +438,13 @@ msgstr "Tämäntyyppisen maksun käsittelyssä kestää tyypillisesti {timedelta
 msgid "Your payment has succeeded"
 msgstr "Maksusi onnistui"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Tänään aloitettu maksu {money_amount} lahjoituksesi rahoittamiseksi vastaanottajalle {recipients} onnistui."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "{money_amount} -maksu, joka tehtiin {date} lahjoituksesi rahoittamiseksi vastaanottajille {recipients} onnistui."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1747,19 +1751,21 @@ msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitu
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "luotto- tai pankkikortti ( {list_of_card_brands} )"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "euromääräinen pankkitili (SEPA-suoraveloitus)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "PayPal-tili"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa seuraavilla tavoilla: {list_of_payment_methods} ."
 
 msgid "Payment Card"
 msgstr "Maksukortti"
@@ -2113,8 +2119,9 @@ msgstr "Miten toistuvat lahjoitukset toimivat?"
 msgid "Can I make a one-time donation?"
 msgstr "Voinko tehdä kertaluonteisen lahjoituksen?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Kertaluonteisia lahjoituksia ei vielä tueta kunnolla, mutta voit lopettaa lahjoituksesi heti ensimmäisen maksun suorittamisen jälkeen."
 
 msgid "Will I get a receipt?"
 msgstr "Saanko kuitin?"
@@ -4185,12 +4192,13 @@ msgstr "Noudattaako Liberapay varainhoitoasetuksia ja -lakeja?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Kyllä. Liberapay toimii Ranskasta käsin ja noudattaa Euroopan Unionin varainhoitoasetuksia. Maksunkäsittelijöillämme on asianmukaiset luvat, ja he auttavat torjumaan petoksia, rahanpesua sekä terrorismin rahoitusta."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Voivatko suomalaiset yksityishenkilöt käyttää Liberapayta lahjoitusten vastaanottamiseen?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Kyllä, mutta vain muista maista tulevat lahjoitukset, koska {external_link_start} Suomen laki säätelee tiukasti rahankeruuta Suomessa {link_end} . Jos haluat vastaanottaa lahjoituksia vain Suomen ulkopuolelta, {internal_link_start} siirry luetteloon maista, joista vastaanotat lahjoituksia {link_end} , poista valinta kohdasta Suomi ja muista napsauttaa Tallenna-painiketta."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Mistä tiedän, ettei lahjoitukseni mene huijarille, joka esiintyy toisena henkilönä?"
