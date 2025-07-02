@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Latvian "
-"<https://hosted.weblate.org/projects/liberapay/core/lv/>\n"
-"Plural-Forms: nplurals=3; plural=n == 0 ? 0 : n%10==1 && n%100!=11 ? 1 : 2;\n"
+"PO-Revision-Date: 2025-07-01 15:42+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Latvian <https://hosted.weblate.org/projects/liberapay/core/lv/>\n"
+"Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 0 ? 0 : n%10==1 && n%100!=11 ? 1 : 2;\n"
+"X-Generator: Weblate 5.13-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, fuzzy, python-brace-format
@@ -216,9 +218,9 @@ msgstr "Piesakieties Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Kāds (cerams, ka jūs) pieprasīja piekļuvi {0} kontam Liberapay."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Lai turpinātu, sekojiet šai saitei: {link}"
 
 #, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -287,16 +289,17 @@ msgstr "Esam atklājuši, ka jūsu parole ir kompromitēta: tā ir atrodama vien
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Jums vajadzētu {link_start}mainīt paroli{link_end} tagad."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Jūsu maksājums ir apstrīdēts"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Jūsu banka ir atcēlusi {money_amount} maksu, kas tika veikta {date}, lai finansētu jūsu ziedojumu {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Jūsu banka atceļ {money_amount} maksājumu, kas tika uzsākts {date}."
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -366,13 +369,13 @@ msgstr "Lai palīdzētu bankai noskaidrot, kas noticis, varat tai nosūtīt {lin
 msgid "Your payment has failed"
 msgstr "Jūsu maksājums ir neizdevies"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Šodien uzsāktais {money_amount} maksājums, lai finansētu jūsu ziedojumu {recipients}, ir neveiksmīgs."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "{date} uzsāktais {money_amount} maksājums, lai finansētu jūsu ziedojumu {recipients}, ir neveiksmīgs."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -406,21 +409,21 @@ msgstr "Mēģiniet vēlreiz"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Ir uzsākta {money_amount} atmaksāšana"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Jums tiek atmaksāta maksa par {money_amount}, kas tika iekasēta no {date}, lai finansētu jūsu ziedojumu {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Daļēji tiek atmaksāta maksa {money_amount}, kas tika iekasēta no {date}, lai finansētu jūsu ziedojumu {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Jums tiek atmaksāts {money_amount} maksājums, kas uzsākts {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Jums tiek daļēji atmaksāts {money_amount} maksājums, kas tika uzsākts {date}."
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -434,8 +437,9 @@ msgstr "Pamatojums: maksājums ir atzīts par krāpniecisku."
 msgid "Reason: the refund was requested by you."
 msgstr "Pamatojums: atmaksu pieprasījāt jūs."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Ja jums ir nepieciešama informācija par iemeslu, varat sazināties ar mums."
 
 #, fuzzy
 msgid "It can take several business days for the funds to reappear in your bank account."
@@ -481,13 +485,13 @@ msgstr "Šāda veida maksājumu apstrāde vidēji aizņem {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Jūsu maksājums ir veikts veiksmīgi"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Šodien uzsāktais {money_amount} maksājums, lai finansētu jūsu ziedojumu portālam {recipients}, ir bijis veiksmīgs."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "{date} uzsāktais {money_amount} maksājums, lai finansētu jūsu ziedojumu {recipients}, ir sekmīgi veikts."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -2052,19 +2056,21 @@ msgstr "{username} vēl nav konfigurēta neviena maksājuma metode, tāpēc jūs
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Ziedojumi {username} tiek apstrādāti, izmantojot PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "kredītkarti vai debetkarti ({list_of_card_brands})."
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "eiro bankas konts (SEPA tiešā debeta maksājums)."
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "PayPal kontu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Ziedojumus {username} var veikt, izmantojot: {list_of_payment_methods}."
 
 #, fuzzy
 msgid "Payment Card"
@@ -2495,8 +2501,9 @@ msgstr "Kā darbojas periodiskie ziedojumi?"
 msgid "Can I make a one-time donation?"
 msgstr "Vai es varu veikt vienreizēju ziedojumu?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Vienreizējie ziedojumi vēl netiek pienācīgi atbalstīti, taču jūs varat pārtraukt ziedojumu uzreiz pēc pirmā maksājuma veikšanas."
 
 #, fuzzy
 msgid "Will I get a receipt?"
@@ -4962,12 +4969,13 @@ msgstr "Vai Liberapay ievēro finanšu noteikumus?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Jā. Liberapay atrodas Francijā un atbilst Eiropas Savienības finanšu noteikumiem. Visi mūsu maksājumu apstrādātāji ir pienācīgi licencēti, un tie palīdz mums bloķēt krāpšanu, nelikumīgi iegūtu līdzekļu legalizēšanu un terorisma finansēšanu."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Vai privātpersonas Somijā var izmantot Liberapay, lai saņemtu ziedojumus?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Jā, bet tikai ziedojumi no citām valstīm, jo {external_link_start}Somijas tiesību akti stingri regulē naudas vākšanu Somijā{link_end}. Lai pieņemtu ziedojumus tikai no valstīm ārpus Somijas, {internal_link_start}dodieties uz to valstu sarakstu, no kurām jūs pieņemat ziedojumus{link_end}, noņemiet Somijas atzīmi un neaizmirstiet nospiest pogu Saglabāt."
 
 #, fuzzy
 msgid "How do I know that my donation won't go to an impostor?"
