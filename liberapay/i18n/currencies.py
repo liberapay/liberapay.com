@@ -580,9 +580,9 @@ def fetch_currency_exchange_rates(db=None):
         d.clear()
     # Check for missing exchange rates.
     if currencies:
-        raise Exception(
+        website.exception(Exception(
             f"missing exchange rates for currencies {', '.join(currencies)}"
-        )
+        ))
 
 
 def get_currency_exchange_rates(db):
