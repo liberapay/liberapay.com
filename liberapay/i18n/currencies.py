@@ -559,6 +559,17 @@ def fetch_currency_exchange_rates(db=None):
         assert website.env.instance_type != 'production'
         r = requests.get('https://liberapay.com/data/exchange-rates.json')
     rates = r.json()['rates']
+    missing_currencies = []
+    equivalent_currencies = {
+        t[1]: k for k, t in CURRENCY_REPLACEMENTS.items() if t[0] == 1
+    }
+    for currency in currencies:
+        if currency in rates:
+            continue
+        if (rate := rates.get(equivalent_currencies.get(currency))):
+            rates[currency] = rate
+        else:
+            missing_currencies.append(currency)
     for currency, rate in rates.items():
         if currency not in currencies:
             continue
@@ -570,7 +581,6 @@ def fetch_currency_exchange_rates(db=None):
             ON CONFLICT (source_currency, target_currency) DO UPDATE
                     SET rate = excluded.rate
         """, dict(target=currency, rate=Decimal(str(rate))))
-        currencies.remove(currency)
     # Update the local cache, unless it hasn't been created yet.
     if hasattr(website, 'currency_exchange_rates'):
         website.currency_exchange_rates = get_currency_exchange_rates(db)
@@ -579,9 +589,10 @@ def fetch_currency_exchange_rates(db=None):
     for d in MoneyAutoConvertDict.instances:
         d.clear()
     # Check for missing exchange rates.
-    if currencies:
+    if missing_currencies:
+        missing_currencies.sort()
         website.exception(Exception(
-            f"missing exchange rates for currencies {', '.join(currencies)}"
+            f"missing exchange rates for currencies {', '.join(missing_currencies)}"
         ))
 
 
