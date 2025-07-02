@@ -15,8 +15,8 @@ CREATE TYPE currency AS ENUM (
     'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MVR', 'MWK', 'MZN', 'NAD', 'NGN', 'NIO',
     'NPR', 'PAB', 'PEN', 'PGK', 'PKR', 'PYG', 'QAR', 'RSD', 'RWF', 'SAR', 'SBD',
     'SCR', 'SHP', 'SLE', 'SOS', 'SRD', 'SZL', 'TJS', 'TOP', 'TTD', 'TWD', 'TZS',
-    'UAH', 'UGX', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF',
-    'YER', 'ZMW'
+    'UAH', 'UGX', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XCG', 'XOF',
+    'XPF', 'YER', 'ZMW'
 );
 CREATE TYPE currency_amount AS (amount numeric, currency currency);
 
