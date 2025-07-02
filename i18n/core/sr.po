@@ -212,9 +212,9 @@ msgstr "Пријавите се на Либерапаи"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Неко (надамо се да сте ви) је затражио приступ {0} налогу на Либерапаи-у."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Пратите овај линк да бисте наставили: {link}"
 
 #, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -283,16 +283,17 @@ msgstr "Открили смо да је ваша лозинка компроми
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Требало би да {link_start}промените своју лозинку{link_end} сада."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Ваша уплата је оспорена"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Ваша банка врши поврат новца од {money_amount} који је покренут {date} за финансирање ваше донације за {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Ваша банка врши повратак наплате од {money_amount} покренуте {date}."
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -362,13 +363,13 @@ msgstr "Да бисте помогли својој банци да схвати
 msgid "Your payment has failed"
 msgstr "Ваша уплата није успела"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Уплата од {money_amount} започета данас за финансирање ваше донације за {recipients} није успела."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Уплата износа од {money_amount} покренута {date} за финансирање ваше донације за {recipients} није успела."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -402,21 +403,21 @@ msgstr "Покушајте поново"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Започет је повраћај новца у износу од {money_amount}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Наплата од {money_amount} покренута {date} за финансирање ваше донације за {recipients} биће вам враћена."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Наплата од {money_amount} покренута дана {date} за финансирање ваше донације за {recipients} вам се делимично враћа."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Уплата од {money_amount} покренута {date} вам се враћа."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Уплата од {money_amount} покренута дана {date} вам се делимично враћа."
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -430,8 +431,9 @@ msgstr "Разлог: исплата се сматра лажном."
 msgid "Reason: the refund was requested by you."
 msgstr "Разлог: ви сте тражили повраћај новца."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Можете нас контактирати ако су вам потребне информације о разлогу."
 
 #, fuzzy
 msgid "It can take several business days for the funds to reappear in your bank account."
@@ -477,13 +479,13 @@ msgstr "Обрада ове врсте плаћања у просеку трај
 msgid "Your payment has succeeded"
 msgstr "Ваша уплата је успела"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Уплата од {money_amount} започета данас за финансирање ваше донације за {recipients} је успешна."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Уплата од {money_amount} започета {date} за финансирање ваше донације за {recipients} је успешна."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -2047,19 +2049,21 @@ msgstr "{username} још увек није конфигурисао нијед�
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Донације за {username} се обрађују преко ПаиПал-а."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "кредитна или дебитна картица ({list_of_card_brands})"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "банковни рачун у еврима (SEPA директно задужење)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "PayPal налог"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Донације за {username} могу се уплатити користећи: {list_of_payment_methods}."
 
 #, fuzzy
 msgid "Payment Card"
@@ -2490,8 +2494,9 @@ msgstr "Како функционишу поновљене донације?"
 msgid "Can I make a one-time donation?"
 msgstr "Могу ли дати једнократну донацију?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Једнократне донације још увек нису правилно подржане, али можете одмах прекинути донацију након што извршите прву уплату."
 
 #, fuzzy
 msgid "Will I get a receipt?"
@@ -4956,12 +4961,13 @@ msgstr "Да ли Либерапаи поштује финансијске пр�
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Да. Либерапаи се налази у Француској и у складу је са финансијским прописима Европске уније. Сви наши процесори плаћања су прописно лиценцирани и помажу нам да блокирамо преваре, прање новца и финансирање тероризма."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Да ли појединци у Финској могу да користе Liberapay за примање донација?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Да, али само донације које долазе из других земаља, јер {external_link_start}фински закон строго регулише прикупљање новца унутар Финске{link_end}. Да бисте прихватали само донације изван Финске, {internal_link_start}идите на листу земаља из којих прихватате донације{link_end}, опозовите избор Финске и не заборавите да кликнете на дугме Сачувај."
 
 #, fuzzy
 msgid "How do I know that my donation won't go to an impostor?"

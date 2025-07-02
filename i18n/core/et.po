@@ -202,9 +202,9 @@ msgstr "Logi sisse Liberapay'sse"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Keegi (loodetavasti sina) proovis ligipääsu Liberapay kontole {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Jätkamiseks järgige seda linki: {link}"
 
 #, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -270,16 +270,17 @@ msgstr "Oleme avastanud, et teie salasõna on ohustatud: see esineb ühes või m
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Sa peaksid nüüd {link_start}muutma oma salasõna{link_end}."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Teie makse on vaidlustatud"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Teie pank tühistab teie annetuse rahastamiseks saajatele {recipients} algatatud {money_amount} debiteerimise, mis algatati kuupäeval {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Teie pank tühistab {date} algatatud debiteerimise summas {money_amount}."
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -346,13 +347,13 @@ msgstr "Selleks, et aidata pangal aru saada, mis juhtus, võite saata neile koop
 msgid "Your payment has failed"
 msgstr "Teie makse on ebaõnnestunud"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Täna teie annetuse rahastamiseks saajale {recipients} algatatud makse summas {money_amount} ebaõnnestus."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Teie annetuse rahastamiseks saajatele {recipients} algatatud makse {date} {money_amount} ebaõnnestus."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -386,21 +387,21 @@ msgstr "Proovi uuesti"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Algatatud on tagasimakse {money_amount}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Teile tagastatakse summa {money_amount} mis algatati kuupäeval {date} teie annetuse rahastamiseks saajatele {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Teie annetuse rahastamiseks saajatele {recipients} algatatud makse summas {date} {money_amount} tagastatakse teile osaliselt."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Teile tagastatakse {date} algatatud makse summas {money_amount}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Teile tagastatakse osaliselt {money_amount} makse, mis algatati kuupäeval {date}."
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -414,8 +415,9 @@ msgstr "Põhjus: makse on tunnistatud pettuseks."
 msgid "Reason: the refund was requested by you."
 msgstr "Põhjendus: tagasimakset taotlesite teie."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Kui vajate teavet põhjuse kohta, võite meiega ühendust võtta."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Summa tagasi jõudmine sinu pangakontole võib kesta mitu tööpäeva."
@@ -459,13 +461,13 @@ msgstr "Sellise makse töötlemine võtab keskmiselt aega {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Teie makse on õnnestunud"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Täna algatatud makse summas {money_amount} teie annetuse rahastamiseks saajale {recipients} õnnestus."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Teie annetuse rahastamiseks saajatele {recipients} sooritatud makse summas {date} {money_amount} õnnestus."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1978,19 +1980,21 @@ msgstr "{username} ei ole veel ühtegi makseviisi konfigureerinud, seega ei saa 
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Annetusi aadressil {username} töödeldakse PayPali kaudu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "krediit- või deebetkaart ({list_of_card_brands})"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "euro pangakonto (SEPA otsekorraldus)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "PayPali konto"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Annetusi kasutajale {username} saab teha järgmiste makseviiside abil: {list_of_payment_methods}."
 
 #, fuzzy
 msgid "Payment Card"
@@ -2410,8 +2414,9 @@ msgstr "Kuidas toimivad korduvad annetused?"
 msgid "Can I make a one-time donation?"
 msgstr "Kas ma saan teha ühekordse annetuse?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Ühekordseid annetusi veel korralikult ei toetata, kuid saate oma annetuse kohe pärast esimese makse tegemist lõpetada."
 
 #, fuzzy
 msgid "Will I get a receipt?"
@@ -4846,12 +4851,13 @@ msgstr "Kas Liberapay järgib finantseeskirju?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Jah. Liberapay asub Prantsusmaal ja vastab Euroopa Liidu finantseeskirjadele. Meie makseprotsessorid on kõik nõuetekohaselt litsentseeritud ja nad aitavad meil blokeerida pettust, rahapesu ja terrorismi rahastamist."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Kas Soome eraisikud saavad Liberapay kaudu annetusi vastu võtta?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Jah, aga ainult annetusi teistest riikidest, kuna {external_link_start}Soome seadus reguleerib raha kogumist Soomes rangelt{link_end}. Ainult annetuste vastuvõtmiseks väljastpoolt Soomet {internal_link_start}minge riikide loendisse, kust te annetusi vastu võtate{link_end}, eemaldage valik Soome ees ja ärge unustage klõpsata nuppu „Salvesta“."
 
 #, fuzzy
 msgid "How do I know that my donation won't go to an impostor?"

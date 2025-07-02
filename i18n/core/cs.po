@@ -204,9 +204,9 @@ msgstr "Přihlaste se na Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Někdo (doufáme, že vy) požádal o přístup k účtu {0} na Liberapay."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Pokračujte kliknutím na tento odkaz: {link}"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -269,16 +269,17 @@ msgstr "Zjistili jsme, že vaše heslo bylo kompromitováno: je obsaženo v jedn
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Měli byste si ihned {link_start}změnit své heslo{link_end}."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Vaše platba je sporná"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Vaše banka stornuje platbu ve výši {money_amount} zahájenou dne {date} za účelem financování vašeho daru pro {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Vaše banka stornuje platbu ve výši {money_amount} zahájenou dne {date}."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Důvodem, který vaše banka uvedla, je: platbu nemohla zpracovat."
@@ -334,13 +335,13 @@ msgstr "Abyste své bance pomohli zjistit, co se stalo, můžete jí zaslat kopi
 msgid "Your payment has failed"
 msgstr "Vaše platba se nezdařila"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Platba ve výši {money_amount} která byla dnes zahájena za účelem financování vašeho daru pro {recipients} se nezdařila."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Platba ve výši {money_amount} zahájená dne {date} za účelem financování vašeho daru pro {recipients} se nezdařila."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -372,21 +373,21 @@ msgstr "Zkusit znovu"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Bylo zahájeno vrácení {money_amount}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Poplatek ve výši {money_amount} který byl dne {date} proveden za účelem financování vašeho daru pro {recipients} vám bude vrácen."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Částka {money_amount} která byla dne {date} za účelem financování vašeho daru pro {recipients} vám bude částečně vrácena."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Platba ve výši {money_amount} zahájená dne {date} vám bude vrácena."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Platba ve výši {money_amount} zahájená dne {date} vám bude částečně vrácena."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Důvod: platba byla duplicitní."
@@ -397,8 +398,9 @@ msgstr "Důvod: platba byla označena jako podvodná."
 msgid "Reason: the refund was requested by you."
 msgstr "Důvod: Vrácení bylo požadováno vámi."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Pokud potřebujete informace o důvodu, můžete nás kontaktovat."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "Může to trvat několik pracovních dní, než se prostředky znovu objeví na vašem bankovním účtu."
@@ -440,13 +442,13 @@ msgstr "Zpracování tohoto druhu platby trvá v průměru {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Vaše platba proběhla úspěšně"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Platba ve výši {money_amount} která byla dnes zahájena na financování vašeho daru pro {recipients} byla úspěšně provedena."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Platba ve výši {money_amount} zahájená dne {date} za účelem financování vašeho daru pro {recipients} byla úspěšně provedena."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1758,19 +1760,21 @@ msgstr "{username} zatím nenakonfigurovalo žádný způsob platby, takže vá�
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Příspěvky pro {username} jsou zpracovávány přes PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "kreditní nebo debetní karta ({list_of_card_brands})"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "bankovní účet v eurech (SEPA inkaso)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "účet PayPal"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Dary pro {username} lze uhradit pomocí: {list_of_payment_methods}."
 
 msgid "Payment Card"
 msgstr "Platební karta"
@@ -2127,8 +2131,9 @@ msgstr "Jak fungují opakující se příspěvky?"
 msgid "Can I make a one-time donation?"
 msgstr "Můžu přispět jednorázově?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Jednorázové dary zatím nejsou řádně podporovány, ale svůj dar můžete ukončit ihned po zahájení první platby."
 
 msgid "Will I get a receipt?"
 msgstr "Dostanu účtenku?"
@@ -4217,12 +4222,13 @@ msgstr "Dodržuje Liberapay finanční nařízení?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Ano. Liberapay sídlí ve Francii a pracuje v souladu s nařízeními Evropské unie. Naši zpracovatelé plateb jsou všichni správně registrovaní a pomáhají nám bránit podvodům, praní špinavých peněz a financování terorismu."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Mohou jednotlivci ve Finsku používat Liberapay k přijímání darů?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Ano, ale pouze dary z jiných zemí, {external_link_start}finské zákony přísně regulují výběr peněz ve Finsku{link_end}. Chcete-li přijímat pouze dary mimo Finsko, {internal_link_start}přejděte na seznam zemí, od kterých přijímáte dary{link_end}, zrušte výběr Finska a nezapomeňte kliknout na tlačítko Uložit."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Jak mohu vědět, že můj příspěvek nedostane podvodník?"

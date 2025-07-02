@@ -194,9 +194,9 @@ msgstr "登入 Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "有人（希望您本人）要存取您 Liberapay 上的帳號 {0}。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "點擊此連結繼續： {link}"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -257,16 +257,17 @@ msgstr "我們偵測到您的密碼已不再安全：該密碼出現在了一個
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "您应立即{link_start}更改您的密码{link_end}。"
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "您的付款有爭議"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "您的銀行正在撤銷您於{date}捐款給{recipients} {money_amount}筆費用。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "您的銀行正在撤銷於{date}所啟動的{money_amount}的費用。"
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "銀行提供的原因是：它無法處理該次付款。"
@@ -322,13 +323,13 @@ msgstr "爲幫助您的銀行弄清發生了什麼，您可以向他們發送{li
 msgid "Your payment has failed"
 msgstr "支付未能順利完成"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "今天發起的一項旨在資助您向{recipients}捐款的{money_amount}付款失敗。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "您於{date}發起的一項{money_amount}的付款旨在為{recipients}提供捐款，但付款失敗。"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -360,21 +361,21 @@ msgstr "再試一次"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount}的數額已退款"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "您於{date}捐款給{recipients}金額為{money_amount}現在將退還給您。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "您於{date}捐款給{recipients}時所收取的{money_amount}費用將部分退還給您。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "於{date}發起的{money_amount}的付款將退還給您。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "於{date}發起的{money_amount}的付款將部分退還給您。"
 
 msgid "Reason: the payment was a duplicate."
 msgstr "原因：重複付款。"
@@ -385,8 +386,9 @@ msgstr "原因：此付款被認為是欺詐。"
 msgid "Reason: the refund was requested by you."
 msgstr "原因：由您所發動的退款要求。"
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "如果您需要了解原因，可以聯絡我們。"
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "需要多個工作天來完成退款流程以返還到銀行帳戶。"
@@ -428,13 +430,13 @@ msgstr "處理此類支付大概需要{timedelta}時間。"
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付已順利完成"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "今天發起的一項金額為{money_amount}的付款已成功完成，用於資助您向{recipients}捐贈。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "您於{date}發起的{money_amount}的付款已成功，用於資助您向{recipients}捐贈。"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1732,19 +1734,21 @@ msgstr "{username} 尚未設定付款方式，故目前無法實際處理您的�
 msgid "Donations to {username} are processed through PayPal."
 msgstr "透過 PayPal 處理向 {username} 的捐助。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "信用卡或金融卡（ {list_of_card_brands} ）"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "歐元銀行帳戶（SEPA 直接扣款）"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "PayPal 帳戶"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "可以使用以下方式捐款給{username} ： {list_of_payment_methods} 。"
 
 msgid "Payment Card"
 msgstr "付款卡"
@@ -2110,8 +2114,9 @@ msgstr "定期捐款是如何進行的？"
 msgid "Can I make a one-time donation?"
 msgstr "我能只捐款一次嗎？"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "一次性捐款尚未得到適當支持，但您可以在發起第一筆付款後立即停止捐款。"
 
 msgid "Will I get a receipt?"
 msgstr "我會得到一張收據嗎？"
@@ -4170,12 +4175,13 @@ msgstr "Liberapay 是否遵守財務規範呢？"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "是的，Liberapay 位於法國須要遵守歐盟的財務規範。我們的付款處理處皆有取得合適的許可執照，它們也會協助我們阻斷詐欺、洗錢或恐怖組織的金流。"
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "芬蘭個人可以使用 Liberapay 接收捐款嗎？"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "是的，但僅限來自其他國家的捐款，因為{external_link_start}芬蘭法律嚴格監管芬蘭境內的資金收繳{link_end} 。如果您只接受來自芬蘭境外的捐款， {internal_link_start}請前往您接受捐款的國家/地區清單{link_end} ，取消選擇芬蘭，並別忘了點擊「儲存」按鈕。"
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "怎麼確保捐款不會被騙子所濫用？"
@@ -4280,7 +4286,7 @@ msgstr "只能在至少有一個受支持的支付處理商可用的地區才能
 
 #, fuzzy, python-brace-format
 msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
-msgstr "目前支持的支付處理商有{Stripe} 和{PayPal} 。您可以在該{link_start} \"{page_name}\" 頁面{link_end} 找到它們之間的區別列表。"
+msgstr "目前支持的支付處理商有{Stripe} 和{PayPal} 。您可以在該{link_start}\"{page_name}\" 頁面{link_end} 找到它們之間的區別列表。"
 
 #, fuzzy
 msgid "Best supported territories"

@@ -199,9 +199,9 @@ msgstr "Liberapay'de oturum aç"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Birisi (umarız siz) Liberapay'deki {0} hesabınıza erişmeye çalıştı."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Devam etmek için bu bağlantıyı takip edin: {link}"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -263,16 +263,17 @@ msgstr "Parolanızın gizliliğinin bozulduğunu saptadık: bir veya daha fazla 
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "{link_start}Parolanızı şimdi değiştirmelisiniz{link_end}."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Sizin ödemenize itiraz edildi"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinden başlatılan {money_amount} ücreti bankanız tarafından geri alınıyor."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "{date} adresinde başlatılan {money_amount} ücretlendirmesi, sizin bankanız tarafından geri alınmaktadır."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Bankanız tarafından sağlanan sebep: ödemeyi işleme koyamadı."
@@ -328,13 +329,13 @@ msgstr "Bankanızın ne olduğunu anlamasına yardımcı olmak için, onlara {li
 msgid "Your payment has failed"
 msgstr "Ödemeniz başarısız oldu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için bugün başlatılan {money_amount} ödemesi başarısız oldu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ödemesi başarısız oldu."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -366,21 +367,21 @@ msgstr "Yeniden deneyin"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount} iadesi işlemi başlatıldı"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ücreti size iade edilmektedir."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ücretinin bir kısmı size iade edilmektedir."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "{date} adresinde başlatılan {money_amount} ödemesi tarafınıza iade edilmektedir."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "{date} adresinde başlatılan {money_amount} ödemesinin bir kısmı tarafınıza iade edilmektedir."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Sebep: ödeme zaten vardı."
@@ -391,8 +392,9 @@ msgstr "Sebep: ödeme hileli olarak değerlendirildi."
 msgid "Reason: the refund was requested by you."
 msgstr "Sebep: geri ödeme tarafınızca istendi."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Sebep hakkında bilgiye ihtiyacınız varsa bizimle iletişime geçebilirsiniz."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr "İadelerin banka hesabınızda yeniden görünmesi birkaç iş günü sürebilir."
@@ -434,13 +436,13 @@ msgstr "Bu tür ödemelerin işlenmesi ortalama {timedelta} sürmektedir."
 msgid "Your payment has succeeded"
 msgstr "Ödemeniz başarılı oldu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için bugün başlatılan {money_amount} ödemesi başarılı olmuştur."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ödemesi başarılı oldu."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1747,19 +1749,21 @@ msgstr "{username} henüz herhangi bir ödeme yöntemi yapılandırmadı, bu ned
 msgid "Donations to {username} are processed through PayPal."
 msgstr "{username} için yapılan bağışlar PayPal üzerinden gerçekleştirilir."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "bir kredi kartı veya banka kartı ({list_of_card_brands})"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "bir euro banka hesabı (SEPA otomatik ödeme)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "bir PayPal hesabı"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "{username} adresine yapılacak bağışlar {list_of_payment_methods} adresi kullanılarak ödenebilir."
 
 msgid "Payment Card"
 msgstr "Ödeme Kartı"
@@ -2127,8 +2131,9 @@ msgstr "Tekrarlayan bağışlar nasıl çalışır?"
 msgid "Can I make a one-time donation?"
 msgstr "Bir kerelik bağış yapabilir miyim?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Tek seferlik bağışlar henüz tam olarak desteklenmemektedir, ancak ilk ödemeyi başlattıktan hemen sonra bağışınızı durdurabilirsiniz."
 
 msgid "Will I get a receipt?"
 msgstr "Makbuz alacak mıyım?"
@@ -4203,12 +4208,13 @@ msgstr "Liberapay finansal düzenlemelere saygı duyuyor mu?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Evet. Liberapay Fransa merkezlidir ve Avrupa Birliği'nin mali düzenlemelerine uymaktadır. Ödeme işleyicilerimizin hepsi uygun şekilde lisanslıdır ve dolandırıcılığı, kara para aklamayı ve terörizmin finansmanını engellememize yardımcı olmaktadır."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Finlandiya'daki bireyler bağışlar için Liberapay'i kullanabilir mi?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Evet, ancak yalnızca diğer ülkelerden gelen bağışlar, çünkü {external_link_start}Finlandiya yasaları Finlandiya içinde para toplanmasını sıkı bir şekilde düzenlemektedir{link_end}. Yalnızca Finlandiya dışından gelen bağışları kabul etmek için, {internal_link_start}adresinden bağış kabul ettiğiniz ülkeler listesine gidin{link_end}, Finlandiya'nın seçimini kaldırın ve Kaydet düğmesine tıklamayı unutmayın."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Bağışımın bir sahtekara gitmeyeceğini nasıl bilebilirim?"

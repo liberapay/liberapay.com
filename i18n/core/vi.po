@@ -194,9 +194,9 @@ msgstr "Đăng nhập vào Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Ai đó (hy vọng là bạn) đã yêu cầu quyền truy cập vào tài khoản {0} trên Liberapay."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Follow this link to proceed: {link}"
-msgstr ""
+msgstr "Nhấp vào liên kết này để tiếp tục: {link}"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
@@ -261,16 +261,17 @@ msgstr "Chúng tôi đã phát hiện ra rằng mật khẩu của bạn đã b�
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Bạn nên {link_start}thay đổi mật khẩu của mình{link_end} ngay bây giờ."
 
+#, fuzzy
 msgid "Your payment is disputed"
-msgstr ""
+msgstr "Thanh toán của bạn đang bị tranh chấp"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr ""
+msgstr "Khoản phí {money_amount} được khởi tạo vào {date} để tài trợ cho khoản quyên góp của bạn cho {recipients} đang được ngân hàng của bạn hoàn lại."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr ""
+msgstr "Ngân hàng của bạn đang hoàn lại khoản phí {money_amount} được phát sinh vào ngày {date}."
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -340,13 +341,13 @@ msgstr "Để giúp ngân hàng của bạn tìm ra điều gì đã xảy ra, b
 msgid "Your payment has failed"
 msgstr "Thanh toán của bạn không thành công"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được khởi tạo hôm nay để tài trợ cho khoản quyên góp của bạn cho {recipients} đã không thành công."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được khởi tạo vào {date} để tài trợ cho khoản quyên góp của bạn cho {recipients} đã không thành công."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -379,21 +380,21 @@ msgstr "Thử lại"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Hoàn lại {money_amount} đã được bắt đầu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr ""
+msgstr "Khoản phí {money_amount} được khởi tạo vào {date} để tài trợ cho khoản quyên góp của bạn cho {recipients} đang được hoàn lại cho bạn."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr ""
+msgstr "Khoản phí {money_amount} được tính vào {date} để tài trợ cho khoản quyên góp của bạn cho {recipients} đang được hoàn lại một phần cho bạn."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được thực hiện vào {date} đang được hoàn lại cho bạn."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được thực hiện vào {date} đang được hoàn lại một phần cho bạn."
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -407,8 +408,9 @@ msgstr "Lý do: thanh toán đã bị coi là gian lận."
 msgid "Reason: the refund was requested by you."
 msgstr "Lý do: khoản hoàn trả do bạn yêu cầu."
 
+#, fuzzy
 msgid "You can contact us if you need information on the reason."
-msgstr ""
+msgstr "Bạn có thể liên hệ với chúng tôi nếu bạn cần thông tin về lý do."
 
 #, fuzzy
 msgid "It can take several business days for the funds to reappear in your bank account."
@@ -454,13 +456,13 @@ msgstr "Việc xử lý loại thanh toán này mất trung bình {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Thanh toán của bạn đã thành công"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được khởi tạo hôm nay để tài trợ cho khoản quyên góp của bạn cho {recipients} đã thành công."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr ""
+msgstr "Khoản thanh toán {money_amount} được khởi tạo vào {date} để tài trợ cho khoản quyên góp của bạn cho {recipients} đã thành công."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -2001,19 +2003,21 @@ msgstr "{username} chưa định cấu hình bất kỳ phương thức thanh to
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Các khoản đóng góp cho {username} được xử lý thông qua PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr ""
+msgstr "thẻ tín dụng hoặc thẻ ghi nợ ({list_of_card_brands})"
 
+#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr ""
+msgstr "tài khoản ngân hàng euro (SEPA Direct Debit)"
 
+#, fuzzy
 msgid "a PayPal account"
-msgstr ""
+msgstr "một tài khoản PayPal"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr ""
+msgstr "Bạn có thể thanh toán các khoản đóng góp cho {username} bằng cách sử dụng: {list_of_payment_methods}."
 
 #, fuzzy
 msgid "Payment Card"
@@ -2438,8 +2442,9 @@ msgstr "Đóng góp định kỳ hoạt động như thế nào?"
 msgid "Can I make a one-time donation?"
 msgstr "Tôi có thể đóng góp một lần không?"
 
+#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr ""
+msgstr "Việc quyên góp một lần chưa được hỗ trợ đầy đủ, nhưng bạn có thể ngừng quyên góp ngay sau khi thực hiện khoản thanh toán đầu tiên."
 
 #, fuzzy
 msgid "Will I get a receipt?"
@@ -4851,12 +4856,13 @@ msgstr "Liberapay có tôn trọng các quy định tài chính không?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Đúng. Liberapay có trụ sở tại Pháp và tuân thủ các quy định tài chính của Liên minh Châu Âu. Các bộ xử lý thanh toán của chúng tôi đều được cấp phép hợp lệ và chúng giúp chúng tôi chặn gian lận, rửa tiền và tài trợ khủng bố."
 
+#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr ""
+msgstr "Người dân ở Phần Lan có thể sử dụng Liberapay để nhận quyên góp không?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr ""
+msgstr "Có, nhưng chỉ những khoản quyên góp đến từ các quốc gia khác, {external_link_start}luật pháp Phần Lan quy định chặt chẽ việc thu tiền trong phạm vi Phần Lan{link_end}. Để chỉ chấp nhận các khoản quyên góp từ bên ngoài Phần Lan, {internal_link_start}hãy vào danh sách các quốc gia mà bạn chấp nhận các khoản quyên góp{link_end}, bỏ chọn Phần Lan và đừng quên nhấp vào nút Lưu."
 
 #, fuzzy
 msgid "How do I know that my donation won't go to an impostor?"
