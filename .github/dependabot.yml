@@ -5,6 +5,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
+    cooldown:
+      default-days: 3
     ignore:
       - dependency-name: "aspen"
       - dependency-name: "botocore"
