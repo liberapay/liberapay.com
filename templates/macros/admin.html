@@ -27,20 +27,35 @@
                 {{ icon('ok-sign', "This account has been marked as unsettling by its owner.") }}
                 % endif
             </label>
-            <label class="text-warning">
+            <label class="text-muted">
                 <input type="radio" name="mark_as" value="controversial" {{
                        'checked' if p.marked_as == 'controversial' else '' }} />
                 controversial
             </label>
-            <label class="text-warning">
+            <label class="text-muted">
                 <input type="radio" name="mark_as" value="irrelevant" {{
                        'checked' if p.marked_as == 'irrelevant' else '' }} />
                 irrelevant
             </label>
-            <label class="text-warning">
+            <label class="text-muted">
                 <input type="radio" name="mark_as" value="misleading" {{
                        'checked' if p.marked_as == 'misleading' else '' }} />
                 misleading
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="obsolete" {{
+                       'checked' if p.marked_as == 'obsolete' else '' }} />
+                obsolete
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="unverifiable" {{
+                       'checked' if p.marked_as == 'unverifiable' else '' }} />
+                unverifiable
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="out-of-scope" {{
+                       'checked' if p.marked_as == 'out-of-scope' else '' }} />
+                out of scope
             </label>
             <label class="text-danger">
                 <input type="radio" name="mark_as" value="spam" {{

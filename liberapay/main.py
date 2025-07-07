@@ -38,7 +38,7 @@ from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import (
     Participant, clean_up_closed_accounts, free_up_usernames,
-    send_account_disabled_notifications,
+    send_account_disabled_notifications, send_account_flagged_notifications,
     generate_profile_description_missing_notifications
 )
 from liberapay.models.repository import refetch_repos
@@ -186,6 +186,7 @@ if conf:
     cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
     cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
     cron(intervals.get('send_account_disabled_notifications', 600), send_account_disabled_notifications, True)
+    cron(intervals.get('send_account_flagged_notifications', 600), send_account_flagged_notifications, True)
     cron(intervals.get('refetch_elsewhere_data', 30), refetch_elsewhere_data, True)
     cron(intervals.get('refetch_repos', 20), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)

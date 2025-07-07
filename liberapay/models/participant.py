@@ -4032,9 +4032,7 @@ def send_account_disabled_notifications():
           FROM events e
           JOIN participants p ON p.id = e.participant
          WHERE e.type = 'flags_changed'
-           AND ( e.payload->>'is_spam' = 'true' OR
-                 e.payload->>'is_suspended' = 'true' OR
-                 e.payload->>'marked_as' IN ('spam', 'fraud') )
+           AND e.payload->>'marked_as' IN ('spam', 'fraud')
            AND e.ts < (current_timestamp - interval '1 hour')
            AND e.ts > (current_timestamp - interval '48 hours')
            AND p.marked_as IN ('spam', 'fraud')
@@ -4059,6 +4057,44 @@ def send_account_disabled_notifications():
         sent += 1
     if sent:
         print(f"Sent {sent} account_disabled notification{'' if sent == 1 else 's'}.")
+    return len(participants)
+
+
+def send_account_flagged_notifications():
+    """Notify the owners of accounts that have been flagged but not disabled.
+
+    The one hour delay before sending the notification gives time to reverse the decision.
+    """
+    participants = website.db.all("""
+        SELECT DISTINCT ON (p.id) p
+          FROM events e
+          JOIN participants p ON p.id = e.participant
+         WHERE e.type = 'flags_changed'
+           AND e.payload->>'marked_as' IN ('obsolete', 'out-of-scope', 'unverifiable')
+           AND e.ts < (current_timestamp - interval '1 hour')
+           AND e.ts > (current_timestamp - interval '48 hours')
+           AND p.marked_as IN ('obsolete', 'out-of-scope', 'unverifiable')
+           AND NOT EXISTS (
+                   SELECT 1
+                     FROM notifications n
+                    WHERE n.participant = p.id
+                      AND n.event = 'account_flagged'
+                      AND n.ts > (current_timestamp - interval '48 hours')
+                    LIMIT 1
+               )
+      ORDER BY p.id
+    """)
+    sent = 0
+    for p in participants:
+        sleep(1)
+        p.notify(
+            'account_flagged',
+            reason=p.marked_as,
+            force_email=True,
+        )
+        sent += 1
+    if sent:
+        print(f"Sent {sent} account_flagged notification{'' if sent == 1 else 's'}.")
     return len(participants)
 
 
