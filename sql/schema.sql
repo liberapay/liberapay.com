@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '188'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '189'::jsonb);
 
 
 -- app configuration
@@ -28,7 +28,8 @@ CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
 CREATE TYPE account_mark AS ENUM (
     'trusted', 'okay', 'unsettling',
     'controversial', 'irrelevant', 'misleading',
-    'spam', 'fraud'
+    'spam', 'fraud',
+    'obsolete', 'out-of-scope', 'unverifiable'
 );
 
 CREATE TABLE participants

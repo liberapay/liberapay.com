@@ -3691,3 +3691,8 @@ INSERT INTO takes
           , actual_amount, recorder, ((paid_in_advance).amount, 'XCG')::currency_amount
        FROM current_takes
       WHERE (amount).currency = 'ANG';
+
+-- migration #189
+ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'obsolete';
+ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'out-of-scope';
+ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'unverifiable';
