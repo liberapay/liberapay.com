@@ -40,9 +40,9 @@ response.csp_allow((b'style-src', b"'unsafe-inline'"))
     % if participant.hide_receiving
     <p class="alert alert-warning">{{ _(
         "This widget is not available because it is not compatible with the "
-        "{link_open}privacy settings{link_close} you have chosen.",
-        link_open=('<a href="{0}edit/privacy">'|safe).format(profile_url),
-        link_close='</a>'|safe
+        "{link_start}privacy settings{link_end} you have chosen.",
+        link_start=('<a href="{0}edit/privacy">'|safe).format(profile_url),
+        link_end='</a>'|safe
     ) }}</p>
     % else
     <p><script src="{{ profile_url }}widgets/receiving.js"></script></p>
@@ -57,18 +57,18 @@ response.csp_allow((b'style-src', b"'unsafe-inline'"))
     % if participant.hide_giving
     <p class="alert alert-warning">{{ _(
         "This widget is not available because it is not compatible with the "
-        "{link_open}privacy settings{link_close} you have chosen.",
-        link_open=('<a href="{0}edit/privacy">'|safe).format(profile_url),
-        link_close='</a>'|safe
+        "{link_start}privacy settings{link_end} you have chosen.",
+        link_start=('<a href="{0}edit/privacy">'|safe).format(profile_url),
+        link_end='</a>'|safe
     ) }}</p>
     % else
     <p><script src="{{ profile_url }}widgets/giving.js"></script></p>
     % endif
 
     <h3>{{ _(
-        "Badges from {link_open}Shields.io{link_close}",
-        link_open="<a href='https://shields.io'>"|safe,
-        link_close="</a>"|safe
+        "Badges from {link_start}Shields.io{link_end}",
+        link_start='<a href="https://shields.io">'|safe,
+        link_end='</a>'|safe
     ) }}</h3>
 
     <p>{{ _("Use these code snippets to add a badge to your website or README:") }}</p>

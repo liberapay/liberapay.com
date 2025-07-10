@@ -31,10 +31,10 @@ title = _("Privacy")
 
 <p>{{ _(
     "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. "
-    "Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} "
+    "Please read {link_start}“Understanding the Cloudflare Cookies”{link_end} "
     "if you want to learn more about them.",
-    link_open='<a href="https://support.cloudflare.com/hc/en-us/articles/200170156">'|safe,
-    link_close='</a>'|safe,
+    link_start='<a href="https://support.cloudflare.com/hc/en-us/articles/200170156">'|safe,
+    link_end='</a>'|safe,
 ) }}</p>
 
 <p>{{ _(

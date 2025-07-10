@@ -116,24 +116,24 @@ subhead = _("Payment Processors")
 
     % if not participant.email
         <p class="alert alert-warning">{{ _(
-            "You have to {link_open}confirm your email address{link_close} before "
+            "You have to {link_start}confirm your email address{link_end} before "
             "you can start to receive donations."
-            , link_open=('<a href="%s">'|safe) % participant.path('emails/')
-            , link_close='</a>'|safe
+            , link_start=('<a href="%s">'|safe) % participant.path('emails/')
+            , link_end='</a>'|safe
         ) }}</p>
     % elif participant.username[0] == '~'
         <p class="alert alert-warning">{{ _(
-            "You have to {link_open}set your username{link_close} before you can "
+            "You have to {link_start}set your username{link_end} before you can "
             "start to receive donations."
-            , link_open=('<a href="%s">'|safe) % participant.path('edit/username')
-            , link_close='</a>'|safe
+            , link_start=('<a href="%s">'|safe) % participant.path('edit/username')
+            , link_end='</a>'|safe
         ) }}</p>
     % elif not has_statement
         <p class="alert alert-warning">{{ _(
-            "You have to {link_open}add a profile description{link_close} before "
+            "You have to {link_start}add a profile description{link_end} before "
             "you can start to receive donations."
-            , link_open=('<a href="%s">'|safe) % participant.path('edit/statement')
-            , link_close='</a>'|safe
+            , link_start=('<a href="%s">'|safe) % participant.path('edit/statement')
+            , link_end='</a>'|safe
         ) }}</p>
     % endif
 
@@ -151,10 +151,10 @@ subhead = _("Payment Processors")
     <p class="alert alert-warning">{{ _(
         "You've connected a PayPal account but no Stripe account. We strongly "
         "recommend that you also connect a Stripe account, because it's "
-        "{link_open}better than PayPal{link_close} in several ways, for both "
+        "{link_start}better than PayPal{link_end} in several ways, for both "
         "you and your donors.",
-        link_open='<a href="/about/payment-processors">'|safe,
-        link_close='</a>'|safe,
+        link_start='<a href="/about/payment-processors">'|safe,
+        link_end='</a>'|safe,
     ) }}</p>
     % elif not accounts
     <p class="text-info">{{ icon('info-sign') }} {{ _(

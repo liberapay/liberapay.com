@@ -117,6 +117,10 @@ _i18n_clean: $(env)
 	           -e '/^#, python-format$$/d' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
 	           -e '/^#: /d' \
+	           -e 's/\( (\{\w+_start\})/(\1/g' \
+	           -e 's/_start\} /_start}/g' \
+	           -e 's/ \{link_end\}/{link_end}/g' \
+	           -e 's/\{link_end\} ([).,，。、])/{link_end}\1/g' \
 	           "$$f" | \
 	        $(env_py) -c "import sys; print(sys.stdin.read().rstrip())" > "$$f.new"; \
 	    mv "$$f.new" "$$f"; \

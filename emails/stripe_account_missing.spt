@@ -5,10 +5,10 @@
 <p>{{ _(
     "You've connected a PayPal account but no Stripe account. We strongly "
     "recommend that you also connect a Stripe account, because it's "
-    "{link_open}better than PayPal{link_close} in several ways, for both "
+    "{link_start}better than PayPal{link_end} in several ways, for both "
     "you and your donors.",
-    link_open='<a href="https://liberapay.com/about/payment-processors">'|safe,
-    link_close='</a>'|safe,
+    link_start='<a href="https://liberapay.com/about/payment-processors">'|safe,
+    link_end='</a>'|safe,
 ) }}</p>
 
 <p><a href="{{ participant.url('payment') }}" style="{{ button_style('primary') }}">{{

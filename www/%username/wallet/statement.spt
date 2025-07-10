@@ -201,10 +201,10 @@ output.body = render(globals(), allow_partial_i18n=False)
                 % elif context == 'refund'
                     {{ _("donation refund") }}
                 % elif context == 'expense'
-                    {{ _("reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}",
-                         link_open='',
+                    {{ _("reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}",
+                         link_start='',
                          invoice_id=event['invoice'],
-                         link_close='',
+                         link_end='',
                          payer=event['username'],
                     ) }}
                 % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
@@ -253,10 +253,10 @@ output.body = render(globals(), allow_partial_i18n=False)
                 % elif context == 'refund'
                     {{ _("refund of anonymous donation") }}
                 % elif context == 'expense'
-                    {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
-                         link_open='',
+                    {{ _("payment of {link_start}expense #{invoice_id}{link_end} to {payee}",
+                         link_start='',
                          invoice_id=event['invoice'],
-                         link_close='',
+                         link_end='',
                          payee=to,
                     ) }}
                 % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')

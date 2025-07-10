@@ -61,13 +61,13 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "The payment processors Liberapay supports have unfavourable policies towards "
-        "sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and "
-        "{stripe_link}Stripe prohibits it entirely{link_close}. So, while it is "
+        "sexual content. {paypal_link}PayPal requires pre-approval{link_end}, and "
+        "{stripe_link}Stripe prohibits it entirely{link_end}. So, while it is "
         "possible to use Liberapay for some adult-only content, it is usually better "
         "to use a platform specialized in such content.",
         paypal_link='<a href="https://www.paypal.com/webapps/mpp/ua/legalhub-full">'|safe,
         stripe_link='<a href="https://stripe.com/legal/restricted-businesses">'|safe,
-        link_close='</a>'|safe,
+        link_end='</a>'|safe,
     ) }}</dd>
 
 
@@ -75,10 +75,10 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "Yes, you can stop your donations or modify their amounts, periods and renewal modes "
-        "at any time through {link_open}your “Giving” page{link_close}. Stopping a donation "
+        "at any time through {link_start}your “Giving” page{link_end}. Stopping a donation "
         "doesn't trigger any refund, it merely cancels future renewals.",
-        link_open='<a href="/about/me/giving/">'|safe,
-        link_close='</a>'|safe,
+        link_start='<a href="/about/me/giving/">'|safe,
+        link_end='</a>'|safe,
     ) }}</dd>
 
 
@@ -102,10 +102,10 @@ title = _("Frequently Asked Questions")
                  "like Patreon and Tipeee.") }}</li>
         <li>{{ _(
             "We care about internationalization, our service supports multiple "
-            "currencies and is translated into many languages ({link_open}you "
-            "can contribute{link_close}).",
-            link_open='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
-            link_close='</a>'|safe
+            "currencies and is translated into many languages ({link_start}you "
+            "can contribute{link_end}).",
+            link_start='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
+            link_end='</a>'|safe
         ) }}</li>
     </ol>
     <p>{{ _("If you'd like more details, the Snowdrift.coop folks have "

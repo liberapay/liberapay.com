@@ -70,16 +70,16 @@ user_agent = request.headers.get(b'User-Agent')
             % if code == 404
                 <p>{{ _(
                     "The requested page could not be found. Please "
-                    "{link_open}contact us{link_close} if you need assistance.",
-                    link_open='<a href="https://liberapay.com/about/contact">'|safe,
-                    link_close='</a>'|safe,
+                    "{link_start}contact us{link_end} if you need assistance.",
+                    link_start='<a href="https://liberapay.com/about/contact">'|safe,
+                    link_end='</a>'|safe,
                 ) }}</p>
             % else
                 <p>{{ _(
                     "Your request has been rejected by our software. Please "
-                    "{link_open}contact us{link_close} if you need assistance.",
-                    link_open='<a href="https://liberapay.com/about/contact">'|safe,
-                    link_close='</a>'|safe,
+                    "{link_start}contact us{link_end} if you need assistance.",
+                    link_start='<a href="https://liberapay.com/about/contact">'|safe,
+                    link_end='</a>'|safe,
                 ) }}</p>
             % endif
         % endif

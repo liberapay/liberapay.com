@@ -113,10 +113,10 @@ subhead = _("Currencies")
         "what to do. If you have a Business PayPal account, you can choose to "
         "automatically convert all incoming payments in foreign currencies to "
         "your main currency. This option is currently located in the "
-        "“{link_open}Preferences for receiving payments{link_close}” page.",
-        link_open='<a href="https://www.paypal.com/businessmanage/preferences/payments"'
+        "“{link_start}Preferences for receiving payments{link_end}” page.",
+        link_start='<a href="https://www.paypal.com/businessmanage/preferences/payments"'
                     ' target="_blank" rel="noopener noreferrer">'|safe,
-        link_close='</a>'|safe
+        link_end='</a>'|safe
     ) }}</p>
 
     <br>

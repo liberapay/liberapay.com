@@ -277,10 +277,10 @@ if user_is_admin:
             % elif context == 'refund'
                 {{ _("donation refund") }}
             % elif context == 'expense'
-                {{ _("reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}",
-                     link_open='<a href="%s">'|safe % event['invoice_url'],
+                {{ _("reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}",
+                     link_start='<a href="%s">'|safe % event['invoice_url'],
                      invoice_id=event['invoice'],
-                     link_close='</a>'|safe,
+                     link_end='</a>'|safe,
                      payer=('<a href="/{0}/">{0}</a>'|safe).format(event['username']),
                 ) }}
             % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
@@ -331,10 +331,10 @@ if user_is_admin:
             % elif context == 'refund'
                 {{ _("refund of anonymous donation") }}
             % elif context == 'expense'
-                {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
-                     link_open='<a href="%s">'|safe % event['invoice_url'],
+                {{ _("payment of {link_start}expense #{invoice_id}{link_end} to {payee}",
+                     link_start='<a href="%s">'|safe % event['invoice_url'],
                      invoice_id=event['invoice'],
-                     link_close='</a>'|safe,
+                     link_end='</a>'|safe,
                      payee=to,
                 ) }}
             % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')

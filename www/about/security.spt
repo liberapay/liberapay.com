@@ -6,28 +6,28 @@ title = _("Security")
 
     <p>{{ _(
         "If you think you've found a security issue, and it's not already in our list "
-        "of {known_issues_link}known low-severity issues{link_close}, then please "
-        "{hackerone_report_link}report it to us through HackerOne{link_close}.",
+        "of {known_issues_link}known low-severity issues{link_end}, then please "
+        "{hackerone_report_link}report it to us through HackerOne{link_end}.",
         known_issues_link='<a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ADefense">'|safe,
         hackerone_report_link='<a href="https://hackerone.com/liberapay/reports/new">'|safe,
-        link_close='</a>'|safe,
+        link_end='</a>'|safe,
     ) }}</p>
 
     <h3>{{ _("Policy") }}</h3>
 
     <p>{{ _(
         "The details of our security policy (scope, rewards…) are available in "
-        "{link_open}our HackerOne profile{link_close}.",
-        link_open='<a href="https://hackerone.com/liberapay">'|safe,
-        link_close='</a>'|safe,
+        "{link_start}our HackerOne profile{link_end}.",
+        link_start='<a href="https://hackerone.com/liberapay">'|safe,
+        link_end='</a>'|safe,
     ) }}</p>
 
     <h3>{{ _("Thanks") }}</h3>
 
     <p>{{ _(
-        "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}.",
-        link_open='<a href="https://hackerone.com/liberapay/thanks">'|safe,
-        link_close='</a>'|safe,
+        "Thanks to {link_start}everyone who has sent us a report through HackerOne{link_end}.",
+        link_start='<a href="https://hackerone.com/liberapay/thanks">'|safe,
+        link_end='</a>'|safe,
     ) }}</p>
 
 % endblock

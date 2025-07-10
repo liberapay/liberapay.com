@@ -650,8 +650,8 @@ msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "透過 Liberapay 讓贊助者更方便支持您"
 
 #, python-brace-format
-msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr "您已連結了 PayPal 帳號而非 Stripe 帳號，我們強烈推薦您設置 Stripe ，因為它{link_open}比 PayPal 更好用{link_close}。"
+msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_start}better than PayPal{link_end} in several ways, for both you and your donors."
+msgstr "您已連結了 PayPal 帳號而非 Stripe 帳號，我們強烈推薦您設置 Stripe ，因為它{link_start}比 PayPal 更好用{link_end}。"
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -741,12 +741,12 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "看來你發現了系統上的一個問題！抱歉造成不便，我們會儘快修復！"
 
 #, python-brace-format
-msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "找不到請求頁面。如需協助，可直接{link_open}連繫我們{link_close}。"
+msgid "The requested page could not be found. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "找不到請求頁面。如需協助，可直接{link_start}連繫我們{link_end}。"
 
 #, python-brace-format
-msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "我們的軟體拒絕了您的請求，如需協助請{link_open}聯絡我們{link_close}。"
+msgid "Your request has been rejected by our software. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "我們的軟體拒絕了您的請求，如需協助請{link_start}聯絡我們{link_end}。"
 
 msgid "Error message:"
 msgstr "錯誤訊息："
@@ -2245,8 +2245,8 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "接受外幣可以提高收入說服其它國家的人捐款支助，不過國際支付通常會有較高的手續費且滙率波動會減少您的收入。"
 
 #, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_open}收款頁的偏好設定{link_close}之下。"
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_start}Preferences for receiving payments{link_end}” page."
+msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_start}收款頁的偏好設定{link_end}之下。"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "連結你擁有的帳號使你的 Liberapay 個人檔案更容易被找到，且幫助證明你是你所聲稱的那個人。"
@@ -3444,16 +3444,16 @@ msgid "The data has been successfully refreshed."
 msgstr "成功更新了該數據。"
 
 #, python-brace-format
-msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "在開始接收捐款前必須先{link_open}確認您的電子郵件地址{link_close}。"
+msgid "You have to {link_start}confirm your email address{link_end} before you can start to receive donations."
+msgstr "在開始接收捐款前必須先{link_start}確認您的電子郵件地址{link_end}。"
 
 #, python-brace-format
-msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "您必須先{link_open}設置您的用戶名{link_close}才能開始接收捐款。"
+msgid "You have to {link_start}set your username{link_end} before you can start to receive donations."
+msgstr "您必須先{link_start}設置您的用戶名{link_end}才能開始接收捐款。"
 
 #, python-brace-format
-msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "您必須{link_open}添加個人資料描述{link_close}才能開始接收捐款。"
+msgid "You have to {link_start}add a profile description{link_end} before you can start to receive donations."
+msgstr "您必須{link_start}添加個人資料描述{link_end}才能開始接收捐款。"
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "要收取捐款您必須有一個可用的支付方法帳尸戶，本頁可讓您進行連接。"
@@ -3991,8 +3991,8 @@ msgid "donation refund"
 msgstr "捐贈退款"
 
 #, python-brace-format
-msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr "{link_open}費用的報梢 #{invoice_id}{link_close} 來自 {payer}"
+msgid "reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}"
+msgstr "{link_start}費用的報梢 #{invoice_id}{link_end} 來自 {payer}"
 
 msgid "anonymous donation"
 msgstr "匿名捐款"
@@ -4024,8 +4024,8 @@ msgid "refund of anonymous donation"
 msgstr "匿名捐贈的退款"
 
 #, python-brace-format
-msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr "費用{link_open}的支付 #{invoice_id}{link_close} 給 {payee}"
+msgid "payment of {link_start}expense #{invoice_id}{link_end} to {payee}"
+msgstr "費用{link_start}的支付 #{invoice_id}{link_end} 給 {payee}"
 
 #, python-brace-format
 msgid "donation to {0}"
@@ -4103,15 +4103,15 @@ msgid "Use this code to add to your website a widget which displays the amount o
 msgstr "使用這個代碼可以在自己的網站上新增一個Liberapay的收款小工具："
 
 #, python-brace-format
-msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
-msgstr "這個小套件無法使用因為它與你所挑選的 {link_open}隱私設定{link_close} 不相容。"
+msgid "This widget is not available because it is not compatible with the {link_start}privacy settings{link_end} you have chosen."
+msgstr "這個小套件無法使用因為它與你所挑選的 {link_start}隱私設定{link_end} 不相容。"
 
 msgid "Or, if you'd like a widget that shows how much you're giving:"
 msgstr "或者您也可以使用這塊會顯示您捐了多少錢的小工具："
 
 #, python-brace-format
-msgid "Badges from {link_open}Shields.io{link_close}"
-msgstr "{link_open}Shields.io{link_close}的徽章"
+msgid "Badges from {link_start}Shields.io{link_end}"
+msgstr "{link_start}Shields.io{link_end}的徽章"
 
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "把這段徵章的代碼加到您的網站或說明檔："
@@ -4170,15 +4170,15 @@ msgid "Not safe for work"
 msgstr "Not safe for work，不適合工作場所的內容"
 
 #, python-brace-format
-msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Liberapay 支持的支付處理商對於性內容採取一些較為不利的政策 — {paypal_link}PayPal 要求預先審批{link_close} ，{stripe_link}Stripe 則完全禁止{link_close}。雖然您可以使用 Liberapay 爲成人內容募款，但我們還是建議使用專門處理這類內容的平臺。"
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_end}, and {stripe_link}Stripe prohibits it entirely{link_end}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "Liberapay 支持的支付處理商對於性內容採取一些較為不利的政策 — {paypal_link}PayPal 要求預先審批{link_end} ，{stripe_link}Stripe 則完全禁止{link_end}。雖然您可以使用 Liberapay 爲成人內容募款，但我們還是建議使用專門處理這類內容的平臺。"
 
 msgid "Can I modify or stop my donations?"
 msgstr "我可以修改或停止捐款嗎？"
 
 #, python-brace-format
-msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr "是的，您可以隨時經{link_open}您的“捐贈”頁面{link_close}停止捐款或修改捐款金額、期限和續訂模式。停止捐款不會觸發任何退款，只會取消未來的續訂。"
+msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_start}your “Giving” page{link_end}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
+msgstr "是的，您可以隨時經{link_start}您的“捐贈”頁面{link_end}停止捐款或修改捐款金額、期限和續訂模式。停止捐款不會觸發任何退款，只會取消未來的續訂。"
 
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "Liberapay與其它市面上的眾資平台如Patreon有什麼不同？"
@@ -4190,8 +4190,8 @@ msgid "Liberapay is an open project structured around a non-profit organization,
 msgstr "Liberapay 是一個由非營利組織推動的開放專案，這讓它與其它商業平台Patreon / Tipeee有所區隔。"
 
 #, python-brace-format
-msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
-msgstr "我們很重視國際化，目前支援多種貨幣且有多語言版本({link_open}歡迎各方貢獻{link_close})."
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_start}you can contribute{link_end})."
+msgstr "我們很重視國際化，目前支援多種貨幣且有多語言版本({link_start}歡迎各方貢獻{link_end})."
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -4492,8 +4492,8 @@ msgid "The liberapay.com website only sets technical cookies which are required 
 msgstr "liberapay 網站設置了一些技術性 cookies 用以核實用戶或執行一些特定操作，這些 cookies 只限於本站內的請求，我們不知道其它網站是否有加入 liberpay 的小工具。"
 
 #, python-brace-format
-msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr "liberapay.com 網站的訪問者也可能收到 Cloudflare 發送的 Cookie。如果您想了解有關細節，請閱讀{link_open}“瞭解 Cloudflare Cookie”{link_close}。"
+msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_start}“Understanding the Cloudflare Cookies”{link_end} if you want to learn more about them."
+msgstr "liberapay.com 網站的訪問者也可能收到 Cloudflare 發送的 Cookie。如果您想了解有關細節，請閱讀{link_start}“瞭解 Cloudflare Cookie”{link_end}。"
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
@@ -4546,19 +4546,19 @@ msgid "As a precaution against identity theft in case of data leak, the identity
 msgstr "為防止資料外洩時出現身份盜用者，Liberapay 帳號持有者的身份資訊皆以加密方式儲存在資料庫。"
 
 #, python-brace-format
-msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr "若您發現安全問題，且尚未在{known_issues_link}目前已知的問題清單{link_close}找到解答，請{hackerone_report_link}利用 HackerOne 提出問題{link_close}。"
+msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_end}, then please {hackerone_report_link}report it to us through HackerOne{link_end}."
+msgstr "若您發現安全問題，且尚未在{known_issues_link}目前已知的問題清單{link_end}找到解答，請{hackerone_report_link}利用 HackerOne 提出問題{link_end}。"
 
 msgid "Policy"
 msgstr "政策"
 
 #, python-brace-format
-msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr "詳細的安全政策 (範圍, 獎賞....)都在我們的{link_open}HackerOne 資料頁{link_close}。"
+msgid "The details of our security policy (scope, rewards…) are available in {link_start}our HackerOne profile{link_end}."
+msgstr "詳細的安全政策 (範圍, 獎賞....)都在我們的{link_start}HackerOne 資料頁{link_end}。"
 
 #, python-brace-format
-msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr "感謝利用{link_open}HackerOne 回報問題的每位使用者{link_close}。"
+msgid "Thanks to {link_start}everyone who has sent us a report through HackerOne{link_end}."
+msgstr "感謝利用{link_start}HackerOne 回報問題的每位使用者{link_end}。"
 
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
@@ -5135,9 +5135,9 @@ msgid_plural "Our service is currently available in {n} languages."
 msgstr[0] "本服務目前提供 {n} 種語言。"
 
 #, python-brace-format
-msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
-msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
-msgstr[0] "目前正在翻譯成其他 {n} 種語言（{link_open}您也可以來翻譯{link_close}）。"
+msgid "It's also partially translated into {n} other language ({link_start}you can contribute{link_end})."
+msgid_plural "It's also partially translated into {n} other languages ({link_start}you can contribute{link_end})."
+msgstr[0] "目前正在翻譯成其他 {n} 種語言（{link_start}您也可以來翻譯{link_end}）。"
 
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
@@ -5206,9 +5206,9 @@ msgid_plural "{n} new donations have been started in the past month, increasing 
 msgstr[0] "上個月有{n}個新捐款被發起，每週全部資助提高了{money_amount}。"
 
 #, python-brace-format
-msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
-msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "上個月新增{n}個 {link_open}捐款承諾{link_close}，可請求的捐款需求每週增加了 {money_amount}。"
+msgid "<unused singular (hash=0e9b5412ec731add80b03f285e32357f)>"
+msgid_plural "{n} new {link_start}pledges{link_end} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
+msgstr[0] "上個月新增{n}個 {link_start}捐款承諾{link_end}，可請求的捐款需求每週增加了 {money_amount}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"

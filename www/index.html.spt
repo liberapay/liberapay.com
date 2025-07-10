@@ -257,11 +257,11 @@ recent = website.db.one("""
                 ) }}
                 % if n_langs > n_complete_translations
                 {{ ngettext(
-                    "It's also partially translated into {n} other language ({link_open}you can contribute{link_close}).",
-                    "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close}).",
+                    "It's also partially translated into {n} other language ({link_start}you can contribute{link_end}).",
+                    "It's also partially translated into {n} other languages ({link_start}you can contribute{link_end}).",
                     n_langs - n_complete_translations,
-                    link_open='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
-                    link_close='</a>'|safe,
+                    link_start='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
+                    link_end='</a>'|safe,
                 ) }}
                 % endif
                 {{ ngettext(
@@ -390,10 +390,10 @@ recent = website.db.one("""
         % if recent.n_pledges > 1
         <p>{{ icon('pledge') }} <span>{{ ngettext(
             "",
-            "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
+            "{n} new {link_start}pledges{link_end} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
             n=recent.n_pledges,
-            link_open='<a href="/explore/pledges">'|safe,
-            link_close='</a>'|safe,
+            link_start='<a href="/explore/pledges">'|safe,
+            link_end='</a>'|safe,
             money_amount=recent.pledges_amount.fuzzy_sum(currency),
         ) }}</span></p>
         % endif

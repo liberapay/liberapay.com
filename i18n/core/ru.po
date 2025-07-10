@@ -666,8 +666,8 @@ msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Вы можете упростить получение поддержки от ваших спонсоров с помощью Liberapay"
 
 #, python-brace-format
-msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr "Вы подключили учётку PayPal, но не учётку Stripe. Также мы очень рекомендуем вам подключить учётку Stripe, потому что она {link_open}лучше PayPal{link_close} в некоторых моментах, как для вас, так и для ваших спонсоров."
+msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_start}better than PayPal{link_end} in several ways, for both you and your donors."
+msgstr "Вы подключили учётку PayPal, но не учётку Stripe. Также мы очень рекомендуем вам подключить учётку Stripe, потому что она {link_start}лучше PayPal{link_end} в некоторых моментах, как для вас, так и для ваших спонсоров."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -761,12 +761,12 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Похоже, вы нашли баг! Приносим извинения за причинённые неудобства, мы исправим его как можно скорее!"
 
 #, python-brace-format
-msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "Запрашиваемая страница не найдена. {link_open}Свяжитесь с нами{link_close} если вам нужна помощь."
+msgid "The requested page could not be found. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "Запрашиваемая страница не найдена. {link_start}Свяжитесь с нами{link_end} если вам нужна помощь."
 
 #, python-brace-format
-msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "Ваш запрос был отклонен нашей программой. {link_open}Свяжитесь с нами{link_close} если вам нужна помощь."
+msgid "Your request has been rejected by our software. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "Ваш запрос был отклонен нашей программой. {link_start}Свяжитесь с нами{link_end} если вам нужна помощь."
 
 msgid "Error message:"
 msgstr "Ошибка:"
@@ -2262,8 +2262,8 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "Приём иностранных валют может повысить благосклонность пользователей."
 
 #, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr "Stripe автоматически конвертирует фунты в Вашу основную валюту, PayPal принимает платежи в оригинальной валюте. Если Вы используете PayPal Business, то можете настроить автоматическое конвертирование валюты входящих платежей. Эта опция находится на странице {link_open}Настройки для приема платежей{link_close}."
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_start}Preferences for receiving payments{link_end}” page."
+msgstr "Stripe автоматически конвертирует фунты в Вашу основную валюту, PayPal принимает платежи в оригинальной валюте. Если Вы используете PayPal Business, то можете настроить автоматическое конвертирование валюты входящих платежей. Эта опция находится на странице {link_start}Настройки для приема платежей{link_end}."
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "Подключение аккаунтов, которые у вас есть на других сайтах, позволяет проще найти ваш профиль Liberapay, и помогает доказать, что вы тот, за кого себя выдаёте."
@@ -3493,16 +3493,16 @@ msgid "The data has been successfully refreshed."
 msgstr "Данные обновлены успешно."
 
 #, python-brace-format
-msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "Вы должны {link_open}подтвердить свой адрес электронной почты{link_close}, прежде чем начать принимать пожертвования."
+msgid "You have to {link_start}confirm your email address{link_end} before you can start to receive donations."
+msgstr "Вы должны {link_start}подтвердить свой адрес электронной почты{link_end}, прежде чем начать принимать пожертвования."
 
 #, python-brace-format
-msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Вам необходимо {link_open}задать имя пользователя{link_close} прежде, чем вы сможете начать получать пожертвования."
+msgid "You have to {link_start}set your username{link_end} before you can start to receive donations."
+msgstr "Вам необходимо {link_start}задать имя пользователя{link_end} прежде, чем вы сможете начать получать пожертвования."
 
 #, python-brace-format
-msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Чтобы начать получать пожертвования, вы должны {link_open}добавить описание профиля{link_close}."
+msgid "You have to {link_start}add a profile description{link_end} before you can start to receive donations."
+msgstr "Чтобы начать получать пожертвования, вы должны {link_start}добавить описание профиля{link_end}."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Для получения пожертвований необходимо подключить хотя бы одну учетную запись от поддерживаемого обработчика платежей. Эта страница позволяет вам сделать это."
@@ -4047,8 +4047,8 @@ msgid "donation refund"
 msgstr "возврат пожертвования"
 
 #, python-brace-format
-msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr "возмещение {link_open}расходов #{invoice_id}{link_close} от {payer}"
+msgid "reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}"
+msgstr "возмещение {link_start}расходов #{invoice_id}{link_end} от {payer}"
 
 msgid "anonymous donation"
 msgstr "анонимное пожертвование"
@@ -4080,8 +4080,8 @@ msgid "refund of anonymous donation"
 msgstr "возврат анонимного пожертвования"
 
 #, python-brace-format
-msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr "оплата {link_open}счёта #{invoice_id}{link_close} для {payee}"
+msgid "payment of {link_start}expense #{invoice_id}{link_end} to {payee}"
+msgstr "оплата {link_start}счёта #{invoice_id}{link_end} для {payee}"
 
 #, python-brace-format
 msgid "donation to {0}"
@@ -4159,15 +4159,15 @@ msgid "Use this code to add to your website a widget which displays the amount o
 msgstr "Используйте этот код, чтобы добавить на ваш сайт виджет, который показывает количество денег, которое вы получаете на Liberapay:"
 
 #, python-brace-format
-msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
-msgstr "Этот виджет недоступен, потому что он не совместим с {link_open}настройками конфиденциальности{link_close}, которые вы выбрали."
+msgid "This widget is not available because it is not compatible with the {link_start}privacy settings{link_end} you have chosen."
+msgstr "Этот виджет недоступен, потому что он не совместим с {link_start}настройками конфиденциальности{link_end}, которые вы выбрали."
 
 msgid "Or, if you'd like a widget that shows how much you're giving:"
 msgstr "Или, если вы хотите виджет, который показывает, как много вы отдаёте:"
 
 #, python-brace-format
-msgid "Badges from {link_open}Shields.io{link_close}"
-msgstr "Значки {link_open}Shields.io{link_close}"
+msgid "Badges from {link_start}Shields.io{link_end}"
+msgstr "Значки {link_start}Shields.io{link_end}"
 
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Используйте эти фрагменты кода, чтобы добавить значок на ваш вебсайт или в README:"
@@ -4226,15 +4226,15 @@ msgid "Not safe for work"
 msgstr "Небезопасно для работы"
 
 #, python-brace-format
-msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Платежные системы, поддерживаемые Liberapay, имеют неблагоприятную политику в отношении сексуального контента. {paypal_link}PayPal требует предварительного одобрения{link_close}, а {stripe_link}Stripe запрещает полностью{link_close}. Поэтому, хоть Liberapay и возможно использовать для некоторых видов контента, предназначенного только для взрослых, лучше использовать специализированные на нём платформы."
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_end}, and {stripe_link}Stripe prohibits it entirely{link_end}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "Платежные системы, поддерживаемые Liberapay, имеют неблагоприятную политику в отношении сексуального контента. {paypal_link}PayPal требует предварительного одобрения{link_end}, а {stripe_link}Stripe запрещает полностью{link_end}. Поэтому, хоть Liberapay и возможно использовать для некоторых видов контента, предназначенного только для взрослых, лучше использовать специализированные на нём платформы."
 
 msgid "Can I modify or stop my donations?"
 msgstr "Могу ли я изменить или остановить свои пожертвования?"
 
 #, python-brace-format
-msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr "Да, вы можете в любой момент остановить ваши пожертвования или изменить их суммы, сроки и режимы продления через {link_open}страницу \"Пожертвования\"{link_close}. Прерывание пожертвования не производит возмещение, она просто отменяет будущие продления."
+msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_start}your “Giving” page{link_end}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
+msgstr "Да, вы можете в любой момент остановить ваши пожертвования или изменить их суммы, сроки и режимы продления через {link_start}страницу \"Пожертвования\"{link_end}. Прерывание пожертвования не производит возмещение, она просто отменяет будущие продления."
 
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr "В чём разница между Liberapay и другими сайтами периодического краудфандинга, как Patreon?"
@@ -4246,8 +4246,8 @@ msgid "Liberapay is an open project structured around a non-profit organization,
 msgstr "Liberapay открытый проект, образованный некоммерческой организацией, что выделяет его из таких коммерческих сайтов, как Patreon или Tipeee."
 
 #, python-brace-format
-msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
-msgstr "Мы заботимся об интернационализации, наши службы поддерживают разные валюты и переведены на множество языков ({link_open}вы можете внести свой вклад{link_close})."
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_start}you can contribute{link_end})."
+msgstr "Мы заботимся об интернационализации, наши службы поддерживают разные валюты и переведены на множество языков ({link_start}вы можете внести свой вклад{link_end})."
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -4548,8 +4548,8 @@ msgid "The liberapay.com website only sets technical cookies which are required 
 msgstr "Веб-сайт liberapay.com устанавливает только технические куки-файлы, которые необходимы для аутентификации пользователя или выполнения определенной операции. Эти файлы cookie ограничены запросами одного и того же сайта, поэтому мы не знаем, кто посещает сайты, содержащие виджеты Liberapay."
 
 #, python-brace-format
-msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr "Посетители сайта liberapay.com также могут получать файлы cookie, отправленные Cloudflare. Пожалуйста, прочитайте {link_open}\"Понимание Cookies Cloudflare\"{link_close}, если вы хотите узнать о них больше."
+msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_start}“Understanding the Cloudflare Cookies”{link_end} if you want to learn more about them."
+msgstr "Посетители сайта liberapay.com также могут получать файлы cookie, отправленные Cloudflare. Пожалуйста, прочитайте {link_start}\"Понимание Cookies Cloudflare\"{link_end}, если вы хотите узнать о них больше."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
@@ -4602,19 +4602,19 @@ msgid "As a precaution against identity theft in case of data leak, the identity
 msgstr "В качестве меры предосторожности против кражи личных данных, в случае утечки данных, личная информация владельцев учетной записи Liberapay хранится в нашей базе данных в зашифрованном виде."
 
 #, python-brace-format
-msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr "Если вы считаете, что нашли проблему с безопасностью, и ее еще нет в нашем списке {known_issues_link}известных проблем с низкой степенью серьезности{link_close}, тогда {hackerone_report_link}сообщите нам об этом через HackerOne{link_close}."
+msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_end}, then please {hackerone_report_link}report it to us through HackerOne{link_end}."
+msgstr "Если вы считаете, что нашли проблему с безопасностью, и ее еще нет в нашем списке {known_issues_link}известных проблем с низкой степенью серьезности{link_end}, тогда {hackerone_report_link}сообщите нам об этом через HackerOne{link_end}."
 
 msgid "Policy"
 msgstr "Политика"
 
 #, python-brace-format
-msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr "Подробная информация о нашей политике безопасности (область действия, награды ...) доступна в {link_open}нашем профиле HackerOne{link_close}."
+msgid "The details of our security policy (scope, rewards…) are available in {link_start}our HackerOne profile{link_end}."
+msgstr "Подробная информация о нашей политике безопасности (область действия, награды ...) доступна в {link_start}нашем профиле HackerOne{link_end}."
 
 #, python-brace-format
-msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr "Спасибо {link_open}всем, кто прислал нам отчет через HackerOne{link_close}."
+msgid "Thanks to {link_start}everyone who has sent us a report through HackerOne{link_end}."
+msgstr "Спасибо {link_start}всем, кто прислал нам отчет через HackerOne{link_end}."
 
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
@@ -5229,11 +5229,11 @@ msgstr[1] "Наш сервис в данный момент доступен н�
 msgstr[2] "Наш сервис в данный момент доступен на {n} языках."
 
 #, python-brace-format
-msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
-msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
-msgstr[0] "Он также частично переведён на {n} другой язык ({link_open}вы можете внести свой вклад{link_close})."
-msgstr[1] "Он также частично переведён на {n} других языка ({link_open}вы можете внести свой вклад{link_close})."
-msgstr[2] "Он также частично переведён на {n} других языков ({link_open}вы можете внести свой вклад{link_close})."
+msgid "It's also partially translated into {n} other language ({link_start}you can contribute{link_end})."
+msgid_plural "It's also partially translated into {n} other languages ({link_start}you can contribute{link_end})."
+msgstr[0] "Он также частично переведён на {n} другой язык ({link_start}вы можете внести свой вклад{link_end})."
+msgstr[1] "Он также частично переведён на {n} других языка ({link_start}вы можете внести свой вклад{link_end})."
+msgstr[2] "Он также частично переведён на {n} других языков ({link_start}вы можете внести свой вклад{link_end})."
 
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
@@ -5314,11 +5314,11 @@ msgstr[1] "{n} новых пожертвования было начато в п
 msgstr[2] "{n} новых пожертвований было начато в прошлом месяце, что увеличило общее еженедельное финансирование на {money_amount}."
 
 #, python-brace-format
-msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
-msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} новый {link_open}подарок{link_close} был сделан в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
-msgstr[1] "{n} новых {link_open}подарка{link_close} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
-msgstr[2] "{n} новых {link_open}подарков{link_close} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
+msgid "<unused singular (hash=0e9b5412ec731add80b03f285e32357f)>"
+msgid_plural "{n} new {link_start}pledges{link_end} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
+msgstr[0] "{n} новый {link_start}подарок{link_end} был сделан в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
+msgstr[1] "{n} новых {link_start}подарка{link_end} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
+msgstr[2] "{n} новых {link_start}подарков{link_end} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
 
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"

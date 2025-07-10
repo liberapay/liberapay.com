@@ -734,8 +734,8 @@ msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Svojim pokroviteljima možeš olakšati pružanje podrške putem Liberapaya"
 
 #, fuzzy, python-brace-format
-msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr "Povezali ste PayPal račun, ali ne i Stripe račun. Toplo preporučamo da povežete i Stripe račun, jer je {link_open}bolji od PayPala{link_close} na nekoliko načina, i za vas i za vaše donatore."
+msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_start}better than PayPal{link_end} in several ways, for both you and your donors."
+msgstr "Povezali ste PayPal račun, ali ne i Stripe račun. Toplo preporučamo da povežete i Stripe račun, jer je {link_start}bolji od PayPala{link_end} na nekoliko načina, i za vas i za vaše donatore."
 
 #, fuzzy, python-brace-format
 msgid "Connect {platform_name} account"
@@ -840,12 +840,12 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Čini se da ste pronašli grešku! Ispričavamo se zbog neugodnosti, riješit ćemo to što prije!"
 
 #, fuzzy, python-brace-format
-msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "Tražena stranica nije pronađena. Molimo {link_open}kontaktirajte nas{link_close} ako trebate pomoć."
+msgid "The requested page could not be found. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "Tražena stranica nije pronađena. Molimo {link_start}kontaktirajte nas{link_end} ako trebate pomoć."
 
 #, fuzzy, python-brace-format
-msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr "Naš je softver odbio vaš zahtjev. Molimo {link_open}kontaktirajte nas{link_close} ako trebate pomoć."
+msgid "Your request has been rejected by our software. Please {link_start}contact us{link_end} if you need assistance."
+msgstr "Naš je softver odbio vaš zahtjev. Molimo {link_start}kontaktirajte nas{link_end} ako trebate pomoć."
 
 #, fuzzy
 msgid "Error message:"
@@ -2660,8 +2660,8 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "Prihvaćanje stranih valuta može povećati vaš prihod uvjeravanjem ljudi u drugim zemljama da vam doniraju, ali međunarodna plaćanja obično rezultiraju višim postotkom naknada, a fluktuacije tečaja mogu umanjiti stabilnost vašeg prihoda."
 
 #, fuzzy, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr "Stripe automatski pretvara sredstva u vašu glavnu valutu, ali prema zadanim postavkama PayPal zadržava plaćanja u stranim valutama dok mu ne kažete što da radi. Ako imate poslovni PayPal račun, možete odabrati automatsku konverziju svih dolaznih uplata u stranim valutama u svoju glavnu valutu. Ova se opcija trenutno nalazi na stranici “{link_open}Postavke za primanje uplata{link_close}”."
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_start}Preferences for receiving payments{link_end}” page."
+msgstr "Stripe automatski pretvara sredstva u vašu glavnu valutu, ali prema zadanim postavkama PayPal zadržava plaćanja u stranim valutama dok mu ne kažete što da radi. Ako imate poslovni PayPal račun, možete odabrati automatsku konverziju svih dolaznih uplata u stranim valutama u svoju glavnu valutu. Ova se opcija trenutno nalazi na stranici “{link_start}Postavke za primanje uplata{link_end}”."
 
 #, fuzzy
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
@@ -4131,16 +4131,16 @@ msgid "The data has been successfully refreshed."
 msgstr "Podaci su uspješno osvježeni."
 
 #, fuzzy, python-brace-format
-msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "Morate {link_open}potvrditi svoju adresu e-pošte{link_close} prije nego što počnete primati donacije."
+msgid "You have to {link_start}confirm your email address{link_end} before you can start to receive donations."
+msgstr "Morate {link_start}potvrditi svoju adresu e-pošte{link_end} prije nego što počnete primati donacije."
 
 #, fuzzy, python-brace-format
-msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Morate {link_open}postaviti svoje korisničko ime{link_close} prije nego što počnete primati donacije."
+msgid "You have to {link_start}set your username{link_end} before you can start to receive donations."
+msgstr "Morate {link_start}postaviti svoje korisničko ime{link_end} prije nego što počnete primati donacije."
 
 #, fuzzy, python-brace-format
-msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Morate {link_open}dodati opis profila{link_close} prije nego što počnete primati donacije."
+msgid "You have to {link_start}add a profile description{link_end} before you can start to receive donations."
+msgstr "Morate {link_start}dodati opis profila{link_end} prije nego što počnete primati donacije."
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4756,8 +4756,8 @@ msgid "donation refund"
 msgstr "povrat donacije"
 
 #, fuzzy, python-brace-format
-msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr "nadoknada {link_open}troška #{invoice_id}{link_close} od {payer}"
+msgid "reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}"
+msgstr "nadoknada {link_start}troška #{invoice_id}{link_end} od {payer}"
 
 #, fuzzy
 msgid "anonymous donation"
@@ -4796,8 +4796,8 @@ msgid "refund of anonymous donation"
 msgstr "povrat anonimne donacije"
 
 #, fuzzy, python-brace-format
-msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr "plaćanje {link_open}trošak #{invoice_id}{link_close} za {payee}"
+msgid "payment of {link_start}expense #{invoice_id}{link_end} to {payee}"
+msgstr "plaćanje {link_start}trošak #{invoice_id}{link_end} za {payee}"
 
 #, fuzzy, python-brace-format
 msgid "donation to {0}"
@@ -4884,16 +4884,16 @@ msgid "Use this code to add to your website a widget which displays the amount o
 msgstr "Upotrijebite ovaj kôd kako biste svojoj web stranici dodali widget koji prikazuje iznos donacija koje primate na Liberapayu:"
 
 #, fuzzy, python-brace-format
-msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
-msgstr "Ovaj widget nije dostupan jer nije kompatibilan s {link_open}postavkama privatnosti{link_close} koje ste odabrali."
+msgid "This widget is not available because it is not compatible with the {link_start}privacy settings{link_end} you have chosen."
+msgstr "Ovaj widget nije dostupan jer nije kompatibilan s {link_start}postavkama privatnosti{link_end} koje ste odabrali."
 
 #, fuzzy
 msgid "Or, if you'd like a widget that shows how much you're giving:"
 msgstr "Ili, ako želite widget koji pokazuje koliko dajete:"
 
 #, fuzzy, python-brace-format
-msgid "Badges from {link_open}Shields.io{link_close}"
-msgstr "Značke s {link_open}Shields.io{link_close}"
+msgid "Badges from {link_start}Shields.io{link_end}"
+msgstr "Značke s {link_start}Shields.io{link_end}"
 
 #, fuzzy
 msgid "Use these code snippets to add a badge to your website or README:"
@@ -4964,16 +4964,16 @@ msgid "Not safe for work"
 msgstr "Nije sigurno za posao"
 
 #, fuzzy, python-brace-format
-msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Procesori plaćanja koje Liberapay podržava imaju nepovoljna pravila prema seksualnom sadržaju. {paypal_link}PayPal zahtijeva prethodno odobrenje{link_close}, a {stripe_link}Stripe to u potpunosti zabranjuje{link_close}. Dakle, iako je moguće koristiti Liberapay za neke sadržaje samo za odrasle, obično je bolje koristiti platformu specijaliziranu za takav sadržaj."
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_end}, and {stripe_link}Stripe prohibits it entirely{link_end}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "Procesori plaćanja koje Liberapay podržava imaju nepovoljna pravila prema seksualnom sadržaju. {paypal_link}PayPal zahtijeva prethodno odobrenje{link_end}, a {stripe_link}Stripe to u potpunosti zabranjuje{link_end}. Dakle, iako je moguće koristiti Liberapay za neke sadržaje samo za odrasle, obično je bolje koristiti platformu specijaliziranu za takav sadržaj."
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"
 msgstr "Mogu li promijeniti ili zaustaviti svoje donacije?"
 
 #, fuzzy, python-brace-format
-msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr "Da, možete zaustaviti svoje donacije ili izmijeniti njihove iznose, razdoblja i načine obnove u bilo kojem trenutku putem {link_open}vaše stranice “Davanje”{link_close}. Zaustavljanje donacije ne pokreće povrat sredstava, samo poništava buduće obnove."
+msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_start}your “Giving” page{link_end}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
+msgstr "Da, možete zaustaviti svoje donacije ili izmijeniti njihove iznose, razdoblja i načine obnove u bilo kojem trenutku putem {link_start}vaše stranice “Davanje”{link_end}. Zaustavljanje donacije ne pokreće povrat sredstava, samo poništava buduće obnove."
 
 #, fuzzy
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
@@ -4988,8 +4988,8 @@ msgid "Liberapay is an open project structured around a non-profit organization,
 msgstr "Liberapay je otvoreni projekt strukturiran oko neprofitne organizacije, što ga razlikuje od komercijalnih platformi kao što su Patreon i Tipeee."
 
 #, fuzzy, python-brace-format
-msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
-msgstr "Stalo nam je do internacionalizacije, naša usluga podržava više valuta i prevedena je na mnoge jezike ({link_open}možete sudjelovati{link_close})."
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_start}you can contribute{link_end})."
+msgstr "Stalo nam je do internacionalizacije, naša usluga podržava više valuta i prevedena je na mnoge jezike ({link_start}možete sudjelovati{link_end})."
 
 #, fuzzy, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -5347,8 +5347,8 @@ msgid "The liberapay.com website only sets technical cookies which are required 
 msgstr "Web stranica liberapay.com postavlja samo tehničke kolačiće koji su potrebni za autentifikaciju korisnika ili za izvođenje određene operacije. Ovi su kolačići ograničeni na zahtjeve iste stranice, tako da ne znamo tko posjećuje web stranice koje sadrže Liberapay widgete."
 
 #, fuzzy, python-brace-format
-msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr "Posjetitelji web stranice liberapay.com također mogu primati kolačiće koje šalje Cloudflare. Pročitajte {link_open}“Razumijevanje Cloudflare kolačića”{link_close} ako želite saznati više o njima."
+msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_start}“Understanding the Cloudflare Cookies”{link_end} if you want to learn more about them."
+msgstr "Posjetitelji web stranice liberapay.com također mogu primati kolačiće koje šalje Cloudflare. Pročitajte {link_start}“Razumijevanje Cloudflare kolačića”{link_end} ako želite saznati više o njima."
 
 #, fuzzy, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
@@ -5411,20 +5411,20 @@ msgid "As a precaution against identity theft in case of data leak, the identity
 msgstr "Kao mjera opreza protiv krađe identiteta u slučaju curenja podataka, informacije o identitetu vlasnika Liberapay računa pohranjuju se šifrirane u našoj bazi podataka."
 
 #, fuzzy, python-brace-format
-msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr "Ako mislite da ste pronašli sigurnosni problem, a on još nije na našem popisu {known_issues_link}poznatih problema niske ozbiljnosti{link_close}, {hackerone_report_link}prijavite nam ga putem HackerOne{link_close}."
+msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_end}, then please {hackerone_report_link}report it to us through HackerOne{link_end}."
+msgstr "Ako mislite da ste pronašli sigurnosni problem, a on još nije na našem popisu {known_issues_link}poznatih problema niske ozbiljnosti{link_end}, {hackerone_report_link}prijavite nam ga putem HackerOne{link_end}."
 
 #, fuzzy
 msgid "Policy"
 msgstr "Politika"
 
 #, fuzzy, python-brace-format
-msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr "Pojedinosti naše sigurnosne politike (opseg, nagrade…) dostupne su u {link_open}našem HackerOne profilu{link_close}."
+msgid "The details of our security policy (scope, rewards…) are available in {link_start}our HackerOne profile{link_end}."
+msgstr "Pojedinosti naše sigurnosne politike (opseg, nagrade…) dostupne su u {link_start}našem HackerOne profilu{link_end}."
 
 #, fuzzy, python-brace-format
-msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr "Hvala {link_open}svima koji su nam poslali izvješće putem HackerOne{link_close}."
+msgid "Thanks to {link_start}everyone who has sent us a report through HackerOne{link_end}."
+msgstr "Hvala {link_start}svima koji su nam poslali izvješće putem HackerOne{link_end}."
 
 #, fuzzy, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
@@ -6138,11 +6138,11 @@ msgstr[1] ""
 msgstr[2] "Naša usluga trenutno je dostupna na {n} jezika."
 
 #, fuzzy, python-brace-format
-msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
-msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
+msgid "It's also partially translated into {n} other language ({link_start}you can contribute{link_end})."
+msgid_plural "It's also partially translated into {n} other languages ({link_start}you can contribute{link_end})."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] "Također je djelomično preveden na {n} druge jezike ({link_open}možete doprinijeti{link_close})."
+msgstr[2] "Također je djelomično preveden na {n} druge jezike ({link_start}možete doprinijeti{link_end})."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
@@ -6231,11 +6231,11 @@ msgstr[1] ""
 msgstr[2] "{n} novih donacija pokrenuto je u proteklom mjesecu, povećavajući ukupno tjedno financiranje za {money_amount}."
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
-msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
+msgid "<unused singular (hash=0e9b5412ec731add80b03f285e32357f)>"
+msgid_plural "{n} new {link_start}pledges{link_end} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] "{n} nova {link_open}obećanja{link_close} dana su prošli mjesec, dodajući {money_amount} tjednih donacija koje čekaju na preuzimanje."
+msgstr[2] "{n} nova {link_start}obećanja{link_end} dana su prošli mjesec, dodajući {money_amount} tjednih donacija koje čekaju na preuzimanje."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
