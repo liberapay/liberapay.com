@@ -469,7 +469,7 @@ class PlatformOAuth1(Platform):
     def get_auth_session(self, domain, token=None):
         args = ()
         if token:
-            args = (token['token'], token['token_secret'])
+            args = (token['oauth_token'], token['oauth_token_secret'])
         callback_url = self.callback_url.format(domain=domain)
         client_id, client_secret = self.get_credentials(domain)
         return OAuth1Session(client_id, client_secret, *args,
@@ -488,7 +488,9 @@ class PlatformOAuth1(Platform):
         return querystring['oauth_token']
 
     def handle_auth_callback(self, domain, url, token, token_secret):
-        sess = self.get_auth_session(domain, dict(token=token, token_secret=token_secret))
+        sess = self.get_auth_session(domain, dict(
+            oauth_token=token, oauth_token_secret=token_secret
+        ))
         sess.parse_authorization_response(url)
         auth_url = self.auth_url.format(domain=domain)
         sess.token = sess.fetch_access_token(auth_url+self.access_token_path)
