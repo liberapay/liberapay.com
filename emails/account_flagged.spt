@@ -14,7 +14,7 @@
 % endif
 <p>{{ _(
     "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled.",
-    link_start=('<a href="%s">'|safe) % participant.url('edit'), link_end='</a>'|safe,
+    link_start=('<a href="%s">'|safe) % participant.url('edit/statement'), link_end='</a>'|safe,
 ) }}</p>
 <p>{{ _(
     "If you no longer want to use Liberapay, please {link_start}close your account{link_end}.",
