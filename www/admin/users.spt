@@ -510,6 +510,7 @@ title = "Users Admin"
         % endif
         % endif
         % endif
+        <p><strong>Locale and currency:</strong> {{ p.email_lang }}/{{ p.main_currency }}.</p>
 
         <div><strong>Profile descriptions:</strong>
         % if p.public_name
