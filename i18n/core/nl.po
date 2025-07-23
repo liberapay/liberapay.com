@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-07-21 00:01+0000\n"
-"Last-Translator: Lennaert <lenn.b@live.nl>\n"
+"PO-Revision-Date: 2025-07-23 09:10+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -289,11 +289,11 @@ msgstr "U zou nu {link_start}uw wachtwoord moeten veranderen{link_end}."
 msgid "Your payment is disputed"
 msgstr "Uw betaling wordt betwist"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr "Er is op {date} een bedrag van {money_amount} afgeschreven om uw donatie aan {recipients} te financieren. Dit bedrag wordt door uw bank teruggedraaid."
+msgstr "Er is op {date} een bedrag van {money_amount} afgeschreven om uw donatie aan {recipients} te financieren. Deze afschrijving wordt door uw bank teruggedraaid."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
 msgstr "Een bedrag van {money_amount} dat op {date} is afgeschreven, wordt door uw bank teruggedraaid."
 
@@ -351,11 +351,11 @@ msgstr "Om uw bank te helpen erachter te komen wat er is gebeurd, kunt u hen een
 msgid "Your payment has failed"
 msgstr "Uw betaling is mislukt"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
 msgstr "Een betaling van {money_amount} die vandaag is gestart om uw donatie aan {recipients} te financieren, is mislukt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
 msgstr "Een betaling van {money_amount} geïnitieerd op {date} om uw donatie aan {recipients} te financieren, is mislukt."
 
@@ -389,19 +389,19 @@ msgstr "Probeer het opnieuw"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Er is een terugbetaling van {money_amount} geïnitieerd"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
 msgstr "Er wordt een bedrag van {money_amount} aan u terugbetaald. Het bedrag is op {date} in rekening gebracht om uw donatie aan {recipients} te financieren."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
 msgstr "Er wordt een bedrag van {money_amount} in rekening gebracht op {date} om uw donatie aan {recipients} te financieren. Dit bedrag wordt gedeeltelijk aan u terugbetaald."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
 msgstr "Een betaling van {money_amount} geïnitieerd op {date} wordt aan u terugbetaald."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
 msgstr "Een betaling van {money_amount} geïnitieerd op {date} wordt gedeeltelijk aan u terugbetaald."
 
@@ -414,7 +414,6 @@ msgstr "Reden: de betaling is als frauduleus beschouwd."
 msgid "Reason: the refund was requested by you."
 msgstr "Reden: de terugbetaling is door uw aangevraagd."
 
-#, fuzzy
 msgid "You can contact us if you need information on the reason."
 msgstr "U kunt contact met ons opnemen als u informatie nodig heeft over de reden."
 
@@ -458,11 +457,11 @@ msgstr "De verwerking van deze betaalmethode duurt gemiddeld {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Uw betaling is geslaagd"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
 msgstr "Een betaling van {money_amount} die vandaag is gestart om uw donatie aan {recipients} te financieren, is geslaagd."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
 msgstr "Een betaling van {money_amount}, geïnitieerd op {date} om uw donatie aan {recipients} te financieren, is geslaagd."
 
@@ -1673,7 +1672,6 @@ msgstr "Toon het {submenu_label} submenu"
 msgid "Introduction"
 msgstr "Introductie"
 
-#, fuzzy
 msgid "Use Cases"
 msgstr "Gebruiksscenario's"
 
@@ -1769,19 +1767,17 @@ msgstr "{username} heeft nog geen betaalmethode geconfigureerd, dus uw donatie k
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donaties aan {username} worden verwerkt via PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "een creditcard of betaalpas ({list_of_card_brands})"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr "een eurobankrekening (SEPA automatische incasso)"
+msgstr "een bankrekening in euro (SEPA Direct Debit)"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "een PayPal-account"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
 msgstr "Donaties aan {username} kunnen worden betaald via: {list_of_payment_methods}."
 
@@ -2137,7 +2133,6 @@ msgstr "Hoe werken periodieke donaties?"
 msgid "Can I make a one-time donation?"
 msgstr "Kan ik een eenmalige donatie doen?"
 
-#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
 msgstr "Eenmalige donaties worden nog niet goed ondersteund, maar u kunt uw donatie direct stopzetten nadat u de eerste betaling heeft uitgevoerd."
 
@@ -4200,13 +4195,12 @@ msgstr "Respecteert Liberapay financiële regelgeving?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Ja. Liberapay is gevestigd in Frankrijk en voldoet aan de Europese Unie financiële regelgeving. Onze betalingsverwerkers zijn gelicentieerd, en helpen ons om fraude, witwassen van geld en financiering van terrorisme te blokkeren."
 
-#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
 msgstr "Kunnen particulieren in Finland Liberapay gebruiken om donaties te ontvangen?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr "Ja, maar alleen donaties uit andere landen, aangezien de Finse wet {external_link_start}de inzameling van geld binnen Finland strikt reguleert{link_end}. Om alleen donaties van buiten Finland te accepteren, {internal_link_start}ga je naar de lijst met landen waaruit je donaties accepteert{link_end}, deselecteer je Finland en vergeet je niet op de knop Opslaan te klikken."
+msgstr "Ja, maar alleen donaties uit andere landen, aangezien de Finse wet {external_link_start}de inzameling van geld binnen Finland strikt reguleert{link_end}. Om alleen donaties van buiten Finland te accepteren, {internal_link_start}ga naar de lijst met landen waaruit u donaties accepteert{link_end}, deselecteer Finland en vergeet niet op de knop Opslaan te klikken."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Hoe weet ik dat mijn donatie niet naar een bedrieger gaat?"
@@ -4714,51 +4708,39 @@ msgstr "Een teamaccount sluiten"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Een teamaccount wordt automatisch gesloten wanneer het laatste lid vertrekt."
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
 msgstr "Liberapay is bedoeld om de ontwikkeling en het onderhoud van gemeenschappelijke bronnen te financieren. Tot nu toe is dit alleen mogelijk via periodieke donaties, waardoor het geschikt is voor een beperkt aantal toepassingen."
 
-#, fuzzy
 msgid "The most common of those valid use cases are:"
-msgstr "De meest voorkomende geldige use cases zijn:"
+msgstr "De meest voorkomende geldige gebruikssituaties zijn:"
 
-#, fuzzy
 msgid "crowdfunding the development and maintenance of freely usable software"
 msgstr "crowdfunding de ontwikkeling en het onderhoud van vrij bruikbare software"
 
-#, fuzzy
 msgid "crowdfunding the costs of providing a free online service"
 msgstr "crowdfunding de kosten van het aanbieden van een gratis online dienst"
 
-#, fuzzy
 msgid "crowdfunding the production of freely accessible art"
 msgstr "crowdfunding voor de productie van vrij toegankelijke kunst"
 
-#, fuzzy
 msgid "crowdfunding the curation and sharing of freely accessible knowledge"
 msgstr "crowdfunding het cureren en delen van vrij toegankelijke kennis"
 
-#, fuzzy
 msgid "Incorrect uses include:"
 msgstr "Onjuist gebruik is onder meer:"
 
-#, fuzzy
 msgid "Begging. The money must be for something the recipient does that benefits other people."
 msgstr "Bedelen. Het geld moet bestemd zijn voor iets wat de ontvanger doet en waar andere mensen baat bij hebben."
 
-#, fuzzy
 msgid "Selling. Thanking patrons is allowed, but rewarding them is forbidden."
-msgstr "Verkopen. Klanten bedanken mag, maar belonen mag niet."
+msgstr "Verkopen. Donateurs bedanken mag, maar belonen mag niet."
 
-#, fuzzy
 msgid "Liberapay is built on top of payment processors that handle the actual fund transfers. These processors have their own rules that recipients must comply with:"
 msgstr "Liberapay is gebaseerd op betalingsverwerkers die de daadwerkelijke geldoverboekingen afhandelen. Deze verwerkers hebben hun eigen regels waaraan ontvangers zich moeten houden:"
 
-#, fuzzy
 msgid "Stripe Prohibited and Restricted Businesses"
 msgstr "Stripe Verboden en Beperkte Bedrijven"
 
-#, fuzzy
 msgid "PayPal Acceptable Use Policy"
 msgstr "PayPal-beleid voor acceptabel gebruik"
 
