@@ -484,7 +484,12 @@ def make_sentry_teller(env, version):
 
         if not sentry:
             # No Sentry, log to stderr instead
-            traceback.print_exc()
+            if not exception.__traceback__:
+                try:
+                    raise exception
+                except Exception:
+                    pass
+            traceback.print_exception(exception)
             # Reraise if allowed
             if env.sentry_reraise and allow_reraise:
                 raise exception
