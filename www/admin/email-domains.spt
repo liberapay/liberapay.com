@@ -162,7 +162,8 @@ else:
     else:
         order = 'blacklisted_since DESC'
     offset = request.qs.get_int('offset', 0)
-    join_type = "LEFT" if show == 'blacklisted' else "RIGHT"
+    min_addresses = request.qs.get_int('min_addresses', default=0, minimum=0)
+    join_type = "LEFT" if show == 'blacklisted' and min_addresses == 0 else "RIGHT"
     email_domains = website.db.all("""
         WITH domain_stats AS (
                 SELECT e.domain
@@ -206,11 +207,12 @@ else:
                         AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                    ) bl
   {join_type} JOIN domain_stats d ON d.domain = bl.domain
+             WHERE coalesce(d.n_addresses, 0) >= %s
           ORDER BY {order}, domain
              LIMIT %s
             OFFSET %s
                ) d
-    """.format(join_type=join_type, order=order), (PAGE_SIZE, offset))
+    """.format(join_type=join_type, order=order), (min_addresses, PAGE_SIZE, offset))
 
 title = "Email Domains"
 
