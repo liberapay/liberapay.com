@@ -31,7 +31,7 @@ feedback = None if participant.status != 'closed' else website.db.one("""
 
 <h3>Admin flags</h3>
 
-{{ admin_form(participant, reload=True, style='inline-labels') }}
+{{ admin_form(participant, reload=True, style='columns-sm-4 block-labels') }}
 
 % if feedback
 <h3>Feedback</h3>
