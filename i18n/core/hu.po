@@ -26,29 +26,26 @@ msgstr "A Liberapay fiókja csalás miatt megjelölésre került a munkatársain
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "A Liberapay profilja spamként került azonosításra. Rejtettként jelenik meg innentől."
 
-#, fuzzy
 msgid "Your Liberapay account is at risk of being disabled"
-msgstr "Liberapay-fiókját a letiltás veszélye fenyegeti."
+msgstr "A letiltás veszélye fenyegeti az Ön Liberapay-fiókját"
 
-#, fuzzy
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
-msgstr "A Liberapay profilodban megadott információk nem elegendőek annak igazolására, hogy az adománygyűjtési kísérleted jogos."
+msgstr "A Liberapay-profiljában megadott információk nem elegendőek annak az ellenőrzésére, hogy az adománygyűjtési kísérlete jogszerű."
 
-#, fuzzy
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
-msgstr "A Liberapay profilodban szereplő információk túl régiek ahhoz, hogy ellenőrizhessük, hogy továbbra is jogszerűen használod-e a szolgáltatásunkat."
+msgstr "A Liberapay-profiljában szereplő információk túl régiek annak az ellenőrzésére, hogy Ön jelenleg is jogszerűen használja a szolgáltatásunkat."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
-msgstr "Úgy tűnik, hogy a Liberapay-t a {link_start}engedélyezett felhasználási esetektől{link_end} eltérő célra használod."
+msgstr "Úgy tűnik, hogy Ön a Liberapay-t az {link_start}engedélyezett felhasználási esetektől{link_end} eltérő célra használja."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled."
-msgstr "Kérjük, {link_start}szerkessze profilját{link_end} a probléma megoldása érdekében. Ha ezt nem teszi meg, fiókját letilthatjuk."
+msgstr "Kérjük, hogy {link_start}szerkessze a profilját{link_end} a probléma megoldása érdekében. Ha ezt nem teszi meg, a fiókját letilthatjuk."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you no longer want to use Liberapay, please {link_start}close your account{link_end}."
-msgstr "Ha a továbbiakban nem szeretné használni a Liberapay szolgáltatást, kérjük, {link_start}zárja be fiókját{link_end}."
+msgstr "Ha a továbbiakban nem szeretné használni a Liberapay szolgáltatást, kérjük, hogy {link_start}zárja be a fiókját{link_end}."
 
 msgid "Greetings,"
 msgstr "Üdvözöljük!"
@@ -1658,9 +1655,8 @@ msgstr "A {submenu_label} almenü megjelenítése"
 msgid "Introduction"
 msgstr "Bemutatkozás"
 
-#, fuzzy
 msgid "Use Cases"
-msgstr "Használati esetek"
+msgstr "Felhasználási esetek"
 
 msgid "Global"
 msgstr "Globális"
@@ -4562,10 +4558,10 @@ msgid "You're not allowed to do this because your account has been flagged. Plea
 msgstr "Ezt nem teheti meg, mert a fiókját kockázatosként jelölték meg. Kérjük, lépjen kapcsolatba a support@liberapay.com címen, ha tudni szeretné miért, emellett kérheti a fiókja megjelölésének feloldását."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. The donors choose how much they want to give, the team members specify how they want to share the money, and Liberapay attempts to distribute the funds accordingly."
-msgstr "A Liberapay csapata több adományozótól több kedvezményezettnek érkező adományokat koordinál. Az adományozók választják ki mennyit szeretnének adni, a csapattagok meghatározzák hogyan akarják megosztani a pénzt, és a Liberapay megpróbálja ennek megfelelően elosztani a pénzt."
+msgstr "A Liberapay csapat összehangoltan elosztja a több adományozótól a több kedvezményezettnek érkező adományokat. Az adományozók választják ki, hogy mennyit szeretnének adni, a csapattagok meghatározzák, hogy hogyan kívánják elosztani azt, és a Liberapay megpróbálja ennek megfelelően elosztani a pénzt."
 
 msgid "A team account isn't meant to be used by the members of a single legal entity, it is designed for a group of independent individuals or organizations who work together on a common project. However, it's also okay to create a team account for a project that only has one contributor, as this allows marking a donation as being intended to support that project specifically rather than the person behind it."
-msgstr "A csapatfiók nem arra szolgál, hogy egy bizonyos jogi személy tagjai vegyék igénybe, hanem egy bizonyos egyedülálló természetes személyek csoportja, akik együtt dolgoznak egy projekten. Emellett alkalmas arra is, hogy a csapatfiókot hozzon létre egy olyan projektre, ami mögött csak egy közreműködő áll. Ezzel specifikálható az adomány a projekt felé, ahelyett, hogy közvetlenül a közreműködő saját nevére kapná."
+msgstr "A csapatfiók nem arra szolgál, hogy egy bizonyos jogi személy tagjai vegyék igénybe, hanem olyan független magánszemélyek vagy szervezetek csoportja számára készült, akik együtt dolgoznak egy közös projekten. Emellett alkalmas arra is, hogy a csapatfiókot hozzon létre egy olyan projektre, ami mögött csak egy közreműködő áll. Ez lehetővé teszi, hogy az adományt úgy jelöljék meg, hogy az kifejezetten az adott projekt támogatására szolgál, nem pedig a mögötte álló személy támogatására."
 
 #, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
@@ -4655,53 +4651,41 @@ msgstr "Csapatfiók bezárása"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Egy csapatfiók automatikusan bezáródik az utolsó tag kilépésével."
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
-msgstr "A Liberapay célja a közös erőforrások fejlesztésének és karbantartásának finanszírozása. Eddig ezt csak rendszeres adományokon keresztül teszi lehetővé, ami korlátozott számú felhasználási esetre alkalmassá teszi."
+msgstr "A Liberapay célja a közösségi munka, fejlesztések és ezek karbantartásának a finanszírozása. Egyelőre csak rendszeres adományokon keresztül teszi ezt lehetővé, ami korlátozott számú felhasználási esetre teszi alkalmassá."
 
-#, fuzzy
 msgid "The most common of those valid use cases are:"
-msgstr "Az érvényes felhasználási esetek közül a leggyakoribbak a következők:"
+msgstr "A leggyakoribb érvényes felhasználási esetek a következők:"
 
-#, fuzzy
 msgid "crowdfunding the development and maintenance of freely usable software"
 msgstr "szabadon használható szoftverek fejlesztésének és karbantartásának közösségi finanszírozása"
 
-#, fuzzy
 msgid "crowdfunding the costs of providing a free online service"
-msgstr "közösségi finanszírozás egy ingyenes online szolgáltatás nyújtásának költségeire"
+msgstr "ingyenes online szolgáltatásnyújtás költségeinek közösségi finanszírozása"
 
-#, fuzzy
 msgid "crowdfunding the production of freely accessible art"
 msgstr "szabadon hozzáférhető művészeti alkotások közösségi finanszírozása"
 
-#, fuzzy
 msgid "crowdfunding the curation and sharing of freely accessible knowledge"
-msgstr "közösségi finanszírozás a szabadon hozzáférhető tudás kurálásához és megosztásához"
+msgstr "szabadon hozzáférhető tudás összegyűjtésének és megosztásának közösségi finanszírozása"
 
-#, fuzzy
 msgid "Incorrect uses include:"
-msgstr "A helytelen használat a következőket foglalja magában:"
+msgstr "Példák a helytelen használatra:"
 
-#, fuzzy
 msgid "Begging. The money must be for something the recipient does that benefits other people."
-msgstr "Koldulás. A pénznek olyan dologra kell irányulnia, amit a címzett másoknak tesz."
+msgstr "Koldulás. A pénznek olyan dologra kell irányulnia, amit a kedvezményezett más emberek javára tesz."
 
-#, fuzzy
 msgid "Selling. Thanking patrons is allowed, but rewarding them is forbidden."
-msgstr "Értékesítés. Megköszönni a vásárlóknak megengedett, de jutalmazni tilos."
+msgstr "Értékesítés. Megköszönni a vásárlóknak megengedett, de jutalmazni őket tilos."
 
-#, fuzzy
 msgid "Liberapay is built on top of payment processors that handle the actual fund transfers. These processors have their own rules that recipients must comply with:"
-msgstr "A Liberapay a tényleges pénzátutalásokat kezelő fizetési processzorokra épül. Ezeknek a processzoroknak saját szabályaik vannak, amelyeket a kedvezményezetteknek be kell tartaniuk:"
+msgstr "A Liberapay a tényleges pénzátutalásokat kezelő pénzforgalmi feldolgozókra épül. Ezeknek a pénzforgalmi feldolgozóknak saját szabályaik vannak, amelyeket a kedvezményezetteknek be kell tartaniuk:"
 
-#, fuzzy
 msgid "Stripe Prohibited and Restricted Businesses"
-msgstr "Csíkos tiltott és korlátozott vállalkozások"
+msgstr "Tiltott és korlátozott vállalkozások a Stripe pénzforgalmi feldolgozónál"
 
-#, fuzzy
 msgid "PayPal Acceptable Use Policy"
-msgstr "PayPal Elfogadható Felhasználási Szabályzata"
+msgstr "A PayPal elfogadható felhasználási szabályzata"
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
