@@ -128,7 +128,7 @@ class UsernameContainsInvalidCharacters(UsernameError):
 
 class UsernameIsPurelyNumerical(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' is purely numerical. This isn't allowed.")
+        return _("The username '{0}' is purely numerical. This isn't allowed.", self.username)
 
 
 class UsernameIsRestricted(UsernameError):

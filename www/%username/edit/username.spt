@@ -56,7 +56,7 @@ subhead = _("Username")
         <p>{{ _("A unique name, required for users who wish to receive donations.") }}</p>
         <div class="form-group">
             <input name="username" class="form-control" spellcheck="false"
-                   value="{{ _username }}" required
+                   value="{{ _username }}"
                    maxlength="{{ constants.USERNAME_MAX_SIZE }}"
                    placeholder="{{ _('Username') }}"/>
             <p class="help-block">{{
