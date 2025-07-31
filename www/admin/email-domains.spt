@@ -163,7 +163,7 @@ else:
         order = 'blacklisted_since DESC'
     offset = request.qs.get_int('offset', 0)
     min_addresses = request.qs.get_int('min_addresses', default=0, minimum=0)
-    join_type = "LEFT" if show == 'blacklisted' and min_addresses == 0 else "RIGHT"
+    join_type = "LEFT" if show == 'blacklisted' else "RIGHT"
     email_domains = website.db.all("""
         WITH domain_stats AS (
                 SELECT e.domain
