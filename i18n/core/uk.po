@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Ukrainian "
-"<https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"PO-Revision-Date: 2025-07-31 09:27+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.13-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -26,27 +28,24 @@ msgstr "Ваш обліковий запис Liberapay був позначени
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "Ваш профіль Liberapay був позначений співробітником як спам. Тепер він прихований."
 
-#, fuzzy
 msgid "Your Liberapay account is at risk of being disabled"
-msgstr "Ваш обліковий запис Liberapay може бути заблоковано"
+msgstr "Ваш обліковий запис Liberapay під загрозою вимкнення"
 
-#, fuzzy
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
-msgstr "Інформації, яку ви вказали у своєму профілі Liberapay, недостатньо для підтвердження законності вашої спроби збору пожертв."
+msgstr "Інформації, яку ви вказали у своєму профілі Liberapay, недостатньо для підтвердження того, що ваша спроба збору внесків легітимна."
 
-#, fuzzy
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
-msgstr "Інформація у вашому профілі Liberapay занадто застаріла, щоб ми могли перевірити, чи користуєтеся ви нашими послугами, і досі є законним."
+msgstr "Інформація у вашому профілі Liberapay занадто застаріла, щоб ми могли перевірити, чи користуєтеся ви нашими послугами, і досі легітимні."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
-msgstr "Схоже, ви використовуєте Liberapay для чогось іншого, ніж {link_start}дозволені випадки використання{link_end}."
+msgstr "Видається, що ви використовуєте Liberapay для чогось іншого, ніж {link_start}санкціоновані випадки використання {link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled."
-msgstr "Будь ласка, {link_start}відредагуйте свій профіль{link_end}, щоб виправити цю проблему. Якщо ви цього не зробите, ваш обліковий запис може бути заблоковано."
+msgstr "Будь ласка, {link_start}змініть свій профіль{link_end}, щоб виправити цю проблему. Якщо ви цього не зробите, ваш обліковий запис може бути вимкнено."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you no longer want to use Liberapay, please {link_start}close your account{link_end}."
 msgstr "Якщо ви більше не бажаєте користуватися Liberapay, будь ласка, {link_start}закрийте свій обліковий запис{link_end}."
 
@@ -228,7 +227,7 @@ msgstr "Увійти в Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Хтось (сподіваємося, ви) запитував доступ до облікового запису {0} в Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Follow this link to proceed: {link}"
 msgstr "Щоб продовжити, перейдіть за цим посиланням: {link}"
 
@@ -293,17 +292,16 @@ msgstr "Ми виявили, що ваш пароль було викрито: �
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Вам необхідно {link_start}змінити свій пароль{link_end} зараз."
 
-#, fuzzy
 msgid "Your payment is disputed"
 msgstr "Ваш платіж оскаржено"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr "Ваш банк скасовує стягнення на суму {money_amount} ініційоване {date} для фінансування вашого пожертвування {recipients}."
+msgstr "Ваш банк скасовує списання на суму {money_amount} ініційоване {date} для фінансування вашого внеску {recipients}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr "Ваш банк скасовує стягнення коштів на суму {money_amount} ініційоване {date}."
+msgstr "Ваш банк скасовує списання коштів на суму {money_amount} ініційоване {date}."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Причина, вказана вашим банком: не вдалося обробити платіж."
@@ -359,13 +357,13 @@ msgstr "Щоб допомогти вашому банку з'ясувати, щ�
 msgid "Your payment has failed"
 msgstr "Не вдалося здійснити платіж"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr "Платіж на суму {money_amount} ініційований сьогодні для фінансування вашого пожертвування {recipients} не вдалося."
+msgstr "Платіж на суму {money_amount} ініційований сьогодні для фінансування вашого внеску {recipients} не відбувся."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr "Платіж у розмірі {money_amount}, ініційований {date} для фінансування вашого пожертвування {recipients} не вдалося."
+msgstr "Платіж у розмірі {money_amount}, ініційований {date} для фінансування вашого внеску для {recipients} не відбувся."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -397,19 +395,19 @@ msgstr "Спробувати ще раз"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Створено запит на повернення коштів обсягом {money_amount}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr "Вам повертається кошти у розмірі {money_amount} стягнуті {date} для фінансування вашого пожертвування {recipients}."
+msgstr "Вам повертаються кошти у розмірі {money_amount} списані {date} для фінансування вашого внеску для {recipients}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr "Вам частково повертається стягнення коштів у розмірі {money_amount} ініційоване {date} для фінансування вашого пожертвування {recipients}."
+msgstr "Вам частково повертається списання коштів у розмірі {money_amount} ініційоване {date} для фінансування вашого внеску для {recipients}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
 msgstr "Вам повертається платіж у розмірі {money_amount} здійснений {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
 msgstr "Платіж у розмірі {money_amount} здійснений {date}, частково повертається вам."
 
@@ -422,7 +420,6 @@ msgstr "Причина: платіж визнано шахрайським."
 msgid "Reason: the refund was requested by you."
 msgstr "Причина: Ви створили запит на повернення коштів."
 
-#, fuzzy
 msgid "You can contact us if you need information on the reason."
 msgstr "Ви можете зв'язатися з нами, якщо вам потрібна інформація про причину."
 
@@ -466,13 +463,13 @@ msgstr "Обробка такого виду платежу в середньо�
 msgid "Your payment has succeeded"
 msgstr "Ваш платіж виконано"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr "Платіж на суму {money_amount} ініційований сьогодні для фінансування вашого пожертвування {recipients} успішно здійснено."
+msgstr "Платіж на суму {money_amount} ініційований сьогодні для фінансування вашого внеску для {recipients} успішно здійснено."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr "Платіж на суму {money_amount} ініційований {date} для фінансування вашого пожертвування {recipients} успішно здійснено."
+msgstr "Платіж на суму {money_amount} ініційований {date} для фінансування вашого внеску для {recipients} успішно здійснено."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1320,26 +1317,21 @@ msgstr "Пароль"
 msgid "This new password is not safe"
 msgstr "Новий пароль не є безпечним"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
-msgstr "Новий пароль, який ви надіслали, є небезпечним, оскільки він збігається із поширеним паролем."
+msgstr "Новий пароль, який ви надіслали, небезпечний, оскільки він збігається із поширеним паролем."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
-msgstr "Новий пароль, який ви надіслали, є небезпечним, оскільки він збігається з паролем, який був скомпрометований під час одного або кількох витоків публічних даних."
+msgstr "Новий пароль, який ви надіслали, небезпечний, оскільки він збігається з паролем, який був скомпрометований під час одного або кількох оприлюднених витоків даних."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
-msgstr "Новий пароль, який ви надіслали, є небезпечним, оскільки його надто легко вгадати."
+msgstr "Новий пароль, який ви надіслали, небезпечний, оскільки його надто легко вгадати."
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "Будь ласка, введіть інший пароль:"
 
 msgid "New password"
 msgstr "Новий пароль"
 
-#, fuzzy
 msgid "Submit"
 msgstr "Надіслати"
 
@@ -1695,9 +1687,8 @@ msgstr "Показати підменю {submenu_label}"
 msgid "Introduction"
 msgstr "Вступ"
 
-#, fuzzy
 msgid "Use Cases"
-msgstr "Варіанти використання"
+msgstr "Випадки використання"
 
 msgid "Global"
 msgstr "Світ"
@@ -1791,21 +1782,19 @@ msgstr "{username} ще не налаштував жодного способу 
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Внески для {username} обробляються через PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "кредитна або дебетова картка ({list_of_card_brands})"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
 msgstr "банківський рахунок у євро (прямий дебет SEPA)"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "обліковий запис PayPal"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr "Пожертви для {username} можна здійснити за допомогою: {list_of_payment_methods}."
+msgstr "Внески для {username} можна здійснити за допомогою: {list_of_payment_methods}."
 
 msgid "Payment Card"
 msgstr "Платіжна картка"
@@ -2162,9 +2151,8 @@ msgstr "Як працюють повторювані внески?"
 msgid "Can I make a one-time donation?"
 msgstr "Чи можу я допомогти одноразово?"
 
-#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr "Одноразові пожертви поки що належним чином не підтримуються, але ви можете припинити свою пожертву одразу після здійснення першого платежу."
+msgstr "Одноразові внески поки що належним чином не підтримуються, але ви можете припинити свою допомогу одразу після здійснення першого платежу."
 
 msgid "Will I get a receipt?"
 msgstr "Чи отримаю я квитанцію?"
