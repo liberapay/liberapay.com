@@ -276,7 +276,10 @@ def create_charge(
                     db, payin.id, charge.id, 'failed', 'canceled on suspicion of fraud',
                     intent_id=intent.id,
                 )
-                intent.cancel(cancellation_reason='fraudulent')
+                intent.cancel(
+                    cancellation_reason='fraudulent',
+                    idempotency_key=f'cancel_{intent.id}',
+                )
                 return payin, charge
         else:
             capture = payin.status in ('pre', 'awaiting_payer_action', 'awaiting_review') and (
@@ -285,7 +288,7 @@ def create_charge(
             )
             if capture:
                 try:
-                    intent = intent.capture()
+                    intent = intent.capture(idempotency_key=f'capture_{intent.id}')
                     charge = intent.charges.data[0]
                 except stripe.error.StripeError as e:
                     return abort_payin(db, payin, repr_stripe_error(e)), None
