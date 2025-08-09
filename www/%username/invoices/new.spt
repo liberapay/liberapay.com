@@ -101,7 +101,7 @@ title = _("Invoice {someone}", someone=addressee.username)
       data-allowed-extensions="{{ ALLOWED_EXTENSIONS_STR }}"
       data-item-limit="{{ constants.INVOICE_DOCS_LIMIT }}"
       data-max-size="{{ constants.INVOICE_DOC_MAX_SIZE }}"
-      data-already-uploaded="{{ json.dumps(already_uploaded or []) }}"
+      data-already-uploaded="{{ json.dumps(already_uploaded|default([])) }}"
       >
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     <input type="hidden" name="currency" value="{{ currency }}" />
@@ -109,7 +109,7 @@ title = _("Invoice {someone}", someone=addressee.username)
     <h4>{{ _("Nature") }}</h4>
     <select class="form-control" name="nature">
     % for value, label in constants.INVOICE_NATURES.items()
-        <option value="{{ value }}" {{ 'selected' if value == invoice.nature }}>{{ _(label) }}</option>
+        <option value="{{ value }}" {{ 'selected' if invoice and value == invoice.nature else '' }}>{{ _(label) }}</option>
     % endfor
     </select>
     <p class="help-block">{{ _("(Liberapay only supports one kind of invoice for now.)") }}</p>
@@ -127,12 +127,12 @@ title = _("Invoice {someone}", someone=addressee.username)
     <input type="text" name="description" class="form-control"
            placeholder="{{ _('A short description of the invoice') }}"
            required minlength=5 maxlength=256
-           value="{{ invoice.description or '' }}" />
+           value="{{ invoice.description|default('') }}" />
 
     <h4>{{ _("Details (optional)") }}</h4>
     <textarea name="details" class="form-control" rows=4
               placeholder="{{ _('Details of the invoice (e.g. the breakdown of the amount into its components)') }}"
-              maxlength=4096>{{ invoice.details or '' }}</textarea>
+              maxlength=4096>{{ invoice.details|default('') }}</textarea>
     <p class="help-block">
         {{ icon('markdown') }} {{ _("Markdown supported.") }}
         <a href="https://daringfireball.net/projects/markdown/basics"
