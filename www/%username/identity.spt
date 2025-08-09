@@ -18,6 +18,8 @@ error = ''
 identity = participant.get_current_identity() or {}
 
 if request.method == 'POST':
+    if user != participant:
+        raise response.error(403)
     body = request.body
     new_kind = 'organization' if body.get('organization_name') else 'individual'
     identity = {}
