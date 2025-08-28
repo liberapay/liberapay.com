@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2025-08-20 20:01+0000\n"
+"Last-Translator: Maoka <bamtainmaoka@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.13\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -34,9 +36,8 @@ msgstr "Liberapayアカウントが無効になる恐れがあります"
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
 msgstr "Liberapay プロフィールに入力した情報は、寄付金を集める試みが正当であることを確認するのに十分ではありません。"
 
-#, fuzzy
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
-msgstr "Liberapay プロフィールの情報が古すぎるため、弊社のサービスの使用がまだ正当であることを確認できません。"
+msgstr "Liberapay プロフィールの情報が古すぎるため、まだあなたのLiberapayの使用が正当であることを確認できません。"
 
 #, fuzzy, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
@@ -351,7 +352,7 @@ msgstr "支払いに失敗しました"
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
 msgstr "{recipients}への寄付金として本日開始された{money_amount}の支払いが失敗しました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
 msgstr "{date}に開始された{recipients}への寄付金{money_amount}の支払いが失敗しました。"
 
@@ -385,19 +386,19 @@ msgstr "再試行"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount}の払い戻しを開始しました"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
 msgstr "{recipients}への寄付金として{date}に請求された{money_amount}が返金されます。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
 msgstr "{recipients}への寄付金として{date}に請求された{money_amount}の一部が返金されます。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
 msgstr "{date}に開始された{money_amount}の支払いが返金されます。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
 msgstr "{date}に開始された{money_amount}の支払いの一部が返金されます。"
 
@@ -410,7 +411,6 @@ msgstr "理由：支払いが詐欺だと見なされたため。"
 msgid "Reason: the refund was requested by you."
 msgstr "理由：あなたが払い戻しを請求したため。"
 
-#, fuzzy
 msgid "You can contact us if you need information on the reason."
 msgstr "理由に関する情報が必要な場合は、お問い合わせください。"
 
@@ -458,7 +458,7 @@ msgstr "支払いに成功しました"
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
 msgstr "{recipients}への寄付金として本日開始された{money_amount}の支払いが成功しました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
 msgstr "{recipients}への寄付金として{date}に開始された{money_amount}の支払いが成功しました。"
 
@@ -1079,9 +1079,8 @@ msgstr "\"{0}\" は有効なコミュニティー名ではありません。"
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "現在お使いのアカウントが利用停止中のため、この操作は許可されていません。"
 
-#, fuzzy
 msgid "Your account lacks a valid email address, please add one."
-msgstr "あなたのアカウントには有効なメールアドレスがありません。"
+msgstr "あなたのアカウントには有効なメールアドレスがありません。メールアドレスを追加してください。"
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "現在受取人のアカウントが利用停止中のため、この支払いを処理できません。"
@@ -1295,28 +1294,23 @@ msgstr "パスワード"
 msgid "This new password is not safe"
 msgstr "この新しいパスワードは安全ではありません"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "送信した新しいパスワードは、一般的に使用されているパスワードと一致するため、安全ではありません。"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
 msgstr "送信した新しいパスワードは、1 つ以上の公開データ漏洩で侵害されたパスワードと一致するため、安全ではありません。"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "送信した新しいパスワードは推測しやすいため安全ではありません。"
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "別のパスワードを入力してください:"
 
 msgid "New password"
 msgstr "新しいパスワード"
 
-#, fuzzy
 msgid "Submit"
-msgstr "提出する"
+msgstr "登録する"
 
 msgid "Go back"
 msgstr "戻る"
@@ -1666,9 +1660,8 @@ msgstr "{submenu_label}サブメニューを表示"
 msgid "Introduction"
 msgstr "はじめに"
 
-#, fuzzy
 msgid "Use Cases"
-msgstr "ユースケース"
+msgstr "使用例"
 
 msgid "Global"
 msgstr "グローバル"
@@ -1762,19 +1755,18 @@ msgstr "{username}さんはまだ支払い方法を設定していないため�
 msgid "Donations to {username} are processed through PayPal."
 msgstr "{username}さんへの寄付はPayPalにより処理されます。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
-msgstr "クレジットカードまたはデビットカード（ {list_of_card_brands} ）"
+msgstr "クレジットまたはデビットカード（ {list_of_card_brands} ）"
 
 #, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
 msgstr "ユーロ銀行口座（SEPA口座振替）"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "PayPalアカウント"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
 msgstr "{username}への寄付は、 {list_of_payment_methods}を使用して支払うことができます。"
 
@@ -1938,9 +1930,8 @@ msgid "The {currency_name} isn't your preferred currency? {username} also accept
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
 msgstr[0] "{currency_name}はお好みの通貨ではありませんか？　{username}さんは他に{n}種類の通貨を受け付けています。"
 
-#, fuzzy
 msgid "supported by PayPal"
-msgstr "ペイパル"
+msgstr "PayPalで支援されています"
 
 msgid "Switch"
 msgstr "変更"
@@ -2129,9 +2120,8 @@ msgstr "継続的な寄付とは、どのような仕組みでしょうか？"
 msgid "Can I make a one-time donation?"
 msgstr "1回限りの寄付はできますか？"
 
-#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr "一度限りの寄付はまだ適切にサポートされていませんが、最初の支払いを開始した後、すぐに寄付を中止することができます。"
+msgstr "一度限りの寄付はまだ十分にサポートされていませんが、最初の支払いを開始した後、すぐに寄付を中止することができます。"
 
 msgid "Will I get a receipt?"
 msgstr "領収書はもらえますか？"
@@ -3468,15 +3458,13 @@ msgstr "このアカウントは支払いを受け取ることができません
 msgid "Manage this {platform} account"
 msgstr "{platform}のアカウントを管理"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
 msgstr "このアカウントでは支払いを受け取ることができません。この問題を解決するには、以下のリンクをクリックして認証手続きを完了してください。"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
-msgstr "このアカウントでは支払いを受け取ることができません。この問題を解決するには、以下のリンクをクリックして有効化手続きを完了してください。"
+msgstr "このアカウントでは支払いを受け取ることができません。この問題を解決するには、以下のリンクをクリックしてアカウント有効化手続きを完了してください。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate this {platform} account"
 msgstr "この{platform}アカウントを有効化する"
 
@@ -3495,23 +3483,21 @@ msgstr "別の{platform_name}のアカウントを連携"
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPalではStripeよりも多くの国で寄付を受け取ることができますが、PayPalはLiberapayに十分に統合されていません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Create a {provider} account"
 msgstr "{provider}アカウントを作成する"
 
-#, fuzzy
 msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
-msgstr "あなたが居住している国、または登録済みの事業所がある国を選択し、Stripe の規約に同意することを確認してください。"
+msgstr "あなたが居住している、または登録済みの事業所がある国を選択し、Stripe の規約に同意することを確認してください。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
-msgstr "{link_start}Stripe Connected アカウント契約{link_end}に同意します。"
+msgstr "{link_start}Stripe Connected Account Agreement{link_end}に同意します。"
 
-#, fuzzy
 msgid "Create account"
 msgstr "アカウントを作成する"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "{provider}アカウントを管理する"
 
@@ -3523,7 +3509,7 @@ msgstr "支払い"
 msgid "Payouts"
 msgstr "支払い"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate a {provider} account"
 msgstr "{provider}アカウントを有効化する"
 
@@ -4093,7 +4079,7 @@ msgstr "送信された資格情報は無効です。"
 
 #, fuzzy
 msgid "You can try again:"
-msgstr "もう一度お試しください:"
+msgstr "こちらをお試しください:"
 
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "他のLiberapayユーザーとコンタクトを取るためにチームに連絡しないでください。他のユーザーにメッセージは転送することはありません。有効な裁判所命令が無い限り、他のユーザーの本人情報や連絡先を開示することはできません。"
@@ -4174,7 +4160,6 @@ msgstr "Liberapayは金融規則を遵守していますか？"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "はい。Liberapayはフランスに拠点を置き、EUの金融規則に準拠しています。私たちの決済サービスはすべて適切にライセンスされており、詐欺、マネーロンダリング、テロ資金供与を阻止することに役立っています。"
 
-#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
 msgstr "フィンランドの個人はLiberapayを使って寄付を受け取ることができますか?"
 
