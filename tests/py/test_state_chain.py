@@ -252,3 +252,22 @@ class Tests2(Harness):
         qs = 'é=é'.encode('utf8').decode('latin1')
         r = self.client.GET('/', QUERY_STRING=qs, raise_immediately=False)
         assert r.code == 200, r.text
+
+    def test_obsolete_browser_warning(self):
+        # Test the obsolete browser warning on the homepage
+        r = self.client.GET(
+            '/',
+            HTTP_USER_AGENT=b'MSIE',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        assert r.headers[b'Cache-Control'] == b'no-cache'
+        # Test the obsolete browser warning on a CSV endpoint
+        # https://hackerone.com/reports/3331446
+        r = self.client.GET(
+            '/alice/giving/public.csv',
+            HTTP_USER_AGENT=b'MSIE',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        assert r.headers[b'Cache-Control'] == b'no-cache'
