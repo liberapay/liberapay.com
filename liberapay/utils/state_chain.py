@@ -300,4 +300,6 @@ def return_500_for_exception(website, exception, response=None):
             "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
             "we'll get it fixed ASAP."
         )
+    response.headers[b'Cache-Control'] = b'no-cache'
+    response.headers[b'Content-Type'] = b'text/plain'
     return {'response': response, 'exception': None}
