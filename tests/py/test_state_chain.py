@@ -271,3 +271,16 @@ class Tests2(Harness):
         )
         assert r.code == 200
         assert r.headers[b'Cache-Control'] == b'no-cache'
+
+    def test_last_resort_error_response(self):
+        "Check that return_500_for_exception works and sets a Cache-Control header."
+        def _fail():
+            raise AssertionError('foobar')
+
+        self.website.state_chain.insert_before('add_caching_to_response', _fail)
+        try:
+            r = self.client.GET('/', raise_immediately=False)
+            assert r.code == 500
+            assert r.headers[b'Cache-Control'] == b'no-cache'
+        finally:
+            self.website.state_chain.remove('_fail')
