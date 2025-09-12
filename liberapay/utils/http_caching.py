@@ -10,6 +10,7 @@ from tempfile import mkstemp
 from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
 from pando import Response
 
+from liberapay.security import DEFAULT_CACHE_CONTROL
 from liberapay.utils import b64encode_s, find_files
 
 
@@ -95,15 +96,13 @@ def try_to_serve_304(dispatch_result, request, response, etag):
 def add_caching_to_response(website, response, request=None, etag=None):
     """Set caching headers.
     """
-    if response.code not in (200, 304):
-        return
-    cache_control = response.headers.get(b'Cache-Control', b'')
-    if etag:
+    if etag and response.code in (200, 304):
+        cache_control = response.headers.get(b'Cache-Control', b'')
         if response.headers.cookie and not cache_control.startswith(b'no-'):
             website.warning("cookies in a cacheable response, not supposed to happen")
             response.headers[b'Cache-Control'] = b'no-cache'
             return
-        if cache_control:
+        if cache_control and cache_control is not DEFAULT_CACHE_CONTROL:
             # The caching policy has already been defined somewhere else
             return
         # https://developers.google.com/speed/docs/best-practices/caching
@@ -114,6 +113,3 @@ def add_caching_to_response(website, response, request=None, etag=None):
         else:
             # Otherwise we cache for 1 hour
             response.headers[b'Cache-Control'] = b'public, max-age=3600'
-    elif not cache_control:
-        # This is a dynamic resource, disable caching by default
-        response.headers[b'Cache-Control'] = b'no-cache'
