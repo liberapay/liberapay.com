@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from io import BytesIO
 import json
 from os.path import dirname, join, realpath
+import re
 import unittest
 
 import html5lib
@@ -51,6 +52,12 @@ def USD(amount):
     return Money(amount, 'USD')
 
 
+cache_control_re = re.compile(
+    # This pattern only matches the directives we're currently using. Expand it
+    # if necessary.
+    b'no-cache|'
+    b'public, max-age=[0-9]+(?:, immutable|, stale-while-revalidate=[0-9]+)?'
+)
 html5parser = html5lib.HTMLParser(strict=True)
 
 
@@ -134,6 +141,8 @@ class ClientWithAuth(Client):
                     f"parsing body of {r.code} response to `{method} {url}` failed:"
                     f"\n{str(e)}"
                 )
+            # Check that the response contains a caching directive
+            assert cache_control_re.fullmatch(r.headers[b'Cache-Control'])
             return wanted
         finally:
             env.sentry_reraise = old_reraise
