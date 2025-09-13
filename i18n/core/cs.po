@@ -293,11 +293,11 @@ msgstr "Měli byste si ihned {link_start}změnit své heslo{link_end}."
 msgid "Your payment is disputed"
 msgstr "Vaše platba je sporná"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
 msgstr "Vaše banka stornuje platbu ve výši {money_amount} zahájenou dne {date} za účelem financování vašeho daru pro {recipients}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
 msgstr "Vaše banka stornuje platbu ve výši {money_amount} zahájenou dne {date}."
 
@@ -355,13 +355,13 @@ msgstr "Abyste své bance pomohli zjistit, co se stalo, můžete jí zaslat kopi
 msgid "Your payment has failed"
 msgstr "Vaše platba se nezdařila"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr "Platba ve výši {money_amount} která byla dnes zahájena za účelem financování vašeho daru pro {recipients} se nezdařila."
+msgstr "Platba ve výši {money_amount}, která byla dnes zahájena za účelem financování vašeho daru pro {recipients}, se nezdařila."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr "Platba ve výši {money_amount} zahájená dne {date} za účelem financování vašeho daru pro {recipients} se nezdařila."
+msgstr "Platba ve výši {money_amount}, zahájená dne {date} za účelem financování vašeho daru pro {recipients}, se nezdařila."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -393,19 +393,19 @@ msgstr "Zkusit znovu"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Bylo zahájeno vrácení {money_amount}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr "Poplatek ve výši {money_amount} který byl dne {date} proveden za účelem financování vašeho daru pro {recipients} vám bude vrácen."
+msgstr "Poplatek ve výši {money_amount}, který byl dne {date} proveden za účelem financování vašeho daru pro {recipients}, vám bude vrácen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr "Částka {money_amount} která byla dne {date} za účelem financování vašeho daru pro {recipients} vám bude částečně vrácena."
+msgstr "Poplatek ve výši {money_amount}, který byl dne {date} proveden za účelem financování vašeho daru pro {recipients}, vám bude částečně vrácen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
 msgstr "Platba ve výši {money_amount} zahájená dne {date} vám bude vrácena."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
 msgstr "Platba ve výši {money_amount} zahájená dne {date} vám bude částečně vrácena."
 
@@ -418,7 +418,6 @@ msgstr "Důvod: platba byla označena jako podvodná."
 msgid "Reason: the refund was requested by you."
 msgstr "Důvod: Vrácení bylo požadováno vámi."
 
-#, fuzzy
 msgid "You can contact us if you need information on the reason."
 msgstr "Pokud potřebujete informace o důvodu, můžete nás kontaktovat."
 
@@ -462,13 +461,13 @@ msgstr "Zpracování tohoto druhu platby trvá v průměru {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Vaše platba proběhla úspěšně"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr "Platba ve výši {money_amount} která byla dnes zahájena na financování vašeho daru pro {recipients} byla úspěšně provedena."
+msgstr "Platba ve výši {money_amount}, která byla dnes zahájena na financování vašeho daru pro {recipients}, byla úspěšně provedena."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr "Platba ve výši {money_amount} zahájená dne {date} za účelem financování vašeho daru pro {recipients} byla úspěšně provedena."
+msgstr "Platba ve výši {money_amount}, zahájená dne {date} za účelem financování vašeho daru pro {recipients}, byla úspěšně provedena."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1325,16 +1324,14 @@ msgstr "Nové heslo, které jste zadali, není bezpečné, protože se shoduje s
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "Nové heslo, které jste zadali, není bezpečné, protože je příliš snadné ho uhodnout."
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "Zadejte prosím jiné heslo:"
 
 msgid "New password"
 msgstr "Nové heslo"
 
-#, fuzzy
 msgid "Submit"
-msgstr "Předložit"
+msgstr "Potvrdit"
 
 msgid "Go back"
 msgstr "Vrátit se zpět"
@@ -1688,12 +1685,11 @@ msgstr "Zobrazit podnabídku {submenu_label}"
 msgid "Introduction"
 msgstr "Představení"
 
-#, fuzzy
 msgid "Use Cases"
 msgstr "Případy použití"
 
 msgid "Global"
-msgstr "Celosvětový"
+msgstr "Celý svět"
 
 msgid "Teams"
 msgstr "Týmy"
@@ -1784,19 +1780,17 @@ msgstr "{username} zatím nenakonfigurovalo žádný způsob platby, takže vá�
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Příspěvky pro {username} jsou zpracovávány přes PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "kreditní nebo debetní karta ({list_of_card_brands})"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
-msgstr "bankovní účet v eurech (SEPA inkaso)"
+msgstr "bankovní účet v eurech (přímé inkaso SEPA)"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "účet PayPal"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
 msgstr "Dary pro {username} lze uhradit pomocí: {list_of_payment_methods}."
 
@@ -2155,9 +2149,8 @@ msgstr "Jak fungují opakující se příspěvky?"
 msgid "Can I make a one-time donation?"
 msgstr "Můžu přispět jednorázově?"
 
-#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr "Jednorázové dary zatím nejsou řádně podporovány, ale svůj dar můžete ukončit ihned po zahájení první platby."
+msgstr "Jednorázové dary zatím nejsou řádně podporovány, svůj dar ale můžete ukončit ihned po zahájení první platby."
 
 msgid "Will I get a receipt?"
 msgstr "Dostanu účtenku?"
@@ -4159,11 +4152,9 @@ msgstr "Odznaky z {link_start}shields.io{link_end}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Pomocí těchto úryvků kódu můžete přidat odznak na vaše webové stránky nebo do README:"
 
-#, fuzzy
 msgid "The submitted credentials aren't valid."
 msgstr "Odeslané přihlašovací údaje nejsou platné."
 
-#, fuzzy
 msgid "You can try again:"
 msgstr "Můžete to zkusit znovu:"
 
@@ -4246,13 +4237,12 @@ msgstr "Dodržuje Liberapay finanční nařízení?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Ano. Liberapay sídlí ve Francii a pracuje v souladu s nařízeními Evropské unie. Naši zpracovatelé plateb jsou všichni správně registrovaní a pomáhají nám bránit podvodům, praní špinavých peněz a financování terorismu."
 
-#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
 msgstr "Mohou jednotlivci ve Finsku používat Liberapay k přijímání darů?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr "Ano, ale pouze dary z jiných zemí, {external_link_start}finské zákony přísně regulují výběr peněz ve Finsku{link_end}. Chcete-li přijímat pouze dary mimo Finsko, {internal_link_start}přejděte na seznam zemí, od kterých přijímáte dary{link_end}, zrušte výběr Finska a nezapomeňte kliknout na tlačítko Uložit."
+msgstr "Ano, ale pouze dary z jiných zemí, jelikož {external_link_start}finské zákony přísně regulují výběr peněz ve Finsku{link_end}. Chcete-li přijímat pouze dary mimo Finsko, {internal_link_start}přejděte na seznam zemí, od kterých přijímáte dary{link_end}, zrušte výběr Finska a nezapomeňte kliknout na tlačítko Uložit."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Jak mohu vědět, že můj příspěvek nedostane podvodník?"
@@ -4771,53 +4761,41 @@ msgstr "Zrušení týmového účtu"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Týmový účet je automaticky uzavřen, když jej opustí poslední člen."
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
 msgstr "Liberapay má sloužit k financování vývoje a údržby společných zdrojů. Zatím to umožňuje pouze prostřednictvím opakovaných darů, což ho činí vhodným pro omezený počet případů použití."
 
-#, fuzzy
 msgid "The most common of those valid use cases are:"
-msgstr "Nejběžnější z těchto platných případů použití jsou:"
+msgstr "Nejběžnější z těchto případů použití jsou:"
 
-#, fuzzy
 msgid "crowdfunding the development and maintenance of freely usable software"
-msgstr "crowdfunding vývoje a údržby volně použitelného softwaru"
+msgstr "financování vývoje a údržby volně použitelného softwaru"
 
-#, fuzzy
 msgid "crowdfunding the costs of providing a free online service"
-msgstr "crowdfunding nákladů na poskytování bezplatné online služby"
+msgstr "financování nákladů na poskytování bezplatné online služby"
 
-#, fuzzy
 msgid "crowdfunding the production of freely accessible art"
-msgstr "crowdfunding produkce volně dostupného umění"
+msgstr "financování produkce volně dostupného umění"
 
-#, fuzzy
 msgid "crowdfunding the curation and sharing of freely accessible knowledge"
-msgstr "crowdfunding – kurátorství a sdílení volně dostupných znalostí"
+msgstr "financování kurátorství a sdílení volně dostupných znalostí"
 
-#, fuzzy
 msgid "Incorrect uses include:"
-msgstr "Mezi nesprávné použití patří:"
+msgstr "Mezi nesprávné příklady použití patří:"
 
-#, fuzzy
 msgid "Begging. The money must be for something the recipient does that benefits other people."
 msgstr "Žebrání. Peníze musí být na něco, co příjemce dělá a co prospívá ostatním lidem."
 
-#, fuzzy
 msgid "Selling. Thanking patrons is allowed, but rewarding them is forbidden."
 msgstr "Prodej. Děkování zákazníkům je povoleno, ale odměňování je zakázáno."
 
-#, fuzzy
 msgid "Liberapay is built on top of payment processors that handle the actual fund transfers. These processors have their own rules that recipients must comply with:"
-msgstr "Liberapay je postaven na platebních procesorech, kteří zpracovávají samotné převody finančních prostředků. Tito zpracovatelé mají svá vlastní pravidla, která musí příjemci dodržovat:"
+msgstr "Liberapay je postaven na zpracovatelích plateb, kteří zpracovávají samotné převody finančních prostředků. Tito zpracovatelé mají svá vlastní pravidla, která musí příjemci dodržovat:"
 
-#, fuzzy
 msgid "Stripe Prohibited and Restricted Businesses"
-msgstr "Zakázané a omezené podniky Stripe"
+msgstr "Zakázané a omezené typy podnikání služby Stripe"
 
-#, fuzzy
 msgid "PayPal Acceptable Use Policy"
-msgstr "Zásady přijatelného používání PayPal"
+msgstr "Zásady přijatelného používání služby PayPal"
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
