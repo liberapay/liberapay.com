@@ -1,9 +1,17 @@
 
+
+DEFAULT_CACHE_CONTROL = b'no-cache'
+
+
 def set_default_security_headers(website, response, request=None):
     # Allow CORS for assets
     # The subdomains need this to access the assets on the main domain.
     if request is not None and request.path.raw.startswith('/assets/'):
         response.headers[b'Access-Control-Allow-Origin'] = b'*'
+
+    # Disallow caching by default to mitigate the risk of private data ending up
+    # in public or shared caches.
+    response.headers[b'Cache-Control'] = DEFAULT_CACHE_CONTROL
 
     # X-Frame-Options is a security measure to prevent clickjacking
     # See http://en.wikipedia.org/wiki/Clickjacking

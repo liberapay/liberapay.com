@@ -494,11 +494,27 @@ del _refresh
 if hasattr(pando.Response, 'render'):
     raise Warning('pando.Response.render() already exists')
 def _render(response, path, state, **extra):
+    # Facilitate passing variables to the simplate by injecting them into the
+    # state dict here.
     state.update(extra)
-    if 'dispatch_result' not in state:
-        state['dispatch_result'] = DispatchResult(
-            DispatchStatus.okay, path, None, None, None
-        )
+    # Ensure that we actually render the simplate, as opposed to possibly
+    # failing when trying to determine which of its pages to render.
+    accept_header = state.get('accept_header')
+    if accept_header and '*/*' not in accept_header:
+        accept_header += ',*/*'
+    # If there's an extension at the end of the URL path, and the simplate has a
+    # page for the corresponding media type, pick that page.
+    dispatch_result = state.get('dispatch_result')
+    if dispatch_result and dispatch_result.extension:
+        if accept_header:
+            accept_header = dispatch_result.extension + ',' + accept_header
+        else:
+            accept_header = dispatch_result.extension + ',*/*'
+    state['accept_header'] = accept_header
+    state['dispatch_result'] = DispatchResult(
+        DispatchStatus.okay, path, None, None, None
+    )
+    # Load the simplate, render it and raise the response.
     website = state['website']
     resource = website.request_processor.resources.get(path)
     render_response(state, resource, response, website)
