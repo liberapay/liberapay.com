@@ -250,8 +250,13 @@ def record_order_result(db, payin, order):
     # Update the payin transfers
     for pu in order['purchase_units']:
         pt_id = pu['reference_id']
+        payments = pu.get('payments', {})
+        if not payments:
+            pt = db.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
+            update_payin_transfer(db, pt.id, pt.remote_id, 'failed', pt.error)
+            continue
         reversed_amount = payin.amount.zero()
-        for refund in pu.get('payments', {}).get('refunds', ()):
+        for refund in payments.get('refunds', ()):
             refund_amount = refund['amount']
             refund_amount = Money(refund_amount['value'], refund_amount['currency_code'])
             reversed_amount += refund_amount
@@ -268,7 +273,7 @@ def record_order_result(db, payin, order):
             )
         if reversed_amount == 0:
             reversed_amount = None
-        for capture in pu.get('payments', {}).get('captures', ()):
+        for capture in payments.get('captures', ()):
             pt_remote_id = capture['id']
             pt_status = CAPTURE_STATUSES_MAP[capture['status']]
             pt_error = capture.get('status_details', {}).get('reason')
