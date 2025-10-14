@@ -26,26 +26,24 @@ msgstr "あなたのLiberapayアカウントは不正であるとスタッフに
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "あなたのLiberapayプロフィールはスパムであるとスタッフによりマークされました。あなたのプロフィールは表示されません。"
 
-#, fuzzy
 msgid "Your Liberapay account is at risk of being disabled"
 msgstr "Liberapayアカウントが無効になる恐れがあります"
 
-#, fuzzy
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
-msgstr "Liberapay プロフィールに入力した情報は、寄付金を集める試みが正当であることを確認するのに十分ではありません。"
+msgstr "Liberapayのプロフィールに入力した情報だけでは、寄付を集める行為が正当であることを確認するには不十分です。"
 
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
 msgstr "Liberapay プロフィールの情報が古すぎるため、まだあなたのLiberapayの使用が正当であることを確認できません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
-msgstr "Liberapay を{link_start}許可された使用例{link_end}以外に使用しているようです。"
+msgstr "Liberapayは、{link_start}認められた利用目的{link_end}以外の用途で使用しているようです。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled."
-msgstr "この問題を修正するには、 {link_start}プロフィールを編集{link_end}してください。編集しない場合、アカウントが無効になる可能性があります。"
+msgstr "この問題を解決するために、{link_start}プロフィールを編集してください{link_end}。編集しない場合、アカウントが無効化される可能性があります。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you no longer want to use Liberapay, please {link_start}close your account{link_end}."
 msgstr "Liberapay の使用をやめたい場合は、 {link_start}アカウントを閉鎖してください{link_end}。"
 
@@ -217,7 +215,7 @@ msgstr "Liberapayへのログイン"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "誰か（おそらくあなた）がLiberapayの{0}アカウントへのアクセスを要求しました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Follow this link to proceed: {link}"
 msgstr "次のリンクをクリックして続行してください: {link}"
 
@@ -280,17 +278,16 @@ msgstr "お使いのパスワードの安全性が破られていることを検
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "すぐに{link_start}パスワードを変更{link_end}してください。"
 
-#, fuzzy
 msgid "Your payment is disputed"
 msgstr "お支払いに異議があります"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr "{date}に{recipients}への寄付金として開始された{money_amount}の請求が、銀行によって取り消されています。"
+msgstr "{date}に{recipients}への寄付資金として行われた{money_amount}の請求が、銀行により取り消されました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr "{date}に開始された{money_amount}の請求が銀行によって取り消されています。"
+msgstr "{date}に行われた{money_amount}の請求が、銀行によって取り消されました。"
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "提示された理由：支払いを処理できませんでした。"
@@ -346,9 +343,9 @@ msgstr "{link_start}この書類{link_end}のコピーを送信することで�
 msgid "Your payment has failed"
 msgstr "支払いに失敗しました"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr "{recipients}への寄付金として本日開始された{money_amount}の支払いが失敗しました。"
+msgstr "本日、{recipients}への寄付資金として開始された{money_amount}の支払いは、失敗しました。"
 
 #, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
@@ -452,9 +449,9 @@ msgstr "この種類の支払いは平均で{timedelta}かかります。"
 msgid "Your payment has succeeded"
 msgstr "支払いに成功しました"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr "{recipients}への寄付金として本日開始された{money_amount}の支払いが成功しました。"
+msgstr "本日、{recipients}への寄付資金として開始された{money_amount}の支払いは、成功しました。"
 
 #, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
@@ -1757,7 +1754,6 @@ msgstr "{username}さんへの寄付はPayPalにより処理されます。"
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "クレジットまたはデビットカード（ {list_of_card_brands} ）"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
 msgstr "ユーロ銀行口座（SEPA口座振替）"
 
@@ -1875,7 +1871,6 @@ msgstr "前払い金"
 msgid "Last week: {0}"
 msgstr "先週: {0}"
 
-#, fuzzy
 msgid "no take"
 msgstr "取り分なし"
 
@@ -3499,11 +3494,9 @@ msgstr "アカウントを作成する"
 msgid "Manage a {provider} account"
 msgstr "{provider}アカウントを管理する"
 
-#, fuzzy
 msgid "Payments"
 msgstr "支払い"
 
-#, fuzzy
 msgid "Payouts"
 msgstr "支払い"
 
@@ -4071,13 +4064,11 @@ msgstr "{link_start}Shields.io{link_end}のバッジ"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "ウェブサイトや README にバッジを追加するには、以下のコードスニペットを埋め込んでください。"
 
-#, fuzzy
 msgid "The submitted credentials aren't valid."
-msgstr "送信された資格情報は無効です。"
+msgstr "入力された認証情報が正しくありません。"
 
-#, fuzzy
 msgid "You can try again:"
-msgstr "こちらをお試しください:"
+msgstr "もう一度お試しください:"
 
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "他のLiberapayユーザーとコンタクトを取るためにチームに連絡しないでください。他のユーザーにメッセージは転送することはありません。有効な裁判所命令が無い限り、他のユーザーの本人情報や連絡先を開示することはできません。"
@@ -4161,9 +4152,9 @@ msgstr "はい。Liberapayはフランスに拠点を置き、EUの金融規則�
 msgid "Can individuals in Finland use Liberapay to receive donations?"
 msgstr "フィンランドの個人はLiberapayを使って寄付を受け取ることができますか?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr "はい、ただしフィンランド国内での募金活動は{external_link_start}フィンランドの法律により厳しく規制されているため、フィンランド国外からの寄付のみ受け付けます{link_end}。フィンランド国外からの寄付のみを受け付けるには、 {internal_link_start}寄付を受け付ける国のリストに移動し{link_end}、フィンランドの選択を解除して「保存」ボタンをクリックしてください。"
+msgstr "はい、ただし他国からの寄付に限られます。{external_link_start}フィンランド国内での資金集めは法律で厳しく規制されています{link_end}。フィンランド国外からの寄付のみを受け付ける場合は、{internal_link_start}寄付を受け付ける国の一覧にアクセスし{link_end}、フィンランドのチェックを外したうえで、保存ボタンをクリックしてください。"
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "私の寄付が詐欺グループに渡っていないことはどのように分かりますか？"
@@ -4237,9 +4228,8 @@ msgstr "Liberapayでの寄付は所得から控除できますか？"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "おそらくできません。ご自身の国の税規則次第では可能な場合もあります。"
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Liberapayアカウントはウォレットですか？"
+msgstr "Liberapayのアカウントはウォレットですか？"
 
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
 msgstr "以前は寄付者の口座に資金を追加し毎週少しずつ受取人に送金していましたが、非常に大きな欠点があったため2018年半ば以降は寄付者から送られた金銭はすぐに受取人に渡るようになりました。"
@@ -4333,7 +4323,7 @@ msgid "Liberapay complies with the laws of the European Union. With the help of 
 msgstr "Liberapayは EU（欧州連合）の法律に従っています。パートナーの皆様のご協力のもと、起こりうる詐欺・資金洗浄・テロへの資金供与を防ぐために取引を監視しています。"
 
 msgid "Postal address:"
-msgstr "住所"
+msgstr "住所:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"
@@ -4613,9 +4603,9 @@ msgstr "寄付を分配"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "チームに階級はありません。メンバー全員が平等で、各自の取り分が設定されています。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "{0}あなたのチームのダッシュボード{1} から取り分を変更することができます。このダッシュボードには、全メンバーの名目取り分と、現在の週サイクルの終わりに差し引かれる実際の金銭の概算が表示された表があります。"
+msgstr "{0}チームのダッシュボード{1}から、取り分を変更することが可能です。ダッシュボードには、全メンバーの名目上の取り分に加え、現在の週次サイクル終了時に差し引かれる金額の概算を示す表が掲載されています。"
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "名目上の取り分は、メンバーが自分自身で入力する数字ですが、実際の取り分は、システムによって計算されます。最初に名目上の金額を合計し、それぞれが取る割合を計算してから、分配できる収入にこれらの割合を掛け算します。名目上のものは、いわば最大値です。追加の収入があっても、実際の持ち分は名目上の金額よりも決して高くはなりません。"
@@ -4632,17 +4622,15 @@ msgstr "デフォルトでは、すべてのチームメンバーは、取り分
 msgid "Regulation of take amounts"
 msgstr "取り分の金額に関する規制"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "チームに対して「取り分調整」が有効になっている場合、そのチームのメンバーは、前の週サイクルの終了時の公称取り分に基づいて計算された最大値より高い取り分を上げることはできません。このメカニズムは、新しい貢献者をチームに招き入れることを奨励するもので、彼らが最初の週に収入の不均衡な取り分を取らないようにするものです。"
+msgstr "チームで『取り分の制限（take throttling）』が有効になっている場合、メンバーは前回の週次サイクル終了時の名目上の取り分に基づいて計算された上限以上に自分の取り分を増やすことはできません。この仕組みは、新しい貢献者がチームに参加した際、最初の数週間で収入の過剰な取り分を取らないようにすることで、新しいメンバーの参加を促すことを目的としています。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "{amount} 、あなたの取り分を前週の2倍にすることもできますし、チームの余剰収入を請求するために取り分を増やすこともできます。また、前週のサイクル終了時の中央値まで取り分を引き上げることもできます。これらの可能性のうち、最も高い金額があなたのその週の最大取り分となります。"
+msgstr "取り分の上限は次のルールに従って決まります。まず、取り分が {amount} 未満であれば、常にその金額まで増やすことができます。また、前週の取り分の2倍まで増やすことが可能です。さらに、チームに残っている収入を取り分として追加したり、前回の週次サイクル終了時の中央値の取り分まで引き上げたりすることもできます。これらの中で最も高い金額が、その週の最大取り分となります。"
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "チームのメンバーが1人しかいない場合や、前週の取り分がすべてゼロの場合（現在のウィークリーサイクルで新規に作成されたチームの場合）には、取り分は制限されません。"
+msgstr "「チームにメンバーが1人しかいない場合、または前週の取り分がすべてゼロであった場合（これは現在の週次サイクル中に作られた新しいチームに当てはまります）、取り分には制限が適用されません。"
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "すでに存在しているチームの取り分の制限を有効あるいは無効にするには、サポートに連絡してください。その際には、この変更がチームの他のメンバーによって認められているという証拠を忘れずに含めてください。"
@@ -4663,53 +4651,41 @@ msgstr "チームアカウントを削除"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "チームアカウントは、最後のメンバーが脱退すると自動的に閉鎖されます。"
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
-msgstr "Liberapayは、共通リソースの開発と維持のための資金として利用されることを目的としています。現時点では、継続的な寄付を通じてのみ利用可能であり、限られたユースケースにしか適していません。"
+msgstr "Liberapayは、共通のリソースの開発や維持に資金を提供するためのサービスです。現時点では、定期的な寄付を通じてのみ利用可能であるため、利用できるケースは限られています。"
 
-#, fuzzy
 msgid "The most common of those valid use cases are:"
-msgstr "有効な使用例の中で最も一般的なものは次のとおりです。"
+msgstr "これらの有効な利用ケースの中で最も一般的なものは以下の通りです:"
 
-#, fuzzy
 msgid "crowdfunding the development and maintenance of freely usable software"
-msgstr "自由に使えるソフトウェアの開発と保守のためのクラウドファンディング"
+msgstr "自由に利用できるソフトウェアの開発および維持のためのクラウドファンディング"
 
-#, fuzzy
 msgid "crowdfunding the costs of providing a free online service"
-msgstr "無料オンラインサービスの提供費用をクラウドファンディングする"
+msgstr "無料で提供されるオンラインサービスの提供費用をクラウドファンディングする"
 
-#, fuzzy
 msgid "crowdfunding the production of freely accessible art"
 msgstr "自由にアクセスできるアートの制作のためのクラウドファンディング"
 
-#, fuzzy
 msgid "crowdfunding the curation and sharing of freely accessible knowledge"
-msgstr "自由にアクセスできる知識のキュレーションと共有をクラウドファンディングする"
+msgstr "自由にアクセスできる知識のキュレーションと共有のためにクラウドファンディングする"
 
-#, fuzzy
 msgid "Incorrect uses include:"
-msgstr "誤った使用法は次のとおりです:"
+msgstr "誤った使用方法には、以下のものが含まれます:"
 
-#, fuzzy
 msgid "Begging. The money must be for something the recipient does that benefits other people."
-msgstr "物乞い。お金は、受け取る人が他の人々のためになる何かをするために使われるべきです。"
+msgstr "物乞い。受け取ったお金は、寄付を受ける人が行うことで他の人々に利益をもたらす活動のためでなければなりません。"
 
-#, fuzzy
 msgid "Selling. Thanking patrons is allowed, but rewarding them is forbidden."
-msgstr "販売。顧客に感謝することは許可されていますが、報酬を与えることは禁止されています。"
+msgstr "販売行為。支援者への感謝は認められますが、報酬を提供することは禁止されています。"
 
-#, fuzzy
 msgid "Liberapay is built on top of payment processors that handle the actual fund transfers. These processors have their own rules that recipients must comply with:"
-msgstr "Liberapayは、実際の資金移動を処理する決済処理業者を基盤として構築されています。これらの決済処理業者には、受取人が遵守しなければならない独自のルールがあります。"
+msgstr "Liberapayは、実際の資金移動を処理する決済プロセッサの上に構築されています。これらのプロセッサには独自の規則があり、受取人はそれに従う必要があります:"
 
-#, fuzzy
 msgid "Stripe Prohibited and Restricted Businesses"
-msgstr "Stripe の禁止および制限対象事業"
+msgstr "Stripeの禁止および制限対象ビジネス"
 
-#, fuzzy
 msgid "PayPal Acceptable Use Policy"
-msgstr "PayPal利用規約"
+msgstr "PayPalにおける許容される利用に関する規約"
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
@@ -5252,7 +5228,7 @@ msgid "Are you {user_name}?"
 msgstr "あなたは{user_name}ですか？"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr "Liberapayに参加できない、または参加したくない方"
+msgstr "Liberapayに参加できない、または参加したくないですか?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
 msgstr "Liberapayを「オプトアウト」できます。今後も引き続き、誰でもあなたに寄付の約束を行うことができますが、このページには、参加する予定がないことを人々に知らせ、Liberapayに関するメッセージを送信しないように依頼するメッセージが表示されます。"
@@ -5387,7 +5363,7 @@ msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr "Liberapayに参加していない人に寄付の約束をすることもできます。"
 
 msgid "Sign In"
-msgstr "ログイン"
+msgstr "サインイン"
 
 msgid "If you already have an account, log in:"
 msgstr "すでにアカウントをお持ちの場合、ログインしてください。"
