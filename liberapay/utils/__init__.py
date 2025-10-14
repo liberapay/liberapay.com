@@ -58,6 +58,8 @@ def get_participant(
             value = int(slug[1:])
         except ValueError:
             raise response.error(404)
+        if value < 0 or value > 9223372036854775807:
+            raise response.error(404)
         participant = user if user and user.id == value else None
     elif slug:
         value = slug.lower()
@@ -458,7 +460,7 @@ def build_s3_object_url(key):
 NO_DEFAULT = object()
 
 
-def get_int(d, k, default=NO_DEFAULT, minimum=0, maximum=2**64-1):
+def get_int(d, k, default=NO_DEFAULT, minimum=0, maximum=2**63-1):
     try:
         r = d[k]
     except (KeyError, Response):
@@ -611,13 +613,18 @@ def parse_list(mapping, k, cast, default=NO_DEFAULT, sep=','):
     return r
 
 
-def parse_int(o, **kw):
+def parse_int(o, default=NO_DEFAULT, minimum=0, maximum=2**63-1):
     try:
-        return int(o)
+        r = int(o)
     except (ValueError, TypeError):
-        if 'default' in kw:
-            return kw['default']
-        raise Response().error(400, "%r is not a valid integer" % o)
+        if default is NO_DEFAULT:
+            raise Response().error(400, "%r is not a valid integer" % o)
+        return default
+    if minimum is not None and r < minimum:
+        raise Response().error(400, f"{r} is less than {minimum}")
+    if maximum is not None and r > maximum:
+        raise Response().error(400, f"{r} is greater than {maximum}")
+    return r
 
 
 def check_address(addr):

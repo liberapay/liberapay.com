@@ -259,7 +259,7 @@ PAYIN_AMOUNTS = {
 }
 
 PAYIN_SETTLEMENT_DELAYS = {
-    'stripe-sdd': timedelta(days=6),
+    'stripe-sdd': timedelta(days=5),
 }
 
 PAYMENT_METHODS = {

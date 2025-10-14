@@ -67,6 +67,13 @@ title = _("Connecting a {platform} account", platform='PayPal')
             "PayPal payments are currently not anonymous, donors will see your "
             "email address, and you will see theirs."
         ) }}</div>
+        <div class="text-warning">{{ icon('warning-sign') }} {{ _(
+            "The email address you provide here must exactly match one you've "
+            "linked to your PayPal account. If you aren't sure, {link_start}go "
+            "to PayPal{link_end} and check your email settings.",
+            link_start='<a href="https://www.paypal.com/" target="_blank" rel="noopener noreferrer">'|safe,
+            link_end='</a>'|safe,
+        ) }}</div>
     </label>
     <label>
         <span>{{ _("Country") }}</span>
