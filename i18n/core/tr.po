@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Turkish "
-"<https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"PO-Revision-Date: 2025-10-13 00:07+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -29,17 +31,15 @@ msgstr "Liberapay profiliniz bir personel tarafından spam olarak işaretlendi. 
 msgid "Your Liberapay account is at risk of being disabled"
 msgstr "Liberapay hesabınız devre dışı bırakılma riski altında"
 
-#, fuzzy
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
-msgstr "Liberapay profilinize koyduğunuz bilgiler, bağış toplama girişiminizin meşru olduğunu doğrulamak için yeterli değildir."
+msgstr "Liberapay profilinize girdiğiniz bilgiler, bağış toplama girişiminizin yasal olduğunu doğrulamak için yeterli değil."
 
-#, fuzzy
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
-msgstr "Liberapay profilinizdeki bilgiler, hizmetimizi kullanımınızın hala meşru olup olmadığını kontrol etmemizi sağlamak için çok eskidir."
+msgstr "Liberapay profilinizdeki bilgiler çok eski olduğundan, hizmetimizi hala yasal bir şekilde kullandığınızı doğrulayamıyoruz."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
-msgstr "Liberapay'i {link_start}yetkili kullanım durumları{link_end} dışında bir şey için kullanıyor gibi görünüyorsunuz."
+msgstr "Liberapay'i {link_start}izin verilen kullanım durumları{link_end} dışında bir amaçla kullanıyor gibi görünüyorsunuz."
 
 #, python-brace-format
 msgid "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled."
@@ -222,7 +222,7 @@ msgstr "Liberapay'de oturum aç"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Birisi (umarız siz) Liberapay'deki {0} hesabınıza erişmeye çalıştı."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Follow this link to proceed: {link}"
 msgstr "Devam etmek için bu bağlantıyı takip edin: {link}"
 
@@ -289,13 +289,13 @@ msgstr "{link_start}Parolanızı şimdi değiştirmelisiniz{link_end}."
 msgid "Your payment is disputed"
 msgstr "Ödemenize itiraz edildi"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinden başlatılan {money_amount} ücreti bankanız tarafından geri alınıyor."
+msgstr "{date} tarihinde {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme, bankanız tarafından iptal ediliyor."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
-msgstr "{date} adresinde başlatılan {money_amount} ücretlendirmesi, sizin bankanız tarafından geri alınmaktadır."
+msgstr "{date} tarihinde başlatılan {money_amount} tutarındaki ödeme, bankanız tarafından iptal ediliyor."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
 msgstr "Bankanız tarafından sağlanan sebep: ödemeyi işleme koyamadı."
@@ -351,13 +351,13 @@ msgstr "Bankanızın ne olduğunu anlamasına yardımcı olmak için, onlara {li
 msgid "Your payment has failed"
 msgstr "Ödemeniz başarısız oldu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için bugün başlatılan {money_amount} ödemesi başarısız oldu."
+msgstr "Bugün {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme başarısız oldu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ödemesi başarısız oldu."
+msgstr "{date} tarihinde {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme başarısız oldu."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -389,21 +389,21 @@ msgstr "Yeniden deneyin"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "{money_amount} iadesi işlemi başlatıldı"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ücreti size iade edilmektedir."
+msgstr "{date} tarihinde {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme size iade ediliyor."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ücretinin bir kısmı size iade edilmektedir."
+msgstr "{date} tarihinde {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme size kısmen iade ediliyor."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
-msgstr "{date} adresinde başlatılan {money_amount} ödemesi tarafınıza iade edilmektedir."
+msgstr "{date} tarihinde başlatılan {money_amount} tutarındaki ödeme size iade ediliyor."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
-msgstr "{date} adresinde başlatılan {money_amount} ödemesinin bir kısmı tarafınıza iade edilmektedir."
+msgstr "{date} tarihinde başlatılan {money_amount} tutarındaki ödeme size kısmen iade ediliyor."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Sebep: ödeme zaten vardı."
@@ -457,13 +457,13 @@ msgstr "Bu tür ödemelerin işlenmesi ortalama {timedelta} sürmektedir."
 msgid "Your payment has succeeded"
 msgstr "Ödemeniz başarılı oldu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için bugün başlatılan {money_amount} ödemesi başarılı olmuştur."
+msgstr "Bugün {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme başarıyla gerçekleştirildi."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
-msgstr "{recipients} adresine yaptığınız bağışı finanse etmek için {date} adresinde başlatılan {money_amount} ödemesi başarılı oldu."
+msgstr "{date} tarihinde {recipients} alıcısına bağışınızı finanse etmek için başlatılan {money_amount} tutarındaki ödeme başarıyla gerçekleştirildi."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
@@ -1307,13 +1307,11 @@ msgstr "Bu yeni parola güvenli değil"
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "Girdiğiniz yeni parola, sık kullanılan bir parolayla eşleştiği için güvenli değildir."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
-msgstr "Gönderdiğiniz yeni parola güvenli değil çünkü bir veya daha fazla kamuya açık veri sızıntısında ele geçirilmiş bir parolayla eşleşiyor."
+msgstr "Gönderdiğiniz yeni parola, bir veya daha fazla herkese açık veri sızıntısında ele geçirilen bir parolayla eşleştiği için güvenli değil."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
-msgstr "Gönderdiğiniz yeni parola güvenli değil çünkü tahmin edilmesi çok kolay."
+msgstr "Gönderdiğiniz yeni parola, tahmin edilmesi çok kolay olduğu için güvenli değil."
 
 msgid "Please input a different password:"
 msgstr "Lütfen farklı bir parola girin:"
@@ -1674,7 +1672,6 @@ msgstr "{submenu_label} alt menüsünü göster"
 msgid "Introduction"
 msgstr "Giriş"
 
-#, fuzzy
 msgid "Use Cases"
 msgstr "Kullanım Örnekleri"
 
@@ -1774,17 +1771,15 @@ msgstr "{username} için yapılan bağışlar PayPal üzerinden gerçekleştiril
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "bir kredi veya banka kartı ({list_of_card_brands})"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
 msgstr "bir euro banka hesabı (SEPA otomatik ödeme)"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "bir PayPal hesabı"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
-msgstr "{username} adresine yapılacak bağışlar {list_of_payment_methods} adresi kullanılarak ödenebilir."
+msgstr "{username} kullanıcısına yapılan bağışlar şu yöntemlerle ödenebilir: {list_of_payment_methods}."
 
 msgid "Payment Card"
 msgstr "Ödeme Kartı"
@@ -1883,20 +1878,18 @@ msgstr "Nominal Pay"
 msgid "Actual Take"
 msgstr "Gerçek Pay"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "Liberapay'de bağışlar peşin olarak ödenir. Bu sütun, her üyenin bu ekip aracılığıyla ne kadar avans aldığını gösterir. Bir üye, ekip aracılığıyla bir bağışçıdan her yeni ödeme aldığında avans artar ve her hafta azalır."
+msgstr "Liberapay'de bağışlar önceden ödenir. Bu sütun, her üyenin bu takım aracılığıyla önceden ne kadar para aldığını gösterir. Bir üye, takım aracılığıyla bir bağışçıdan yeni bir ödeme aldığında ön ödeme artar ve her hafta azalır."
 
 msgid "Advance"
 msgstr "Önceden ödenen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "Geçen hafta: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "Almak yok"
+msgstr "alınmıyor"
 
 msgid "auto"
 msgstr "otomatik"
@@ -1949,9 +1942,8 @@ msgid_plural "The {currency_name} isn't your preferred currency? {username} also
 msgstr[0] "{currency_name} tercih edilen para biriminiz değil mi? {username} ayrıca {n} tane kabul etmektedir:"
 msgstr[1] "{currency_name} tercih edilen para biriminiz değil mi? {username} ayrıca {n} tane kabul etmektedir:"
 
-#, fuzzy
 msgid "supported by PayPal"
-msgstr "PayPal tarafından desteklenmektedir"
+msgstr "PayPal tarafından desteklenir"
 
 msgid "Switch"
 msgstr "Değiştir"
@@ -2042,49 +2034,38 @@ msgstr "Liberapay'in tekrarlayan bağış sistemi, içerik oluşturuculara istik
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Deneme kipindesiniz, hiçbir gerçek ödeme veya kişisel veri girmeyin!"
 
-#, fuzzy
 msgid "The credentials have been generated."
 msgstr "Kimlik bilgileri oluşturuldu."
 
-#, fuzzy
 msgid "The credentials have been revoked."
 msgstr "Kimlik bilgileri iptal edildi."
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Sürekli oturum"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
-msgstr "İsteklerinize aşağıdaki HTTP başlığını ekleyerek hesabınızdan özel bilgilerin indirilmesini otomatik hale getirebilirsiniz:"
+msgstr "İsteklerinize şu HTTP başlığını ekleyerek hesabınızdan özel bilgilerin indirilmesini otomatikleştirebilirsiniz:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Örneğin, aşağıdaki komutu çalıştırarak o anda aktif olan müşterilerinizin listesini indirebilirsiniz:"
+msgstr "Örneğin, şu komutu çalıştırarak şu anda etkin olan sponsorlarınızın listesini indirebilirsiniz:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "Size yönelik riskleri en aza indirmek için, bu kimlik bilgileri yalnızca veri almak için kullanılabilir, hesabınızdaki herhangi bir şeyi değiştirmek için kullanılamaz ve bir yıl boyunca kullanılmazsa otomatik olarak sona erer."
+msgstr "Sizin için riskleri en aza indirmek amacıyla, bu kimlik bilgileri yalnızca veri almak için kullanılabilir, hesabınızda herhangi bir değişiklik yapmak için kullanılamaz ve bir yıl boyunca kullanılmadıkları takdirde otomatik olarak geçerlilikleri sona erer."
 
-#, fuzzy
 msgid "Revoke credentials"
-msgstr "Kimlik bilgilerini iptal etme"
+msgstr "Kimlik bilgilerini iptal et"
 
-#, fuzzy
 msgid "The credentials have expired."
 msgstr "Kimlik bilgilerinin süresi doldu."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Kimlik bilgilerini yeniden oluşturun"
+msgstr "Kimlik bilgilerini yeniden oluştur"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "Hesabınızdan özel bilgilerin indirilmesini otomatikleştirmeyi basitleştirmek için uzun ömürlü salt okunur kimlik bilgileri oluşturabilirsiniz."
+msgstr "Hesabınızdan özel bilgilerin indirilmesini otomatikleştirmek için, uzun süreli salt okunur kimlik bilgileri oluşturabilirsiniz."
 
-#, fuzzy
 msgid "Generate credentials"
-msgstr "Kimlik bilgileri oluşturma"
+msgstr "Kimlik bilgileri oluştur"
 
 msgid "Dashboard"
 msgstr "Denetim Paneli"
@@ -2152,9 +2133,8 @@ msgstr "Tekrarlayan bağışlar nasıl çalışır?"
 msgid "Can I make a one-time donation?"
 msgstr "Bir kerelik bağış yapabilir miyim?"
 
-#, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after initiating the first payment."
-msgstr "Tek seferlik bağışlar henüz tam olarak desteklenmemektedir, ancak ilk ödemeyi başlattıktan hemen sonra bağışınızı durdurabilirsiniz."
+msgstr "Tek seferlik bağışlar henüz tam olarak desteklenmiyor, ancak ilk ödemeyi yaptıktan sonra bağışınızı hemen durdurabilirsiniz."
 
 msgid "Will I get a receipt?"
 msgstr "Makbuz alacak mıyım?"
@@ -2185,9 +2165,8 @@ msgstr "Gözden Geçirilmiş Ödeme Hizmetleri Yönergesi"
 msgid "Your new avatar URL is: {0}"
 msgstr "Yeni avatar URL'niz: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
-msgstr "Profilinizde artık bir avatar yok."
+msgstr "Profilinizde artık avatar yok."
 
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
@@ -3053,13 +3032,12 @@ msgstr "Gelir geçmişini görüntüle"
 msgid "No data to show."
 msgstr "Gösterilecek veri yok."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
-msgstr "Haftalık gelir ({currency})"
+msgstr "Haftalık gelir ({currency} cinsinden)"
 
-#, fuzzy
 msgid "Number of patrons per week"
-msgstr "Haftalık müşteri sayısı"
+msgstr "Haftalık sponsor sayısı"
 
 msgid "Invoice documents are private."
 msgstr "Fatura belgeleri özeldir."
@@ -3512,17 +3490,15 @@ msgstr "Bu hesap ödeme alamıyor. Bunu düzeltmek için hesap ile oturum açın
 msgid "Manage this {platform} account"
 msgstr "Bu {platform} hesabını yönet"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
-msgstr "Bu hesap ödeme alamıyor. Bunu düzeltmek için aşağıdaki bağlantıya tıklayın ve doğrulama işlemini tamamlayın."
+msgstr "Bu hesap ödeme alamıyor. Bu sorunu gidermek için aşağıdaki bağlantıya tıklayın ve doğrulama işlemini tamamlayın."
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
-msgstr "Bu hesap ödeme alamıyor. Bunu düzeltmek için aşağıdaki bağlantıya tıklayın ve aktivasyon işlemini tamamlayın."
+msgstr "Bu hesap ödeme alamıyor. Bu sorunu gidermek için aşağıdaki bağlantıya tıklayın ve etkinleştirme işlemini tamamlayın."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate this {platform} account"
-msgstr "Bu {platform} hesabını etkinleştirin"
+msgstr "Bu {platform} hesabını etkinleştir"
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3539,37 +3515,33 @@ msgstr "Başka bir {platform_name} hesabı bağla"
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal, Stripe'dan çok daha fazla ülkede para almaya izin verir, ancak Liberapay ile aynı derecede iyi bütünleşmiş değildir."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Create a {provider} account"
-msgstr "Bir {provider} hesabı oluşturun"
+msgstr "{provider} hesabı oluştur"
 
-#, fuzzy
 msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
-msgstr "Lütfen yaşadığınız veya kayıtlı bir işletmenizin bulunduğu ülkeyi seçin ve Stripe'ın şartlarını kabul ettiğinizi onaylayın."
+msgstr "Lütfen yaşadığınız veya kayıtlı işinizin bulunduğu ülkeyi seçin ve Stripe'ın şartlarını kabul ettiğinizi onaylayın."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
-msgstr "{link_start}Stripe Connected Hesap Sözleşmesini{link_end} kabul ediyorum."
+msgstr "{link_start}Stripe Bağlı Hesap Sözleşmesini{link_end} kabul ediyorum."
 
-#, fuzzy
 msgid "Create account"
 msgstr "Hesap oluştur"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Manage a {provider} account"
-msgstr "Bir {provider} hesabını yönetin"
+msgstr "{provider} hesabını yönet"
 
-#, fuzzy
 msgid "Payments"
 msgstr "Ödemeler"
 
-#, fuzzy
 msgid "Payouts"
 msgstr "Ödemeler"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate a {provider} account"
-msgstr "Bir {provider} hesabını etkinleştirin"
+msgstr "{provider} hesabı etkinleştir"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -3661,7 +3633,6 @@ msgstr "Vergiler"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Bu ödeme bir bağıştır, karşılığında herhangi bir mal veya hizmet sağlanmayacaktır, Liberapay tarafından herhangi bir vergi tahsil edilmemiştir."
 
-#, fuzzy
 msgid "Income history"
 msgstr "Gelir geçmişi"
 
@@ -3672,14 +3643,12 @@ msgstr "Ödeme işlemeyi yapılandırana kadar yeni bağış alamazsınız."
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Takımlar aracılığıyla yapılan bağışlar gelirinizin {income_percent}'ini ({team_income} / {total_income}) ve bağışçılarınızın {patrons_percent}'ini ({nteampatrons} / {npatrons}) oluşturuyor."
 
-#, fuzzy
 msgid "Details of personal donations"
-msgstr "Kişisel bağışların detayları"
+msgstr "Kişisel bağışların ayrıntıları"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Bu bölüm, takımlar aracılığıyla yapılan bağışlarla ilgili verileri içermez, yalnızca kişisel olarak aldığınız bağışları gösterir."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "Kişisel bağışlarda yapılan son değişiklikler"
 
@@ -3703,7 +3672,6 @@ msgstr "Bir bağış haftalık {old_amount} tutarından {new_amount} tutarına d
 msgid "A donation of {amount} per week has been restarted."
 msgstr "Haftalık {amount} tutarında bir bağış yeniden başlatıldı."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Kişisel bağışlara ilişkin istatistikler"
 
@@ -4142,11 +4110,9 @@ msgstr "{link_start}Shields.io{link_end} Rozetleri"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Web sitenize veya README dosyanıza bir rozet eklemek için şu kod parçalarını kullanın:"
 
-#, fuzzy
 msgid "The submitted credentials aren't valid."
 msgstr "Gönderilen kimlik bilgileri geçerli değil."
 
-#, fuzzy
 msgid "You can try again:"
 msgstr "Tekrar deneyebilirsiniz:"
 
@@ -4229,13 +4195,12 @@ msgstr "Liberapay finansal düzenlemelere saygı duyuyor mu?"
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Evet. Liberapay Fransa merkezlidir ve Avrupa Birliği'nin mali düzenlemelerine uymaktadır. Ödeme işleyicilerimizin hepsi uygun şekilde lisanslıdır ve dolandırıcılığı, kara para aklamayı ve terörizmin finansmanını engellememize yardımcı olmaktadır."
 
-#, fuzzy
 msgid "Can individuals in Finland use Liberapay to receive donations?"
-msgstr "Finlandiya'daki bireyler bağışlar için Liberapay'i kullanabilir mi?"
+msgstr "Finlandiya'daki kişiler bağışlar için Liberapay'i kullanabilir mi?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Yes, but only donations coming from other countries, as {external_link_start}Finnish law strictly regulates money collection within Finland{link_end}. To only accept donations from outside Finland, {internal_link_start}go to the list of countries you accept donations from{link_end}, deselect Finland, and don't forget to click on the Save button."
-msgstr "Evet, ancak yalnızca diğer ülkelerden gelen bağışlar, çünkü {external_link_start}Finlandiya yasaları Finlandiya içinde para toplanmasını sıkı bir şekilde düzenlemektedir{link_end}. Yalnızca Finlandiya dışından gelen bağışları kabul etmek için, {internal_link_start}adresinden bağış kabul ettiğiniz ülkeler listesine gidin{link_end}, Finlandiya'nın seçimini kaldırın ve Kaydet düğmesine tıklamayı unutmayın."
+msgstr "Evet, ancak yalnızca diğer ülkelerden gelen bağışlar kabul edilir, çünkü {external_link_start}Finlandiya yasaları Finlandiya içindeki para toplama işlemlerini sıkı bir şekilde düzenlemektedir{link_end}. Yalnızca Finlandiya dışından bağış kabul etmek için, {internal_link_start}bağış kabul ettiğiniz ülkelerin listesine gidin{link_end}, Finlandiya'nın seçimini kaldırın ve Kaydet düğmesine tıklamayı unutmayın."
 
 msgid "How do I know that my donation won't go to an impostor?"
 msgstr "Bağışımın bir sahtekara gitmeyeceğini nasıl bilebilirim?"
@@ -4268,13 +4233,11 @@ msgstr "Ödeme işlem ücretleri nedir?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Ücretler ödeme işleyicisine, ödeme yöntemine, ülkelere ve para birimlerine göre değişmektedir. Geçtiğimiz yıl, ortalama ücret yüzdeleri Stripe tarafından işlenen ödemeler için {average_fee_stripe} ve PayPal tarafından işlenen ödemeler için {average_fee_paypal} olmuştur."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
-msgstr "Müşterilerim tarafından gönderilen parayı nasıl ve ne zaman alabilirim?"
+msgstr "Sponsorlarım tarafından gönderilen parayı nasıl ve ne zaman alacağım?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
-msgstr "Bir bağışçı tarafından gönderilen para derhal Stripe veya PayPal hesabınıza gider. Stripe varsayılan olarak parayı otomatik olarak banka hesabınıza gönderirken PayPal siz harcayana veya çekene kadar parayı saklar."
+msgstr "Bağışçı tarafından gönderilen para hemen Stripe veya PayPal hesabınıza aktarılır. Öntanımlı olarak Stripe, parayı otomatik olarak banka hesabınıza gönderirken, PayPal ise siz harcayana veya çekene kadar parayı saklar."
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Stripe denetim panelinde neden kısmi geri ödemeler görüyorum?"
@@ -4311,13 +4274,11 @@ msgstr "Liberapay aracılığıyla yapılan bağışlar vergiden düşülebilir 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Muhtemelen hayır, ancak bu ülkenizin vergi kurallarına bağlı."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Liberapay hesabı bir cüzdan mıdır?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "2018 ortasından beri değil. Bir bağışçı tarafından gönderilen para hemen alıcıya gidiyor. Daha önce fonlar bağışçının hesabında tutuluyor ve her hafta alıcıya azar azar ödeniyordu. Bu sistem, çok önemli dezavantajları nedeniyle kesin olarak terk edildi."
+msgstr "2018 ortasından beri değil. Bağışçı tarafından gönderilen para hemen alıcıya ulaşır. Önceden, fonlar bağışçının hesabında tutulur ve her hafta alıcıya azar azar ödenirdi. Bu sistem, çok önemli kusurları nedeniyle kesin olarak terk edildi."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Aşağıdaki sosyal ağlarda bizden güncellemeler alabilirsiniz:"
@@ -4699,9 +4660,9 @@ msgstr "Parayı paylaş"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Takımların bir hiyerarşisi yoktur, tüm üyeleri eşittir ve kendi oylarını belirler."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Alımlarınızı {0}ekiplerinizin kontrol paneli{1} adresinden değiştirebilirsiniz. Tüm üyelerin nominal paylarını gösteren tabloların yanı sıra mevcut haftalık döngünün sonunda kesilecek gerçek para miktarlarının bir tahminini içerir."
+msgstr "{0}Takımınızın denetim panelinden{1} payınızı değiştirebilirsiniz. Bu panelde, tüm üyelerin paylarını gösteren tabloların yanı sıra, geçerli haftalık döngünün sonunda kesilecek gerçek para tutarlarının tahmini de yer alır."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominal paylar, üyelerin kendilerinin girdiği ham sayılardır, gerçek paylar sistem tarafından hesaplanır: önce nominal payları toplar, sonra her bir payın temsil ettiği yüzdeyi hesaplar ve son olarak bu yüzdeleri kullanılabilir gelire uygular. Nominal paylar ayrıca en üst sınır olarak hareket eder: İlave gelir olsa bile, gerçek paylar asla nominal olanlardan yüksek değildir."
@@ -4718,17 +4679,15 @@ msgstr "Öntanımlı olarak tüm takım üyelerinin payları, artıkların eşit
 msgid "Regulation of take amounts"
 msgstr "Pay tutarlarının düzenlenmesi"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Bir ekip için \"alım azaltma\" etkinleştirildiğinde, üyeleri, bir önceki haftalık döngünün sonundaki nominal alımlar temelinde hesaplanan bir maksimumdan daha yüksek alım yapamazlar. Bu mekanizma, ilk haftalarında gelirden orantısız bir pay almamalarını sağlayarak yeni katılımcıları ekibe katılmaya davet etmeyi teşvik etmeyi amaçlamaktadır."
+msgstr "Bir takım için “alım kısıtlaması” etkinleştirildiğinde, takım üyeleri önceki haftalık döngünün sonunda oluşan alım miktarını temel alarak hesaplanan azami miktardan daha fazla alım yapamazlar. Bu yöntem, yeni katılımcıların ilk haftalarında gelirden orantısız bir pay almamalarını sağlayarak, takıma katılmalarını teşvik etmek amacıyla uygulanmaktadır."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit şu şekilde işlemektedir: eğer aldığınız miktar bunun altındaysa her zaman {amount} adresine yükseltebilirsiniz, bir önceki haftaya göre aldığınız miktarı iki katına çıkarabilirsiniz, takımın artık gelirini talep etmek için aldığınız miktarı yükseltebilirsiniz ve aldığınız miktarı bir önceki haftalık döngünün sonundaki medyan miktarın seviyesine getirebilirsiniz. Bu olasılıklardan hangisi en yüksek miktarla sonuçlanırsa, o hafta için maksimum kazancınız odur."
+msgstr "Sınır şu şekilde işler: Eğer kazancınız bu miktarın altındaysa, her zaman {amount} kadar artırabilirsiniz, önceki haftaya göre kazancınızı iki katına çıkarabilirsiniz, takımın kalan gelirini talep etmek için kazancınızı artırabilirsiniz ve önceki haftalık döngünün sonunda kazancınızı ortalama kazanç seviyesine çıkarabilirsiniz. Bu seçeneklerden hangisi en yüksek miktarı veriyorsa, o hafta için en yüksek kazancınız o olur."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Ekibin yalnızca bir üyesi varsa veya önceki haftanın tüm alımları sıfırsa (mevcut haftalık döngü sırasında oluşturulan herhangi bir yeni ekip için durum böyledir) alımlar sınırlandırılmaz."
+msgstr "Takımın yalnızca bir üyesi varsa veya önceki haftanın alımları sıfırsa (bu durum, geçerli haftalık döngüde oluşturulan tüm yeni takımlar için geçerlidir), alımlar sınırlandırılmaz."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Var olan bir takım için pay sınırlarını etkinleştirmek veya devre dışı bırakmak istiyorsanız lütfen destekle iletişime geçin. Değişikliğin diğer takım üyeleri tarafından onaylandığına dair kanıt eklemeyi unutmayın."
@@ -4749,51 +4708,39 @@ msgstr "Takım hesabını kapatma"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Bir takım hesabı, son üyesi ayrıldığında otomatik olarak kapatılır."
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
-msgstr "Liberapay, ortak varlıkların geliştirilmesi ve bakımını finanse etmek için kullanılmak üzere tasarlanmıştır. Şimdiye kadar bunu yalnızca tekrarlayan bağışlar yoluyla yapmaya izin veriyor, bu da onu sınırlı sayıda kullanım durumu için uygun hale getiriyor."
+msgstr "Liberapay, ortak kaynakların geliştirilmesi ve bakımının fonlanması için kullanılmak üzere tasarlandı. Şu ana kadar bunu yalnızca düzenli bağışlar yoluyla yapmaya izin veriyor, bu da onu sınırlı sayıda kullanım durumu için uygun hale getiriyor."
 
-#, fuzzy
 msgid "The most common of those valid use cases are:"
-msgstr "Bu geçerli kullanım durumlarından en yaygın olanları şunlardır:"
+msgstr "Bu geçerli kullanım örneklerinin en yaygın olanları şunlardır:"
 
-#, fuzzy
 msgid "crowdfunding the development and maintenance of freely usable software"
-msgstr "Özgürce kullanılabilen yazılımların geliştirilmesi ve bakımı için kitle fonlaması"
+msgstr "özgürce kullanılabilen yazılımların geliştirilmesi ve bakımının kitle fonlaması"
 
-#, fuzzy
 msgid "crowdfunding the costs of providing a free online service"
-msgstr "ücretsiz bir çevrimiçi hizmet sunmanın maliyetlerinin kitle fonlamasıyla karşılanması"
+msgstr "ücretsiz çevrim içi hizmet sunmanın maliyetlerinin kitle fonlaması"
 
-#, fuzzy
 msgid "crowdfunding the production of freely accessible art"
-msgstr "özgürce eri̇şi̇lebi̇li̇r sanat üreti̇mi̇ni̇n ki̇tle fonlaması"
+msgstr "serbest erişilebilir sanat eserlerinin üretiminin kitle fonlaması"
 
-#, fuzzy
 msgid "crowdfunding the curation and sharing of freely accessible knowledge"
-msgstr "serbestçe erişilebilen bilginin küratörlüğünü ve paylaşımını kitle fonlaması"
+msgstr "serbest erişilebilir bilginin oluşturulması ve paylaşılmasının kitle fonlaması"
 
-#, fuzzy
 msgid "Incorrect uses include:"
-msgstr "Yanlış kullanımlar şunları içerir:"
+msgstr "Yanlış kullanımlar şunlardır:"
 
-#, fuzzy
 msgid "Begging. The money must be for something the recipient does that benefits other people."
-msgstr "Dilencilik. Para, alıcının diğer insanlara fayda sağlayan bir şey yapması için olmalıdır."
+msgstr "Dilencilik. Para, alıcının diğer insanlara fayda sağlayan bir şey yapması için kullanılmalıdır."
 
-#, fuzzy
 msgid "Selling. Thanking patrons is allowed, but rewarding them is forbidden."
-msgstr "Satış yapmak. Sponsorlara teşekkür etmek serbesttir, ancak onları ödüllendirmek yasaktır."
+msgstr "Satış. Sponsorlara teşekkür etmek serbesttir, ancak onlara ödül vermek yasaktır."
 
-#, fuzzy
 msgid "Liberapay is built on top of payment processors that handle the actual fund transfers. These processors have their own rules that recipients must comply with:"
-msgstr "Liberapay, gerçek fon transferlerini gerçekleştiren ödeme işleyicilerinin üzerine inşa edilmiştir. Bu işleyicilerin, alıcıların uyması gereken kendi kuralları vardır:"
+msgstr "Liberapay, gerçek para aktarımlarını gerçekleştiren ödeme işleyicileri üzerine kurulmuştur. Bu işleyicilerin, alıcıların uyması gereken kendi kuralları vardır:"
 
-#, fuzzy
 msgid "Stripe Prohibited and Restricted Businesses"
-msgstr "Stripe Yasaklı ve Kısıtlı İşletmeler"
+msgstr "Stripe Yasaklanan ve Kısıtlanan İşler"
 
-#, fuzzy
 msgid "PayPal Acceptable Use Policy"
 msgstr "PayPal Kabul Edilebilir Kullanım Politikası"
 
