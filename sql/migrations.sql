@@ -3696,3 +3696,7 @@ INSERT INTO takes
 ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'obsolete';
 ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'out-of-scope';
 ALTER TYPE account_mark ADD VALUE IF NOT EXISTS 'unverifiable';
+
+-- migration #190
+ALTER TABLE payin_events ADD COLUMN remote_timestamp timestamptz;
+ALTER TABLE payin_transfer_events ADD COLUMN remote_timestamp timestamptz;

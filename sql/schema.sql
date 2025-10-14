@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '189'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '190'::jsonb);
 
 
 -- app configuration
@@ -537,10 +537,11 @@ CREATE TABLE payins
 CREATE INDEX payins_payer_idx ON payins (payer);
 
 CREATE TABLE payin_events
-( payin          int               NOT NULL REFERENCES payins
-, status         payin_status      NOT NULL
-, error          text
-, timestamp      timestamptz       NOT NULL
+( payin             int               NOT NULL REFERENCES payins
+, status            payin_status      NOT NULL
+, error             text
+, timestamp         timestamptz       NOT NULL
+, remote_timestamp  timestamptz
 , UNIQUE (payin, status)
 );
 
@@ -603,6 +604,7 @@ CREATE TABLE payin_transfer_events
 , status           payin_transfer_status   NOT NULL
 , error            text
 , timestamp        timestamptz             NOT NULL
+, remote_timestamp timestamptz
 , UNIQUE (payin_transfer, status)
 );
 
