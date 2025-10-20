@@ -28,8 +28,13 @@
             </div>
         % endfor
         <br>
-        <a class="btn btn-default" href="{{ participant.path('income/') }}">{{
-            _("View income shares")
-        }}</a><br>
+        <p class="buttons">
+            <a class="btn btn-default" href="{{ participant.path('income/') }}">{{
+                _("View income shares")
+            }}</a>
+            <a class="btn btn-default" href="{{ participant.path('income/payments') }}">{{
+                _("View payments")
+            }}</a>
+        </p>
     </div>
 % endmacro
