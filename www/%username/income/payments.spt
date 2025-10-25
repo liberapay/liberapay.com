@@ -1,0 +1,191 @@
+from liberapay.utils import get_participant
+
+csv_fields = (
+    'id', 'date', 'currency', 'amount', 'reversed_amount', 'recipient_id',
+    'recipient_username', 'payment_method', 'payer_id', 'payer_username',
+    'payer_public_name',
+)
+
+def flatten(payins):
+    r = []
+    for pi in payins:
+        for pt in pi.transfers:
+            pt['date'] = pi.date
+            pt['payer_id'] = pi.payer_id
+            pt['payer_username'] = pi.payer_username
+            pt['payer_public_name'] = pi.payer_public_name
+            pt['payment_method'] = pi.payment_method
+            pt['currency'] = pt['amount'].currency
+            pt['amount'] = pt['amount'].amount
+            pt['reversed_amount'] = getattr(pt['reversed_amount'], 'amount', 0)
+            r.append({k: pt[k] for k in csv_fields})
+    return r
+
+[---]
+
+participant = get_participant(state, restrict=False)
+if participant.kind != 'group':
+    raise response.error(403)
+title = participant.username
+subhead = _("Payments")
+
+before = request.qs.get_int('before', default=None)
+year = request.qs.get_int('year', default=None)
+per_page = request.qs.get_int(
+    'per_page', default=(None if year or output.media_type == 'text/csv' else 50),
+    minimum=1, maximum=100,
+)
+payins = website.db.all("""
+    SELECT ( SELECT pie.timestamp::date
+               FROM payin_events pie
+              WHERE pie.payin = pi.id
+                AND pie.status = 'succeeded'
+           ) AS date
+         , payer.id AS payer_id
+         , payer.username AS payer_username
+         , payer.public_name AS payer_public_name
+         , ( SELECT r.network FROM exchange_routes r WHERE r.id = pi.route ) AS payment_method
+         , json_agg((SELECT x FROM ( SELECT
+               pt.id, pt.amount, pt.unit_amount, pt.n_units, pt.period, pt.reversed_amount,
+               pt.recipient AS recipient_id, recipient.username AS recipient_username
+           ) x) ORDER BY pt.id) AS transfers
+      FROM payin_transfers pt
+      JOIN payins pi ON pi.id = pt.payin
+      JOIN participants recipient ON recipient.id = pt.recipient
+ LEFT JOIN participants payer ON payer.id = pi.payer AND pt.visibility = 2
+     WHERE pt.team = %s
+       AND coalesce(pt.id < %s, true)
+       AND coalesce(extract(year from pt.ctime) = %s, true)
+       AND pt.status = 'succeeded'
+  GROUP BY pi.id, payer.id
+  ORDER BY pi.id DESC
+     LIMIT %s
+""", (participant.id, before, year, per_page + 1 if per_page else per_page), max_age=0)
+if per_page:
+    has_more = len(payins) > per_page
+    payins = payins[:per_page]
+else:
+    has_more = False
+for pi in payins:
+    for pt in pi.transfers:
+        pt['amount'] = Money(**pt['amount'])
+        if pt['unit_amount']:
+            pt['unit_amount'] = Money(**pt['unit_amount'])
+        if pt['reversed_amount']:
+            pt['reversed_amount'] = Money(**pt['reversed_amount'])
+    transfers_currency = pi.transfers[0]['amount'].currency
+    pi.transfers_sum = Money.sum(
+        (pt['amount'] for pt in pi.transfers),
+        transfers_currency
+    )
+    pi.reversed_sum = Money.sum(
+        (pt['reversed_amount'] for pt in pi.transfers if pt['reversed_amount']),
+        transfers_currency
+    )
+    del transfers_currency
+
+[---] text/html
+% from "templates/macros/payment-methods.html" import payment_method_icon with context
+
+% extends "templates/layouts/profile.html"
+
+% block content
+
+% if payins
+    <table class="table table-fold-xs">
+    <thead>
+        <tr>
+            <th>{{ _("Date") }}</th>
+            <th>{{ _("Donor") }}</th>
+            <th class="text-center">{{ _("Method") }}</th>
+            <th class="text-right">{{ _("Amount") }}</th>
+            <th>{{ _("Recipients") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    % for pi in payins
+        <tr>
+            <td>{{ locale.format_date(pi.date) }}</td>
+            <td>
+                % if pi.payer_id
+                <a href="/~{{ pi.payer_id }}/">{{
+                    pi.payer_public_name if pi.payer_public_name and pi.payer_username.startswith('~') else
+                    pi.payer_username
+                }}</a>
+                % else
+                <em>{{ _("hidden") }}</em>
+                % endif
+            </td>
+            <td class="text-center">{{ payment_method_icon(pi.payment_method) }}</td>
+            <td class="text-right">
+            % if pi.reversed_sum
+                <strike class="text-muted">{{ locale.format_money(pi.transfers_sum) }}</strike>
+                % if pi.reversed_sum < pi.transfers_sum
+                <br>{{ locale.format_money(pi.transfers_sum - pi.reversed_sum) }}
+                % endif
+            % else
+                {{ locale.format_money(pi.transfers_sum) }}
+            % endif
+            </td>
+            <td class="block-xs">
+                <ul class="m-0 right-pointing-arrows">
+                % for pt in pi.transfers
+                    <li>
+                    {{ _(
+                        "{money_amount} to {recipient_name}",
+                        money_amount=pt.amount - (pt.reversed_amount or 0),
+                        recipient_name=('<a href="/~{}/">{}</a>'|safe).format(pt.recipient_id, pt.recipient_username),
+                    ) }}
+                    % if pt.period
+                        <span class="inline-block">
+                        ({{ ngettext(
+                            "{n} week of {money_amount}",
+                            "{n} weeks of {money_amount}",
+                            n=pt.n_units, money_amount=pt.unit_amount
+                        ) if pt.period == 'weekly' else ngettext(
+                            "{n} month of {money_amount}",
+                            "{n} months of {money_amount}",
+                            n=pt.n_units, money_amount=pt.unit_amount
+                        ) if pt.period == 'monthly' else ngettext(
+                            "{n} year of {money_amount}",
+                            "{n} years of {money_amount}",
+                            n=pt.n_units, money_amount=pt.unit_amount
+                        )}})
+                        </span>
+                    % endif
+                    </li>
+                % endfor
+                </ul>
+            </td>
+        </tr>
+    % endfor
+    </tbody>
+    </table>
+% else
+    <p>{{ _("There were no transactions during this period.") }}</p>
+% endif
+
+% if not before
+    <p class="buttons pull-right">
+        <a class="btn btn-default" href="{{ participant.path('income/payments.csv') }}">{{
+            icon('download') }} {{ _("Export as CSV") }}</a>
+        <a class="btn btn-default" href="{{ participant.path('income/payments.json') }}">{{
+            icon('download') }} {{ _("Export as JSON") }}</a>
+    </p>
+% endif
+
+% if has_more
+    <p><a class="btn btn-default" href="{{ request.qs.derive(before=payins[-1].transfers[0].id) }}">{{
+        _("View older payments")
+    }}</a></p>
+% endif
+
+<a class="btn btn-default" href="{{ participant.path('') }}">{{ _("← Go back") }}</a>
+
+% endblock
+
+[---] application/json
+payins
+
+[---] text/csv via csv_dump
+flatten(payins)

@@ -132,6 +132,13 @@ form.buttons > .btn, span.buttons > .btn {
     margin: 5px 2ex 5px 0;
 }
 
+@media (max-width: $screen-xs-max) {
+    .buttons.pull-right {
+        display: block;
+        float: none !important;
+    }
+}
+
 .btn-wrap {
     white-space: normal;
 }
