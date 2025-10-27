@@ -31,3 +31,26 @@
 .last-col-right th:last-child, .last-col-right td:last-child {
     text-align: right;
 }
+
+@media (max-width: $screen-xs-max) {
+    .table-fold-xs {
+        display: block;
+        thead {
+            display: none;
+        }
+        tbody, tr {
+            display: block;
+        }
+        tbody > tr > td {
+            border-width: 0 !important;
+            display: inline-block;
+            text-align: left !important;
+            &.block-xs {
+                display: block;
+            }
+        }
+        tr {
+            border-top: 1px solid $table-border-color;
+        }
+    }
+}
