@@ -1810,6 +1810,9 @@ msgstr "Küldetés teljesítve!"
 msgid "View income shares"
 msgstr "Bevételek részesedéseinek megtekintése"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(származtatás)"
 
@@ -2897,6 +2900,34 @@ msgstr "Jövedelem Részesedés"
 msgid "{0} receives {1} per week"
 msgstr "{0} hetente {1} összeget kap"
 
+msgid "Payments"
+msgstr "Fizetések"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Mód"
+
+msgid "hidden"
+msgstr "rejtett"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Nem voltak átutalások ebben az időintervallumban."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Ön nem tagja a(z) {0} csapatnak."
@@ -3176,9 +3207,6 @@ msgstr "Összes átutalt pénz: {0}"
 msgid "Fees"
 msgstr "Illetékek"
 
-msgid "Method"
-msgstr "Mód"
-
 msgid "automatic charge"
 msgstr "automatikus terhelés"
 
@@ -3187,9 +3215,6 @@ msgstr "terhelés"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Ez a fizetés arra vár, hogy a Liberapay munkatársai kézzel ellenőrizzék a csalás szempontból."
-
-msgid "hidden"
-msgstr "rejtett"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3244,9 +3269,6 @@ msgstr "Ezt a kifizetést a kedvezményezettnek kézzel kell jóváhagynia a {pr
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "A fizető fél fiókja csalás vagy egyéb jogosulatlan tevékenység gyanúja miatt felfüggesztésre került."
-
-msgid "There were no transactions during this period."
-msgstr "Nem voltak átutalások ebben az időintervallumban."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3493,9 +3515,6 @@ msgstr "Fiók létrehozása"
 #, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "{provider} fiók kezelése"
-
-msgid "Payments"
-msgstr "Fizetések"
 
 msgid "Payouts"
 msgstr "Kifizetések"
@@ -3988,9 +4007,6 @@ msgstr "Betéti"
 
 msgid "Credit"
 msgstr "Hitel"
-
-msgid "Date"
-msgstr "Dátum"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

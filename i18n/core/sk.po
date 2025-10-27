@@ -1850,6 +1850,9 @@ msgstr "Misia splnená!"
 msgid "View income shares"
 msgstr "Zobraziť podiely vo firmách"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(fork)"
 
@@ -2968,6 +2971,35 @@ msgstr "Podiel na príjmoch"
 msgid "{0} receives {1} per week"
 msgstr "{0} dostáva {1} týždenne"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Platby"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Metóda"
+
+msgid "hidden"
+msgstr "skryté"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "V toto obdobie neboli žiadne transakcie."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Nieste členom tímu {0}."
@@ -3259,9 +3291,6 @@ msgstr "Celkom sa poslalo peňazí: {0}"
 msgid "Fees"
 msgstr "Poplatky"
 
-msgid "Method"
-msgstr "Metóda"
-
 msgid "automatic charge"
 msgstr "automatické nabíjanie"
 
@@ -3270,9 +3299,6 @@ msgstr "účtovať"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Táto platba čaká na manuálnu kontrolu personálu Liberapay, či neobsahuje známky podvodu."
-
-msgid "hidden"
-msgstr "skryté"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3327,9 +3353,6 @@ msgstr "Táto platba musí byť manuálne potvrdená príjemcom cez stránku {pr
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Účet platiteľa je pozastavený z dôvodu podozrenia z podvodu alebo iného neoprávneného konania."
-
-msgid "There were no transactions during this period."
-msgstr "V toto obdobie neboli žiadne transakcie."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3582,10 +3605,6 @@ msgstr "Vytvoriť účet"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Spravovať účet {provider}"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Platby"
 
 #, fuzzy
 msgid "Payouts"
@@ -4093,9 +4112,6 @@ msgstr "Debet"
 
 msgid "Credit"
 msgstr "Kredit"
-
-msgid "Date"
-msgstr "Dátum"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

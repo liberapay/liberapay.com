@@ -1853,6 +1853,9 @@ msgstr "Oppdrag utført!"
 msgid "View income shares"
 msgstr "Vis inntektsfordeling"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(forgreining)"
 
@@ -2997,6 +3000,35 @@ msgstr "Inntektsandeler"
 msgid "{0} receives {1} per week"
 msgstr "{0} mottar {1} hver uke"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Betalinger"
+
+msgid "Date"
+msgstr "Dato"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Metode"
+
+msgid "hidden"
+msgstr "skjult"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Ingen transaksjoner i denne perioden."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Du er ikke med i {0}-laget."
@@ -3287,9 +3319,6 @@ msgstr "Penger sendt, i alt: {0}"
 msgid "Fees"
 msgstr "Gebyrer"
 
-msgid "Method"
-msgstr "Metode"
-
 msgid "automatic charge"
 msgstr "automatisk trekk"
 
@@ -3299,9 +3328,6 @@ msgstr "belast"
 #, fuzzy
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Denne betalingen venter på å bli kontrollert manuelt av Liberapay-ansatte for tegn på svindel."
-
-msgid "hidden"
-msgstr "skjult"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3357,9 +3383,6 @@ msgstr "Denne betalingen må godkjennes manuelt av mottageren gjennom {provider}
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Betalerens konto er suspendert på grunn av mistanke om svindel eller annen uautorisert handling."
-
-msgid "There were no transactions during this period."
-msgstr "Ingen transaksjoner i denne perioden."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3626,10 +3649,6 @@ msgstr "Opprett konto"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Administrer en {provider}-konto"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Betalinger"
 
 #, fuzzy
 msgid "Payouts"
@@ -4148,9 +4167,6 @@ msgstr "Debet"
 
 msgid "Credit"
 msgstr "Kreditt"
-
-msgid "Date"
-msgstr "Dato"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

@@ -1840,6 +1840,9 @@ msgstr "목표 달성!"
 msgid "View income shares"
 msgstr "수입 분배 비율 보기"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(포크)"
 
@@ -2973,6 +2976,35 @@ msgstr "수익 분배"
 msgid "{0} receives {1} per week"
 msgstr "{0} 님은 매주 {1} 만큼을 받습니다"
 
+#, fuzzy
+msgid "Payments"
+msgstr "결제"
+
+msgid "Date"
+msgstr "날짜"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "수단"
+
+msgid "hidden"
+msgstr "숨김"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "{0} 팀의 일원이 아닙니다."
@@ -3256,9 +3288,6 @@ msgstr "총 보낸 금액: {0}"
 msgid "Fees"
 msgstr "수수료"
 
-msgid "Method"
-msgstr "수단"
-
 msgid "automatic charge"
 msgstr "자동 청구"
 
@@ -3268,9 +3297,6 @@ msgstr "청구"
 #, fuzzy
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "이 결제는 사기 징후가 있는지 Liberapay 직원이 수동으로 확인하기를 기다리고 있습니다."
-
-msgid "hidden"
-msgstr "숨김"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3326,9 +3352,6 @@ msgstr "이 지급은 수신인이 {provider}의 웹사이트를 통해 수동�
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "사기 또는 기타 무단 행위가 의심되어 결제자의 계정이 일시 정지되었습니다."
-
-msgid "There were no transactions during this period."
-msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3596,10 +3619,6 @@ msgstr "계정 생성"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "{provider} 계정 관리"
-
-#, fuzzy
-msgid "Payments"
-msgstr "결제"
 
 #, fuzzy
 msgid "Payouts"
@@ -4124,9 +4143,6 @@ msgstr "직불"
 
 msgid "Credit"
 msgstr "신용"
-
-msgid "Date"
-msgstr "날짜"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

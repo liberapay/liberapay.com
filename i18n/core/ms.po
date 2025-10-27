@@ -1838,6 +1838,9 @@ msgstr "Matlamat berjaya dicapai!"
 msgid "View income shares"
 msgstr "Lihat pembahagian pendapatan"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(cabangkan)"
 
@@ -2941,6 +2944,35 @@ msgstr "Pembahagian Pendapatan"
 msgid "{0} receives {1} per week"
 msgstr "{0} menerima {1} setiap minggu"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Pembayaran"
+
+msgid "Date"
+msgstr "Tarikh"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Kaedah"
+
+msgid "hidden"
+msgstr "disembunyikan"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Tiada transaksi dibuat pada waktu ini."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Anda bukan ahli kumpulan {0}."
@@ -3226,9 +3258,6 @@ msgstr "Jumlah wang dihantar: {0}"
 msgid "Fees"
 msgstr "Caj perkhidmatan"
 
-msgid "Method"
-msgstr "Kaedah"
-
 msgid "automatic charge"
 msgstr "caj automatik"
 
@@ -3237,9 +3266,6 @@ msgstr "caj"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Pembayaran ini sedang menunggu untuk diperiksa secara manual oleh kakitangan Liberapay untuk tanda-tanda penipuan."
-
-msgid "hidden"
-msgstr "disembunyikan"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3294,9 +3320,6 @@ msgstr "Pembayaran ini mesti diluluskan secara manual oleh penerima melalui lama
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Akaun pembayar telah digantung kerana disyaki berlaku penipuan atau tindakan lain yang tidak dibenarkan."
-
-msgid "There were no transactions during this period."
-msgstr "Tiada transaksi dibuat pada waktu ini."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3548,10 +3571,6 @@ msgstr "Buat akaun"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Urus akaun {provider}"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Pembayaran"
 
 #, fuzzy
 msgid "Payouts"
@@ -4052,9 +4071,6 @@ msgstr "Debit"
 
 msgid "Credit"
 msgstr "Kredit"
-
-msgid "Date"
-msgstr "Tarikh"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

@@ -1853,6 +1853,9 @@ msgstr "Цель достигнута!"
 msgid "View income shares"
 msgstr "Просмотреть доли доходов"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(fork)"
 
@@ -2971,6 +2974,35 @@ msgstr "Распределение дохода"
 msgid "{0} receives {1} per week"
 msgstr "{0} получает {1} в неделю"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Платежи"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Метод"
+
+msgid "hidden"
+msgstr "скрытый"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "За данный период не было транзакций."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Вы не являетесь участником команды {0}."
@@ -3262,9 +3294,6 @@ msgstr "Всего денег отправлено: {0}"
 msgid "Fees"
 msgstr "Комиссии"
 
-msgid "Method"
-msgstr "Метод"
-
 msgid "automatic charge"
 msgstr "автоматическое списание"
 
@@ -3273,9 +3302,6 @@ msgstr "списание"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Этот платеж ожидает ручной проверки сотрудниками Liberapay на наличие признаков мошенничества."
-
-msgid "hidden"
-msgstr "скрытый"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3330,9 +3356,6 @@ msgstr "Этот платеж должен быть подтвержден по�
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Счет плательщика деактивирован из-за подозрения в мошенничестве или других несанкционированных действиях."
-
-msgid "There were no transactions during this period."
-msgstr "За данный период не было транзакций."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3585,10 +3608,6 @@ msgstr "Зарегистрироваться"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Управляйте аккаунтом {provider}"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Платежи"
 
 #, fuzzy
 msgid "Payouts"
@@ -4096,9 +4115,6 @@ msgstr "Дебет"
 
 msgid "Credit"
 msgstr "Кредит"
-
-msgid "Date"
-msgstr "Дата"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

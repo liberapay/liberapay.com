@@ -1824,6 +1824,9 @@ msgstr "達成任務！"
 msgid "View income shares"
 msgstr "查看收入分配"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "（分支）"
 
@@ -2935,6 +2938,35 @@ msgstr "收入分紅"
 msgid "{0} receives {1} per week"
 msgstr "{0} 每週收到 {1}"
 
+#, fuzzy
+msgid "Payments"
+msgstr "付款"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "方式"
+
+msgid "hidden"
+msgstr "隱藏"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "在此期間沒有任何交易。"
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "你並不是 {0} 團隊的成員。"
@@ -3215,9 +3247,6 @@ msgstr "付款總額：{0}"
 msgid "Fees"
 msgstr "手續費"
 
-msgid "Method"
-msgstr "方式"
-
 msgid "automatic charge"
 msgstr "自動扣款"
 
@@ -3226,9 +3255,6 @@ msgstr "收費"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "這筆付款正在等待 Liberapay 員工進行人工審核，確定是否有欺詐跡象。"
-
-msgid "hidden"
-msgstr "隱藏"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3283,9 +3309,6 @@ msgstr "支付必須由收款者透過 {provider} 網站的手動操作來處理
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "由於付款人的帳戶涉嫌欺詐或其他未經授權的行為，該帳戶已被凍結。"
-
-msgid "There were no transactions during this period."
-msgstr "在此期間沒有任何交易。"
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3537,10 +3560,6 @@ msgstr "創建賬戶"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "管理{provider}賬戶"
-
-#, fuzzy
-msgid "Payments"
-msgstr "付款"
 
 #, fuzzy
 msgid "Payouts"
@@ -4040,9 +4059,6 @@ msgstr "出账"
 
 msgid "Credit"
 msgstr "进账"
-
-msgid "Date"
-msgstr "日期"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"
@@ -5408,7 +5424,7 @@ msgstr "PayPal 支付目前無法匿名，捐款者會看到您的電郵地址�
 
 #, fuzzy, python-brace-format
 msgid "The email address you provide here must exactly match one you've linked to your PayPal account. If you aren't sure, {link_start}go to PayPal{link_end} and check your email settings."
-msgstr "您在此提供的電子郵件地址必須與您已關聯至 PayPal 帳戶的電子郵件地址完全一致。如果您不確定，請{link_start}前往 PayPal{link_end}並檢查您的電子郵件設定。"
+msgstr "您在此處提供的電子郵件地址必須與您已關聯至 PayPal 賬戶的電子郵件地址完全一致。如果您不確定，請{link_start}前往 PayPal{link_end}並檢查您的電子郵件設置。"
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "抱歉，我們未找到任何相符的查詢。"

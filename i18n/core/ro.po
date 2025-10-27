@@ -1943,6 +1943,9 @@ msgstr "Misiune împlinită!"
 msgid "View income shares"
 msgstr "Vizualizează cotele de venit"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(fork)"
 
@@ -3162,6 +3165,36 @@ msgstr "Cote de venit"
 msgid "{0} receives {1} per week"
 msgstr "{0} primește {1} pe săptămână"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Plăți"
+
+msgid "Date"
+msgstr "Dată"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Metodă"
+
+#, fuzzy
+msgid "hidden"
+msgstr "ascuns"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Nu au fost tranzacții în timpul acestei perioade."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Sunteți membru al echipei {0}."
@@ -3460,9 +3493,6 @@ msgstr "Bani trimiși în total: {0}"
 msgid "Fees"
 msgstr "Taxe"
 
-msgid "Method"
-msgstr "Metodă"
-
 #, fuzzy
 msgid "automatic charge"
 msgstr "încărcare automată"
@@ -3474,10 +3504,6 @@ msgstr "taxă"
 #, fuzzy
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Această plată așteaptă să fie verificată manual de către personalul Liberapay pentru a detecta semne de fraudă."
-
-#, fuzzy
-msgid "hidden"
-msgstr "ascuns"
 
 #, fuzzy, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3534,9 +3560,6 @@ msgstr "Această plată trebuie să fie aprobată manual de către beneficiar pr
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Contul plătitorului este suspendat ca urmare a unei suspiciuni de fraudă sau a unei alte acțiuni neautorizate."
-
-msgid "There were no transactions during this period."
-msgstr "Nu au fost tranzacții în timpul acestei perioade."
 
 #, fuzzy, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3814,10 +3837,6 @@ msgstr "Creează cont"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Gestionați un cont {provider}"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Plăți"
 
 #, fuzzy
 msgid "Payouts"
@@ -4356,9 +4375,6 @@ msgstr "Debit"
 
 msgid "Credit"
 msgstr "Credit"
-
-msgid "Date"
-msgstr "Dată"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

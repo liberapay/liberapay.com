@@ -1839,6 +1839,9 @@ msgstr "Päämäärä on saavutettu!"
 msgid "View income shares"
 msgstr "Näytä tulo-osuudet"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(haara)"
 
@@ -2942,6 +2945,35 @@ msgstr "Tulo-osuudet"
 msgid "{0} receives {1} per week"
 msgstr "{0} vastaanottaa {1} viikoittain"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Maksut"
+
+msgid "Date"
+msgstr "Päiväys"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Menetelmä"
+
+msgid "hidden"
+msgstr "piilotettu"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Tälle ajanjaksolle ei ole tapahtumia."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Et ole ryhmän {0} jäsen."
@@ -3227,9 +3259,6 @@ msgstr "Rahaa lähetetty yhteensä: {0}"
 msgid "Fees"
 msgstr "Kulut"
 
-msgid "Method"
-msgstr "Menetelmä"
-
 msgid "automatic charge"
 msgstr "automaattinen veloitus"
 
@@ -3238,9 +3267,6 @@ msgstr "veloitus"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Liberapayn henkilökunta tarkastaa tämän maksun manuaalisesti petoksen merkkien varalta."
-
-msgid "hidden"
-msgstr "piilotettu"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3295,9 +3321,6 @@ msgstr "Vastaanottajan pitää käydä erikseen hyväksymässä maksu {provider}
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Maksajan tili on jäädytetty petosepäilyn tai muun luvattoman toiminnan vuoksi."
-
-msgid "There were no transactions during this period."
-msgstr "Tälle ajanjaksolle ei ole tapahtumia."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3549,10 +3572,6 @@ msgstr "Luo tili"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Hallinnoi {provider}-tiliä"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Maksut"
 
 #, fuzzy
 msgid "Payouts"
@@ -4055,9 +4074,6 @@ msgstr "Debіt"
 
 msgid "Credit"
 msgstr "Credіt"
-
-msgid "Date"
-msgstr "Päiväys"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"

@@ -1830,6 +1830,9 @@ msgstr "Αποστολή εξετελέσθη!"
 msgid "View income shares"
 msgstr "Εμφάνιση μεριδίων εσόδων"
 
+msgid "View payments"
+msgstr ""
+
 msgid "(fork)"
 msgstr "(διακλάδωση)"
 
@@ -2935,6 +2938,35 @@ msgstr "Μετοχές Εισοδήματος"
 msgid "{0} receives {1} per week"
 msgstr "Ο/Η {0} λαμβάνει {1} ανά εβδομάδα"
 
+#, fuzzy
+msgid "Payments"
+msgstr "Πληρωμές"
+
+msgid "Date"
+msgstr "Ημερομηνία"
+
+msgid "Donor"
+msgstr ""
+
+msgid "Method"
+msgstr "Μέθοδος"
+
+msgid "hidden"
+msgstr "κρυμμένο"
+
+#, python-brace-format
+msgid "{money_amount} to {recipient_name}"
+msgstr ""
+
+msgid "There were no transactions during this period."
+msgstr "Δεν υπήρξαν συναλλαγές κατά τη διάρκεια αυτής της περιόδου."
+
+msgid "Export as JSON"
+msgstr ""
+
+msgid "View older payments"
+msgstr ""
+
 #, python-brace-format
 msgid "You are not a member of the {0} team."
 msgstr "Δεν είστε μέλος της ομάδας {0}."
@@ -3220,9 +3252,6 @@ msgstr "Σύνολο αποσταλθέντων χρημάτων: {0}"
 msgid "Fees"
 msgstr "Τέλη"
 
-msgid "Method"
-msgstr "Μέθοδος"
-
 msgid "automatic charge"
 msgstr "αυτόματη χρέωση"
 
@@ -3231,9 +3260,6 @@ msgstr "χρέωση"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Αυτή η πληρωμή αναμένεται να ελεγχθεί χειροκίνητα από το προσωπικό της Liberapay για ενδείξεις απάτης."
-
-msgid "hidden"
-msgstr "κρυμμένο"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -3288,9 +3314,6 @@ msgstr "Η πληρωμή αυτή πρέπει να εγκριθεί χειρο
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Ο λογαριασμός του πληρωτή αναστέλλεται λόγω υποψίας απάτης ή άλλης μη εξουσιοδοτημένης ενέργειας."
-
-msgid "There were no transactions during this period."
-msgstr "Δεν υπήρξαν συναλλαγές κατά τη διάρκεια αυτής της περιόδου."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
@@ -3544,10 +3567,6 @@ msgstr "Δημιουργία λογαριασμού"
 #, fuzzy, python-brace-format
 msgid "Manage a {provider} account"
 msgstr "Διαχείριση λογαριασμού {provider}"
-
-#, fuzzy
-msgid "Payments"
-msgstr "Πληρωμές"
 
 #, fuzzy
 msgid "Payouts"
@@ -4049,9 +4068,6 @@ msgstr "Πιστωτική"
 
 msgid "Credit"
 msgstr "Χρεωστική"
-
-msgid "Date"
-msgstr "Ημερομηνία"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"
