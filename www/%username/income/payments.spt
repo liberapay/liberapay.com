@@ -108,7 +108,7 @@ for pi in payins:
             <td>{{ locale.format_date(pi.date) }}</td>
             <td>
                 % if pi.payer_id
-                <a href="/~{{ pi.payer_id }}/">{{
+                <a class="break-word-anywhere" href="/~{{ pi.payer_id }}/">{{
                     pi.payer_public_name if pi.payer_public_name and pi.payer_username.startswith('~') else
                     pi.payer_username
                 }}</a>
