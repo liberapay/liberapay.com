@@ -21,6 +21,13 @@ def flatten(payins):
             r.append({k: pt[k] for k in csv_fields})
     return r
 
+def sort_by_amount(transfers):
+    transfers.sort(key=lambda pt: (
+        -pt['amount'].convert('EUR'),
+        pt['recipient_username']
+    ))
+    return transfers
+
 [---]
 
 participant = get_participant(state, restrict=False)
@@ -129,7 +136,7 @@ for pi in payins:
             </td>
             <td class="block-xs">
                 <ul class="m-0 right-pointing-arrows">
-                % for pt in pi.transfers
+                % for pt in sort_by_amount(pi.transfers)
                     <li>
                     {{ _(
                         "{money_amount} to {recipient_name}",
