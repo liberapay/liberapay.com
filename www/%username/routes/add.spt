@@ -18,7 +18,7 @@ if request.method == 'POST':
     try:
         pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
         route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
-    except stripe.error.StripeError as e:
+    except stripe.StripeError as e:
         raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)

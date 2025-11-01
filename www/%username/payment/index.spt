@@ -20,7 +20,7 @@ if request.method == 'POST':
         """, (participant.id, account_pk))
         if account and account.provider == 'stripe' and account.independent:
             try:
-                stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
+                stripe.OAuth.deauthorize(stripe_user_id=account.id)
             except stripe.oauth_error.InvalidClientError as e:
                 expected = (
                     "No such user: " in str(e) or
@@ -41,7 +41,7 @@ if request.method == 'POST':
         if account.provider == 'stripe':
             try:
                 stripe_account = stripe.Account.retrieve(account.id)
-            except stripe.error.PermissionError as e:
+            except stripe.PermissionError as e:
                 website.db.run("""
                     UPDATE payment_accounts
                        SET is_current = null

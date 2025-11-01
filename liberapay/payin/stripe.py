@@ -2,7 +2,6 @@ from datetime import timedelta
 from decimal import Decimal
 
 import stripe
-import stripe.error
 
 from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
@@ -256,7 +255,7 @@ def create_charge(
                 params['on_behalf_of'] = destination
                 params['transfer_data'] = {'destination': destination}
             intent = stripe.PaymentIntent.create(**params)
-        except stripe.error.StripeError as e:
+        except stripe.StripeError as e:
             return abort_payin(db, payin, repr_stripe_error(e)), None
         except Exception as e:
             website.tell_sentry(e)
@@ -290,7 +289,7 @@ def create_charge(
                 try:
                     intent = intent.capture(idempotency_key=f'capture_{intent.id}')
                     charge = intent.charges.data[0]
-                except stripe.error.StripeError as e:
+                except stripe.StripeError as e:
                     return abort_payin(db, payin, repr_stripe_error(e)), None
                 except Exception as e:
                     website.tell_sentry(e)
@@ -497,7 +496,7 @@ def execute_transfer(db, pt, source_transaction, update_donor=True):
             source_transaction=source_transaction,
             idempotency_key='payin_transfer_%i' % pt.id,
         )
-    except stripe.error.StripeError as e:
+    except stripe.StripeError as e:
         error = repr_stripe_error(e)
         if error.startswith("No such destination: "):
             db.run("""
@@ -619,7 +618,7 @@ def reverse_transfer(
                     f'reverse_{Money_to_int(reversal_amount)}_from_pt_{pt.id}'
                 )
             )
-        except stripe.error.InvalidRequestError as e:
+        except stripe.InvalidRequestError as e:
             if str(e).endswith(" is already fully reversed."):
                 return update_payin_transfer(
                     db, pt.id, pt.remote_id, pt.status, pt.error,
@@ -706,7 +705,7 @@ def settle_destination_charge(
                     metadata={'payin_id': payin.id},
                     idempotency_key='payin_fee_%i' % payin.id,
                 )
-            except stripe.error.StripeError as e:
+            except stripe.StripeError as e:
                 # In some cases Stripe can refuse to create a reversal. This is
                 # a serious problem, it means that Liberapay is losing money,
                 # but it can't be properly resolved automatically, so here the
@@ -749,7 +748,7 @@ def update_transfer_metadata(tr, pt):
         if isinstance(py, str):
             try:
                 py = stripe.Charge.retrieve(py, stripe_account=tr.destination)
-            except stripe.error.PermissionError as e:
+            except stripe.PermissionError as e:
                 if str(e).endswith(" Application access may have been revoked."):
                     pass
                 else:
@@ -769,7 +768,7 @@ def update_transfer_metadata(tr, pt):
             attrs['stripe_account'] = tr.destination
             try:
                 py.modify(py.id, **attrs)
-            except stripe.error.PermissionError as e:
+            except stripe.PermissionError as e:
                 if str(e).endswith(" Application access may have been revoked."):
                     pass
                 else:

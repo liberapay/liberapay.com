@@ -201,7 +201,7 @@ class ExchangeRoute(Model):
             if self.address.startswith('pm_'):
                 try:
                     stripe.PaymentMethod.detach(self.address)
-                except stripe.error.InvalidRequestError as e:
+                except stripe.InvalidRequestError as e:
                     if "The payment method you provided is not attached " in str(e):
                         pass
                     else:
@@ -209,7 +209,7 @@ class ExchangeRoute(Model):
             else:
                 try:
                     source = stripe.Source.retrieve(self.address).detach()
-                except stripe.error.InvalidRequestError as e:
+                except stripe.InvalidRequestError as e:
                     ignore = (
                         "does not appear to be currently attached" in str(e) or
                         "No such source: " in str(e)
