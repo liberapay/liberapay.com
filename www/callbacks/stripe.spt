@@ -26,7 +26,7 @@ try:
     event = stripe.Webhook.construct_event(payload, sig, secret)
 except ValueError as e:
     raise response.error(400, str(e))
-except stripe.error.SignatureVerificationError:
+except stripe.SignatureVerificationError:
     raise response.error(403, "invalid signature")
 
 if event.livemode != PRODUCTION:

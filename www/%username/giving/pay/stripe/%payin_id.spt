@@ -2,7 +2,6 @@ from datetime import timedelta
 from math import floor
 
 import stripe
-import stripe.error
 
 from liberapay.exceptions import NextAction
 from liberapay.models.exchange_route import ExchangeRoute
@@ -92,7 +91,7 @@ if request.method == 'POST':
             if set_as_default_for:
                 route.set_as_default_for(set_as_default_for)
 
-    except stripe.error.StripeError as e:
+    except stripe.StripeError as e:
         route = None
         error = _(
             "The payment processor {name} returned an error: “{error_message}”.",
@@ -103,7 +102,7 @@ if request.method == 'POST':
         try:
             if postal_address and not (route.get_postal_address() or {}).get('line1'):
                 route.set_postal_address(postal_address)
-        except stripe.error.StripeError as e:
+        except stripe.StripeError as e:
             website.tell_sentry(e)
 
         transfer_amounts = resolve_amounts(
