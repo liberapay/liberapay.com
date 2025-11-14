@@ -336,6 +336,10 @@ class MixinTeam:
         """Return an OrderedDict of member dicts.
         """
         takes = self.get_current_takes_for_display()
+        takes.sort(key=lambda t: (
+            -t['actual_amount'].fuzzy_sum(self.main_currency),
+            t['member_name']
+        ))
         nmembers = len(takes)
         last_week = self.get_takes_last_week()
         compute_max = self.throttle_takes and nmembers > 1 and last_week.nonzero

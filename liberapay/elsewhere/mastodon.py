@@ -65,7 +65,7 @@ class Mastodon(PlatformOAuth2):
         try:
             o = r.json()
             c_id, c_secret = o['client_id'], o['client_secret']
-        except (KeyError, ValueError):
+        except (KeyError, TypeError, ValueError):
             c_id, c_secret = None, None
         if status != 200 or not c_id or not c_secret:
             logger.info('{} responded with {}:\n{}'.format(domain, status, r.text))
