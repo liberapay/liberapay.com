@@ -573,7 +573,7 @@ msgstr "{0} från {1} har registrerat sig på Liberapay!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr "Din utfästelse om att ge {0} varje vecka till {1} kommer nu sättas i gång eftersom de har registrerat sig på Liberapay. Hurra!"
+msgstr "Ditt åtagande att ge {0} varje vecka till {1} kommer nu sättas i gång eftersom de har registrerat sig på Liberapay. Hurra!"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
@@ -585,7 +585,7 @@ msgstr "{user_name} från {platform} har gått med i Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr "{date} så lovade du att donera {money_amount} till {user_name} om de gick med Liberapay."
+msgstr "{date} så åtog du dig att donera {money_amount} till {user_name} om de gick med Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
@@ -593,7 +593,7 @@ msgstr "Vi är glada att informera dig om att {user_name} gick med Liberapay {ti
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr "Följaktligen har en automatisk betalning på {money_amount} schemalagts för den {date}, för att göra ditt löfte till handling."
+msgstr "Följaktligen har en automatisk betalning på {money_amount} schemalagts för den {date}, för att verkställa ditt åtagande."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
@@ -603,7 +603,7 @@ msgstr[1] "Om du vill ändra eller avbryta dessa kommande betalningar, klicka p�
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr "Vi är stolta att informera dig om att {user_name} har gått med Liberapay {time_ago}, som {liberapay_username}, så du kan nu konvertera din utfästelse till en riktig donation:"
+msgstr "Vi är stolta att informera dig att {user_name} har gått med Liberapay {time_ago}, som {liberapay_username}, så du kan nu verkställa ditt donationsåtagande:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -770,7 +770,7 @@ msgid "When it's time to renew my donations"
 msgstr "När det är dags att förnya mina donationer"
 
 msgid "When someone I pledge to joins Liberapay"
-msgstr "När någon jag lovat registrerar sig på Liberapay"
+msgstr "När någon jag åtagit mig registrerar sig på Liberapay"
 
 msgid "When someone invites me to join a team"
 msgstr "När någon bjuder in mig till en grupp"
@@ -1511,7 +1511,7 @@ msgid "Modify your donation"
 msgstr "Ändra din donation"
 
 msgid "Pledge"
-msgstr "Löften"
+msgstr "Åtagande"
 
 msgid "Donate"
 msgstr "Donera"
@@ -1808,10 +1808,10 @@ msgid "per week"
 msgstr "per vecka"
 
 msgid "Modify your pledge"
-msgstr "Ändra din utfästelse"
+msgstr "Ändra ditt åtagande"
 
 msgid "Pledges"
-msgstr "Löften"
+msgstr "Åtaganden"
 
 msgid "Sum"
 msgstr "Summa"
@@ -1987,19 +1987,19 @@ msgid "Discontinue the donation"
 msgstr "Stoppa donationen"
 
 msgid "Cancel the pledge"
-msgstr "Avbryt utfästelsen"
+msgstr "Avbryt åtagandet"
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr "{username} har valt att inte visa vilka deras beskyddare är, så din donation kommer att vara hemlig."
+msgstr "{username} har valt att inte visa sina bidragsgivare, så din donation kommer att vara hemlig."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr "Den här donationen kommer inte vara hemlig utan du kommer att finnas med i {username}:s privata lista över beskyddare."
+msgstr "Den här donationen kommer inte vara hemlig utan du kommer att finnas med i {username}:s privata lista över bidragsgivare."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
-msgstr "{username} avslöjar vilka deras beskyddare är, din donation kommer att bli offentlig."
+msgstr "{username} publicerar sina bidragsgivare, din donation kommer att bli offentlig."
 
 msgid "Please select a privacy level for this donation:"
 msgstr "Vänligen välj en sekretessnivå för den här donationen:"
@@ -2016,7 +2016,7 @@ msgstr "Privat donation"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr "Du kommer att visas i {username}'s privata lista över beskyddare."
+msgstr "Du kommer att visas i {username}:s privata lista över bidragsgivare."
 
 msgid "Public donation"
 msgstr "Publik donation"
@@ -2094,7 +2094,7 @@ msgstr "Stöt {username}'s arbete med en återkommande donation."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr "{username} accepterar för närvarande inte donationer. Du kan skapa ett donationslöfte till dem, men du kan inte faktiskt överföra pengar."
+msgstr "{username} tar för närvarande inte emot donationer. Du kan skapa ett donationsåtagande för dem, men inte överföra pengar än."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Detta konto är tillfälligt avstängt, donationer till det kommer inte bli behandlade."
@@ -2664,7 +2664,7 @@ msgid "This stopped donation still has {money_amount} paid in advance. That adva
 msgstr "Denna avslutade donation har fortfarande {money_amount} betalade i förskott. Detta förskott kommer användas varje vecka tills det att det når noll."
 
 msgid "Cancelled pledges"
-msgstr "Avslutade donationslöften"
+msgstr "Avslutade åtaganden"
 
 msgid "Funding your donations"
 msgstr "Finansiera dina donationer"
@@ -3927,7 +3927,7 @@ msgstr "Du har nu lovat att donera {0} per månad till {1}. Tack!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr "Du har nu lovat att donare {0} per år till {1}. Tack!"
+msgstr "Du har nu lovat att donera {0} per år till {1}. Tack!"
 
 msgid "The donation amount is missing."
 msgstr "Donationsbeloppet saknas."
@@ -4241,11 +4241,11 @@ msgid "You can usually check the authenticity of a Liberapay profile by looking 
 msgstr "Du kan vanligtvis kontrollera äktheten av en Liberapay-profil genom att titta på de sociala konton som är anslutna till den. Endast den som kontrollerar ett socialt konto kan ansluta det till en Liberapay-profil, eftersom processen innehåller ett autentiseringssteg. Du kan också leta efter en länk till en Liberapay-profil på projektets officiella webbplats. Slutligen, om du har tvivel om ett specifikt konto så kan du fråga oss, så undersöker vi det."
 
 msgid "How do I know that my pledges won't be claimed by an impostor?"
-msgstr "Hur vet jag att mina utfästelser inte kommer att krävas av en bedragare?"
+msgstr "Hur vet jag att mina åtaganden inte kommer lösas in av en bedragare?"
 
 #, python-brace-format
 msgid "A pledge is linked to an account on another platform (e.g. {platform}) and it can only be claimed by someone who controls this account."
-msgstr "En utfästelse är länkad till ett konto på en annan plattform (t.ex. {platform}) och det kan endast kopplas av den som styr detta konto."
+msgstr "Ett åtagande är länkat till ett konto på en annan plattform (t.ex. {platform}) och det kan endast lösas in av den som styr detta konto."
 
 msgid "Which countries and currencies are supported?"
 msgstr "Vilka land och valutor stöds?"
@@ -4265,9 +4265,8 @@ msgstr "Vad är betalningsbearbetningsavgifterna?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Avgifterna varierar beroende på betalningsförmedlare, betalningsmetod, länder och valutor. Under det senaste året har de genomsnittliga avgiftsprocenterna varit {average_fee_stripe} för betalningar som hanteras av Stripe och {average_fee_paypal} för betalningar som hanteras av PayPal."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
-msgstr "Hur och när får jag de pengar som mina beskyddare har skickat?"
+msgstr "Hur och när får jag de pengar som mina bidragsgivare skickat?"
 
 #, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
@@ -4892,7 +4891,7 @@ msgid "Liberapay allows pledging to fund people who haven't joined the site yet.
 msgstr "Liberapay tillåter att man lovar att finansiera människor som inte har anslutit sig till webbplatsen ännu."
 
 msgid "Explore Pledges"
-msgstr "Utforska utfästelser"
+msgstr "Utforska åtaganden"
 
 msgid "A repository contains a project's data, for example the source code of an application."
 msgstr "Ett källkodsarkiv innehåller ett projekts data, till exempel källkoden för ett program."
@@ -4951,13 +4950,13 @@ msgid "There are no unclaimed donations right now."
 msgstr "Det finns inga outtagna donationer just nu."
 
 msgid "Make a pledge"
-msgstr "Gör en utfästelse"
+msgstr "Gör ett åtagande"
 
 msgid "Do you have someone in mind?"
 msgstr "Har du någon i åtanke?"
 
 msgid "We can help you find pledgees if you connect your accounts:"
-msgstr "Vi kan hjälpa dig att hitta mecenater om du ansluter dina konton:"
+msgstr "Vi kan hjälpa dig att hitta åtaganden om du ansluter dina konton:"
 
 #, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -5216,7 +5215,7 @@ msgid "You can also easily list on your profile the repositories you contribute 
 msgstr "På din profil kan du enkelt lista vilka källkodsarkiv som du bidrar till på {platforms_list}."
 
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay tillåter dig att utfästa en donation till personer som inte har gått med ännu. Inga pengar samlas in för utfästelserna, utan de blir verkliga donationer först när mottagarna går med. Givetvis underrättar vi givarna när det sker."
+msgstr "Liberapay tillåter dig att utfästa en donation till personer som inte har gått med ännu. Inga pengar samlas in för åtagandena, utan de blir verkliga donationer först när mottagarna går med. Givetvis underrättar vi givarna när det sker."
 
 msgid "Sponsors"
 msgstr "Sponsorer"
@@ -5263,7 +5262,7 @@ msgstr[1] "{n} nya donationer har påbörjats den senaste månaden, vilket ökar
 msgid "<unused singular (hash=0e9b5412ec731add80b03f285e32357f)>"
 msgid_plural "{n} new {link_start}pledges{link_end} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgstr[0] "<oanvänd singular (hash=0e9b5412ec731add80b03f285e32357f)>"
-msgstr[1] "{n} nya {link_start}utfästelser{link_end} har gjorts den senaste månaden, vilket tillför {money_amount} av veckovisa donationer som väntar på att tas i anspråk."
+msgstr[1] "{n} nya {link_start}åtaganden{link_end} har gjorts den senaste månaden, vilket tillför {money_amount} av veckovisa donationer som väntar på att tas i anspråk."
 
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
@@ -5328,7 +5327,7 @@ msgstr "Upptäck outtagna donationer"
 
 #, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Denna sida är för donationsutfästelser avseende {platform}-användaren {user_name}:"
+msgstr "Denna sida är för donationsåtaganden avseende användaren {user_name} på {platform}:"
 
 msgid "No description available."
 msgstr "Ingen beskrivning tillgänglig."
@@ -5340,12 +5339,12 @@ msgstr "Profil på {0}"
 #, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "En Liberapay användare har utfäst att donera {0} per vecka till {1}."
-msgstr[1] "{n} Liberapay användare har utfäst att donera {0} per vecka till {1}."
+msgstr[0] "En Liberapay-användare har åtagit sig att donera {0} per vecka till {1}."
+msgstr[1] "{n} Liberapay-användare har åtagit sig att donera {0} per vecka till {1}."
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr "{user_name} har tillkännagivit att de inte kan eller inte vill gå med i Liberapay. Du kan trots det ge ett donationslöfte till dem nedan, men du bör även fundera på att stötta på dem på något annat sätt."
+msgstr "{user_name} har meddelat att de inte kan eller vill gå med i Liberapay. Du kan ändå göra ett donationsåtagande till dem nedan, men du bör även fundera på att stötta på dem på något annat sätt."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
@@ -5353,7 +5352,7 @@ msgstr "Vänligen skicka inte meddelanden till {user_name} med inbjudningar om a
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr "Ge ett donationslöfte till {user_name}"
+msgstr "Gör ett donationsåtagande till {user_name}"
 
 msgid "You can support individual team members:"
 msgstr "Du kan stödja individuella team-medlemmar:"
@@ -5370,7 +5369,7 @@ msgid "You can't or don't want to join Liberapay?"
 msgstr "Kan eller vill du inte gå med i Liberapay?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr "Du kan \"välja bort\" Liberapay. Folk kommer fortfarande att kunna ge löften till dig, men ett meddelande kommer att visas på den här sidan som informerar alla om att du inte planerar att gå med och ber dem att inte skicka meddelanden om Liberapay till dig."
+msgstr "Du kan ”välja bort” Liberapay. Folk kommer fortfarande att kunna göra åtaganden för dig, men ett meddelande kommer att visas på den här sidan som informerar alla om att du inte planerar att gå med och ber dem att inte skicka meddelanden om Liberapay till dig."
 
 msgid "Opt out"
 msgstr "Säg upp"
