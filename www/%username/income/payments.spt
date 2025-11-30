@@ -59,7 +59,7 @@ payins = website.db.all("""
       FROM payin_transfers pt
       JOIN payins pi ON pi.id = pt.payin
       JOIN participants recipient ON recipient.id = pt.recipient
- LEFT JOIN participants payer ON payer.id = pi.payer AND pt.visibility = 2
+ LEFT JOIN participants payer ON payer.id = pi.payer AND pt.visibility = 3
      WHERE pt.team = %s
        AND coalesce(pt.id < %s, true)
        AND coalesce(extract(year from pt.ctime) = %s, true)
