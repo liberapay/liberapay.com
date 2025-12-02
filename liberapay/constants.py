@@ -137,13 +137,13 @@ EMAIL_RE = re.compile(r'''
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 EUROZONE = {
-    'AT', 'BE', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'IE', 'IT', 'LT',
-    'LU', 'LV', 'MT', 'NL', 'PT', 'SI', 'SK',
+    'AT', 'BE', 'BG', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'IE', 'IT',
+    'LT', 'LU', 'LV', 'MT', 'NL', 'PT', 'SI', 'SK',
 }
 SEPA = {
     *EUROZONE,
-    'AD', 'AL', 'BG', 'CH', 'CZ', 'DK', 'GB', 'GI', 'HU', 'IS', 'LI', 'MC', 'MD',
-    'ME', 'MK', 'NO', 'PL', 'RO', 'SE', 'VA',
+    'AD', 'AL', 'CH', 'CZ', 'DK', 'GB', 'GI', 'HU', 'IS', 'LI', 'MC', 'MD', 'ME',
+    'MK', 'NO', 'PL', 'RO', 'SE', 'VA',
 }
 
 EVENTS = [
