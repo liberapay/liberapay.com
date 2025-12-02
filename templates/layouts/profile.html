@@ -21,13 +21,14 @@
     <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
         <h1>
-            {% if '/income/' in request.path %}<a href="{{ participant.path('') }}">{% endif %}
+            % set is_subpage = request.path.raw.rstrip('/') > participant.path('').rstrip('/')
+            {% if is_subpage %}<a href="{{ participant.path('') }}">{% endif %}
                 % if participant.public_name
                     {{ participant.public_name }}<br><small>@{{ participant.username }}</small>
                 % else
                     {{ participant.username }}
                 % endif
-            {% if '/income/' in request.path %}</a>{% endif %}
+            {% if is_subpage %}</a>{% endif %}
         </h1>
         <p class="summary" lang="{{ lang|default('', True) }}">{{ summary|default('', True) }}</p>
     </div>
