@@ -20,11 +20,16 @@
     {% block profile_alternates %}{% endblock %}
     <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
-        % if participant.public_name
-            <h1>{{ participant.public_name }}<br><small>@{{ participant.username }}</small></h1>
-        % else
-            <h1>{{ participant.username }}</h1>
-        % endif
+        <h1>
+            % set is_subpage = request.path.raw.rstrip('/') > participant.path('').rstrip('/')
+            {% if is_subpage %}<a href="{{ participant.path('') }}">{% endif %}
+                % if participant.public_name
+                    {{ participant.public_name }}<br><small>@{{ participant.username }}</small>
+                % else
+                    {{ participant.username }}
+                % endif
+            {% if is_subpage %}</a>{% endif %}
+        </h1>
         <p class="summary" lang="{{ lang|default('', True) }}">{{ summary|default('', True) }}</p>
     </div>
 </div>
