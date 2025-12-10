@@ -201,7 +201,7 @@ if mode == 'all':
      LEFT JOIN communities c ON c.participant = p.id
      LEFT JOIN feedback f ON f.participant = p.id
          WHERE coalesce(p.id < %s, true)
-           AND coalesce(p.marked_as = %s, true)
+           AND coalesce(coalesce(p.marked_as::text, 'null') = %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
          LIMIT 25
