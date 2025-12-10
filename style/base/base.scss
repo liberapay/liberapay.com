@@ -426,26 +426,32 @@ ul.emails {
     }
 }
 
-.faq dt {
-    margin: 0;
-    padding-bottom: 0.33em;
-    &:target, &:target + dd {
-        background-color: rgba(yellow, 0.3);
-        animation: target-flash 1.5s 1;
-    }
-    & > a {
-        color: #000;
-        position: relative;
-        text-decoration: none;
-        &:hover:after {
-            content: ' §';
-        }
-    }
-}
-.faq dd {
+.faq details {
     margin-bottom: 1.5em;
 }
-.faq dd > p {
+
+.faq details > summary {
+    margin: 0;
+    padding-bottom: 0.33em;
+    font-size: $font-size-medium;
+    font-weight: 200;
+    margin-bottom: 10px;
+
+    color: #000;
+    position: relative;
+    text-decoration: none;
+
+    &:hover::after {
+        content: ' §';
+    }
+}
+
+.faq details:target {
+    background-color: rgba(yellow, 0.3);
+    animation: target-flash 1.5s 1;
+}
+
+.faq details > p {
     margin-bottom: 0.33em;
 }
 
@@ -925,6 +931,35 @@ fieldset#amount {
 abbr[title] {
     /* Bootstrap 3.3.6 adds a bottom border but doesn't disable text-decoration */
     text-decoration: none;
+}
+
+details {
+    // Ensures details blocks have some padding when opened, if needed
+    padding: 0;
+}
+
+summary {
+    cursor: pointer;
+    list-style: none; /* Hide default arrow in most browsers */
+    
+    // Hide default arrow in Chrome/Safari
+    &::-webkit-details-marker {
+        display: none;
+    }
+    
+    // Add custom indicator
+    &::before {
+        content: '\25B6\0020'; /* Right-pointing triangle + space */
+        transition: transform 0.15s ease-out;
+        display: inline-block;
+        margin-right: 0.5ex;
+        font-size: 80%;
+    }
+}
+
+details[open] summary::before {
+    // Down-pointing triangle when open
+    content: '\25BC\0020';
 }
 
 .preview {
