@@ -500,6 +500,10 @@ class InvalidNumber(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid number.', *self.args)
 
+class TooManyDecimalPlaces(LazyResponse400):
+    def msg(self, _):
+        return _("The amount '{0}' has too many decimal places.", *self.args)
+
 
 class AmbiguousNumber(LazyResponse400):
     html_template = 'templates/exceptions/AmbiguousNumber.html'

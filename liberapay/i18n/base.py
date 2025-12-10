@@ -14,7 +14,7 @@ from markupsafe import Markup
 import opencc
 from pando.utils import utcnow
 
-from ..exceptions import AmbiguousNumber, InvalidNumber
+from ..exceptions import AmbiguousNumber, InvalidNumber, TooManyDecimalPlaces
 from ..website import website
 from .currencies import (
     CURRENCIES, CURRENCY_REPLACEMENTS, D_MAX, Money, MoneyBasket, to_precision,
@@ -360,7 +360,7 @@ class Locale(babel.core.Locale):
         money = Money(decimal, currency).round_down()
         if money.amount != decimal:
             # The input amount exceeds maximum precision (e.g. $0.001).
-            raise InvalidNumber(string)
+            raise TooManyDecimalPlaces(string) # <-- THIS IS THE FIX
         return money
 
     @cached_property
