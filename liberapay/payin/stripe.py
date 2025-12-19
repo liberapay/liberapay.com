@@ -307,6 +307,55 @@ def create_charge(
     return payin, charge
 
 
+def set_up_payment_method(pm, route, payin_amount):
+    """Create a SetupIntent for the given PaymentMethod.
+    """
+    state = website.state.get()
+    request, response = state['request'], state['response']
+    if route.network == 'stripe-sdd':
+        user_agent = request.headers.get(b'User-Agent', b'')
+        try:
+            user_agent = user_agent.decode('ascii', 'backslashreplace')
+        except UnicodeError:
+            raise response.error(400, "User-Agent must be ASCII only")
+        mandate_data = {
+            "customer_acceptance": {
+                "type": "online",
+                "accepted_at": int(utcnow().timestamp()),
+                "online": {
+                    "ip_address": str(request.source),
+                    "user_agent": user_agent,
+                },
+            },
+        }
+    else:
+        mandate_data = None
+    si = stripe.SetupIntent.create(
+        confirm=True,
+        customer=route.remote_user_id,
+        mandate_data=mandate_data,
+        metadata={"route_id": route.id},
+        payment_method=pm.id,
+        payment_method_types=[pm.type],
+        single_use=dict(
+            amount=Money_to_int(payin_amount),
+            currency=payin_amount.currency,
+        ) if payin_amount and route.one_off else None,
+        usage='on_session' if payin_amount and route.one_off else 'off_session',
+        idempotency_key='create_SI_for_route_%i' % route.id,
+    )
+    mandate_id = si.single_use_mandate or si.mandate
+    if mandate_id:
+        mandate = stripe.Mandate.retrieve(mandate_id)
+        route.set_mandate(mandate_id, mandate.payment_method_details.sepa_debit.reference)
+    if si.status == 'requires_action':
+        act = si.next_action
+        if act.type == 'redirect_to_url':
+            raise response.refresh(state, url=act.redirect_to_url.url)
+        else:
+            raise NotImplementedError(act.type)
+
+
 def send_payin_notification(db, payin, payer, charge, route):
     """Send the legally required notification for SEPA Direct Debits.
     """
