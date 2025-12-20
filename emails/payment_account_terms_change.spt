@@ -1,0 +1,22 @@
+[---] -/subject
+{{ _("Payment processor contractual changes") }}
+
+[---] text/html
+<p>{{ _(
+    "{provider} is updating {link_start}its terms of service{link_end}. The changes "
+    "will take effect on {effect_date}. No action is needed from you, but by continuing "
+    "to use {provider}'s services on or after that date, you're agreeing to these "
+    "updated terms."
+    , provider=provider_name
+    , link_start=('<a href="{}">'|safe).format(contract_url)
+    , link_end='</a>'|safe
+    , effect_date=effect_date
+) }}</p>
+
+<p><a href="{{ diff_url|default(contract_url) }}" style="margin: 0 2ex 0.7em 0; {{ button_style('primary') }}">{{ _(
+    "Review the changes"
+) if diff_url|default('') else _(
+    "Review the new terms"
+) }}</a> <a href="{{ participant.url('payment') }}" style="{{ button_style('primary') }}">{{ _(
+    "Manage your payment processors"
+) }}</a></p>

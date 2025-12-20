@@ -219,7 +219,7 @@ class Locale(babel.core.Locale):
                     if isinstance(o, datetime):
                         o = format_datetime(o, locale=self)
                     else:
-                        o = format_date(o, locale=self)
+                        o = format_date(o, 'long', locale=self)
                 elif isinstance(o, Locale):
                     o = self.languages.get(o.language) or o.language.upper()
                 elif isinstance(o, list):
