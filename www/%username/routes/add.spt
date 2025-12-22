@@ -2,7 +2,7 @@ import stripe
 
 from liberapay.exceptions import AccountSuspended
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.payin.stripe import repr_stripe_error
+from liberapay.payin.stripe import repr_stripe_error, set_up_payment_method
 from liberapay.utils import check_address_v2, form_post_success, get_participant
 
 [---]
@@ -17,7 +17,8 @@ if request.method == 'POST':
     one_off = body.get('one_off') == 'true'
     try:
         pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
-        route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
+        route = ExchangeRoute.insert_stripe_payment_method(participant, pm, one_off)
+        set_up_payment_method(pm, route, None)
     except stripe.StripeError as e:
         raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",

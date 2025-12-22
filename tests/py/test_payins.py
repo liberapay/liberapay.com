@@ -1887,7 +1887,7 @@ class TestRefundsStripe(EmailHarness):
             stripe.api_key
         )
         cus_create.return_value = Object(id='cus_XXXXXXXXXXXXXX')
-        route = ExchangeRoute.attach_stripe_payment_method(alice, pm_card, False)
+        route = ExchangeRoute.insert_stripe_payment_method(alice, pm_card, False)
         alice.set_tip_to(bob, EUR('2.46'))
         payin, pt = self.make_payin_and_transfer(
             route, bob, EUR(400), fee=EUR('3.45'),

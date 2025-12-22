@@ -477,9 +477,9 @@ class Harness(unittest.TestCase):
         r.__dict__['participant'] = participant
         return r
 
-    def attach_stripe_payment_method(self, participant, stripe_pm_id, one_off=False):
+    def insert_stripe_payment_method(self, participant, stripe_pm_id, one_off=False):
         pm = stripe.PaymentMethod.retrieve(stripe_pm_id)
-        return ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
+        return ExchangeRoute.insert_stripe_payment_method(participant, pm, one_off)
 
     def make_invoice(self, sender, addressee, amount, status):
         invoice_data = {

@@ -10,7 +10,7 @@ from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_tip,
 )
 from liberapay.payin.prospect import PayinProspect
-from liberapay.payin.stripe import charge, repr_stripe_error
+from liberapay.payin.stripe import charge, repr_stripe_error, set_up_payment_method
 from liberapay.utils import check_address_v2, get_participant
 
 STRIPE_BIT = 1
@@ -79,7 +79,9 @@ if request.method == 'POST':
         if 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
-            route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
+            route = ExchangeRoute.insert_stripe_payment_method(payer, pm, one_off)
+            if route.network == 'stripe-sdd':
+                set_up_payment_method(pm, route, payin_amount)
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:

@@ -7,7 +7,6 @@ import stripe
 
 from ..constants import CARD_BRANDS
 from ..exceptions import InvalidId, TooManyAttempts
-from ..utils import utcnow
 from ..website import website
 
 
@@ -117,7 +116,7 @@ class ExchangeRoute(Model):
         return r
 
     @classmethod
-    def attach_stripe_payment_method(cls, participant, pm, one_off):
+    def insert_stripe_payment_method(cls, participant, pm, one_off):
         if pm.type == 'card':
             network = 'stripe-card'
             card = pm.card
@@ -140,20 +139,12 @@ class ExchangeRoute(Model):
                AND network::text LIKE 'stripe-%%'
              LIMIT 1
         """, (participant.id,))
-        if customer_id:
-            pm = stripe.PaymentMethod.attach(
-                pm.id, customer=customer_id,
-                idempotency_key='attach_%s_to_%s' % (pm.id, customer_id),
-            )
-        else:
+        if not customer_id:
             customer_id = stripe.Customer.create(
                 email=participant.get_email_address(),
                 metadata={'participant_id': participant.id},
-                payment_method=pm.id,
                 preferred_locales=[participant.email_lang],
-                idempotency_key='create_customer_for_participant_%i_with_%s' % (
-                    participant.id, pm.id
-                ),
+                idempotency_key=f'create_customer_for_participant_{participant.id}'
             ).id
         pm_instrument = getattr(pm, pm.type)
         route = cls.insert(
@@ -164,36 +155,6 @@ class ExchangeRoute(Model):
             expiration_date=expiration_date, owner_name=pm.billing_details.name,
         )
         route.stripe_payment_method = pm
-        if network == 'stripe-sdd':
-            state = website.state.get()
-            request, response = state['request'], state['response']
-            user_agent = request.headers.get(b'User-Agent', b'')
-            try:
-                user_agent = user_agent.decode('ascii', 'backslashreplace')
-            except UnicodeError:
-                raise response.error(400, "User-Agent must be ASCII only")
-            si = stripe.SetupIntent.create(
-                confirm=True,
-                customer=route.remote_user_id,
-                mandate_data={
-                    "customer_acceptance": {
-                        "type": "online",
-                        "accepted_at": int(utcnow().timestamp()),
-                        "online": {
-                            "ip_address": str(request.source),
-                            "user_agent": user_agent,
-                        },
-                    },
-                },
-                metadata={"route_id": route.id},
-                payment_method=pm.id,
-                payment_method_types=[pm.type],
-                usage='off_session',
-                idempotency_key='create_SI_for_route_%i' % route.id,
-            )
-            mandate = stripe.Mandate.retrieve(si.mandate)
-            route.set_mandate(si.mandate, mandate.payment_method_details.sepa_debit.reference)
-            assert not si.next_action, si.next_action
         return route
 
     def invalidate(self):
