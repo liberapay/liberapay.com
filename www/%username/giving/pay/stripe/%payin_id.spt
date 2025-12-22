@@ -81,7 +81,7 @@ if request.method == 'POST':
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.insert_stripe_payment_method(payer, pm, one_off)
             if route.network == 'stripe-sdd':
-                set_up_payment_method(pm, route, payin_amount)
+                set_up_payment_method(pm, route, payin_amount, None)
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:

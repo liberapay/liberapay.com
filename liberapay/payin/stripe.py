@@ -307,7 +307,7 @@ def create_charge(
     return payin, charge
 
 
-def set_up_payment_method(pm, route, payin_amount):
+def set_up_payment_method(pm, route, payin_amount, return_url):
     """Create a SetupIntent for the given PaymentMethod.
     """
     state = website.state.get()
@@ -337,6 +337,7 @@ def set_up_payment_method(pm, route, payin_amount):
         metadata={"route_id": route.id},
         payment_method=pm.id,
         payment_method_types=[pm.type],
+        return_url=return_url,
         single_use=dict(
             amount=Money_to_int(payin_amount),
             currency=payin_amount.currency,
