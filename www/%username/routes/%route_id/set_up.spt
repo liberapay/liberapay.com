@@ -1,0 +1,18 @@
+import stripe
+
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True)
+route = ExchangeRoute.from_id(participant, request.path.get_int('route_id'))
+if not route.network.startswith('stripe-'):
+    raise response.error(400)
+pm = stripe.PaymentMethod.retrieve(route.address)
+if pm.customer:
+    raise response.redirect(participant.path('routes/?success'))
+else:
+    route.update_status('failed')
+    raise response.redirect(participant.path('routes/?set_up_failed'))
+
+[---] text/html
