@@ -177,7 +177,15 @@ PostgreSQL is designed to prevent data loss, so it does a lot of synchronous dis
 
 ### Tinkering with payments
 
-Liberapay currently supports two payment processors: [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/).
+You'll need [Stripe's documentation](https://docs.stripe.com/) and/or [PayPal's documentation](https://developer.paypal.com/).
+
+#### Testing Stripe charges
+
+Different Stripe payment scenarios can be tested by using [special test numbers](https://docs.stripe.com/testing). There are a lot of them, but here are the ones you'll need most often:
+
+- Card without mandatory authentication: 4242424242424242
+- Card requiring 3D Secure authentication: 4000002500003155
+- IBAN for a SEPA Direct Debit: FR1420041010050500013M02606
 
 #### Testing Stripe webhooks
 

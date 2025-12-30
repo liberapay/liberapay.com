@@ -157,7 +157,7 @@ class ExchangeRoute(Model):
         route.stripe_payment_method = pm
         return route
 
-    def invalidate(self):
+    def detach(self):
         if self.network.startswith('stripe-'):
             if self.address.startswith('pm_'):
                 try:
@@ -183,6 +183,13 @@ class ExchangeRoute(Model):
                     assert source.status not in ('chargeable', 'pending')
                     self.update_status(source.status)
                     return
+        elif self.network == 'paypal':
+            pass
+        else:
+            raise NotImplementedError(self.network)
+
+    def invalidate(self):
+        self.detach()
         self.update_status('canceled')
 
     def set_as_default(self):

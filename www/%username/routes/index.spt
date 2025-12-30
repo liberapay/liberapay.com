@@ -89,6 +89,8 @@ title = _("Payment Instruments")
             }}</a>
             </div>
         % endif
+    % elif 'set_up_failed' in request.qs
+        <p class="alert alert-danger">{{ _("Setting up the payment instrument failed.") }}</p>
     % endif
 
     <p>{{ ngettext(
