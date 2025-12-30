@@ -149,7 +149,7 @@ def update_payin(
              RETURNING exchange_routes
             """, (new_route_status, payin.route))
             if route:
-                route.invalidate()
+                route.detach()
 
         # Lock to avoid concurrent updates
         cursor.run("SELECT * FROM participants WHERE id = %s FOR UPDATE",
