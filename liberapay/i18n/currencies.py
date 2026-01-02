@@ -30,8 +30,8 @@ CURRENCIES = dict.fromkeys([
 
 CURRENCY_REPLACEMENTS = {
     'ANG': (Decimal('1'), 'XCG', datetime(2025, 7, 1, 1, 0, 0, tzinfo=timezone.utc)),
-    'BGN': (Decimal('1.95583'), 'EUR', datetime(2026, 1, 1, 2, 0, 0, tzinfo=timezone.utc)),
-    'HRK': (Decimal('7.53450'), 'EUR', datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc)),
+    'BGN': (Decimal('1.95583'), 'EUR', datetime(2025, 12, 31, 22, 0, 0, tzinfo=timezone.utc)),
+    'HRK': (Decimal('7.53450'), 'EUR', datetime(2022, 12, 31, 23, 0, 0, tzinfo=timezone.utc)),
 }
 
 ZERO_DECIMAL_CURRENCIES = {
