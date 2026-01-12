@@ -7,13 +7,17 @@ from unicodedata import combining, normalize
 import warnings
 
 import babel.core
-from babel.dates import format_date, format_datetime, format_time, format_timedelta
+from babel.dates import (
+    format_date, format_datetime, format_time, format_timedelta,
+    get_timezone_location,
+)
 from babel.messages.pofile import Catalog
 from babel.numbers import parse_pattern
 from markupsafe import Markup
 import opencc
 from pando.utils import utcnow
 
+from ..constants import TIME_ZONES, TIME_ZONE_AREAS
 from ..exceptions import AmbiguousNumber, InvalidNumber
 from ..website import website
 from .currencies import (
@@ -367,6 +371,34 @@ class Locale(babel.core.Locale):
     def global_tag(self):
         "The BCP47 tag for this locale, in lowercase, without the territory."
         return intern('-'.join(filter(None, (self.language, self.script))).lower())
+
+    @cached_property
+    def grouped_time_zones(self):
+        r = []
+        city_names = {}
+        fake_context = {'escape': lambda x: x}
+        area = '/'
+        group = None
+        zones = iter(TIME_ZONES.values())
+        while True:
+            zone = next(zones, None)
+            if not zone or not zone.key.startswith(area):
+                if group:
+                    group.sort()
+                    r.append((
+                        self._(fake_context, TIME_ZONE_AREAS[area]),
+                        group
+                    ))
+                if not zone:
+                    break
+                area = intern(zone.key[:zone.key.find('/')])
+                group = []
+            city_name = get_timezone_location(zone, locale=self, return_city=True)
+            group.append((
+                city_names.setdefault(city_name, city_name),
+                zone
+            ))
+        return r
 
     @cached_property
     def tag(self):
