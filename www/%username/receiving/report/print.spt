@@ -1,0 +1,194 @@
+from datetime import datetime, time
+
+from liberapay.constants import TIME_ZONES
+from liberapay.i18n.currencies import MoneyBasket
+from liberapay.utils import get_participant, render_postal_address, utcnow
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+period_start_date = request.qs.parse_date('period_start_date')
+if period_start_date.year < constants.LAUNCH_TIME.year:
+    raise response.error(400, f"start year must be at least {constants.LAUNCH_TIME.year}")
+period_end_date = request.qs.parse_date('period_end_date')
+if period_end_date < period_start_date:
+    raise response.error(400, "period_end_date must be greater than period_start_date")
+time_zone = TIME_ZONES[request.qs.get_choice('time_zone', TIME_ZONES)]
+period_start_time = datetime.combine(period_start_date, time(), tzinfo=time_zone)
+period_end_time = datetime.combine(period_end_date, time(), tzinfo=time_zone)
+now = utcnow()
+today = now.date()
+if period_end_time > now:
+    raise response.error(400, "period_end_date must be in the past")
+payin_transfers = website.db.all("""
+    SELECT pt.id, coalesce(pt.destination_amount, pt.amount) AS amount, pt.visibility
+         , pte.timestamp
+      FROM payin_transfers pt
+      JOIN payin_transfer_events pte ON pte.payin_transfer = pt.id
+                                    AND pte.status = 'succeeded'
+     WHERE pt.recipient = %s
+       AND pte.timestamp >= %s
+       AND pte.timestamp < %s
+       AND pt.status = 'succeeded'
+     LIMIT 10001
+""", (participant.id, period_start_time, period_end_time))
+if len(payin_transfers) > 10000:
+    raise response.redirect(participant.path('receiving/report', dict(
+        error='too_much_data',
+        period_start_date=period_start_date.isoformat(),
+        period_end_date=period_end_date.isoformat(),
+        time_zone=time_zone.key,
+    )))
+for t in payin_transfers:
+    t.type = 'payin_transfer'
+payin_transfer_reversals = website.db.all("""
+    SELECT ptr.id, ptr.payin_transfer
+         , coalesce(ptr.destination_amount, ptr.amount) AS amount
+         , ptr.ctime AS timestamp
+      FROM payin_transfer_reversals ptr
+      JOIN payin_transfers pt ON pt.id = ptr.payin_transfer
+     WHERE pt.recipient = %s
+       AND ptr.ctime >= %s
+       AND ptr.ctime < %s
+""", (participant.id, period_start_time, period_end_time))
+for t in payin_transfer_reversals:
+    t.type = 'payin_transfer_reversal'
+incoming_transfers = website.db.all("""
+    SELECT t.id, t.amount, t.timestamp, t.context
+         , 'incoming_transfer' AS type
+      FROM transfers t
+     WHERE t.tippee = %s
+       AND t.timestamp >= %s
+       AND t.timestamp < %s
+       AND t.virtual IS NOT true
+       AND t.status = 'succeeded'
+       AND t.context IN (
+               'tip', 'take', 'final-gift', 'swap',
+               'tip-in-advance', 'take-in-advance',
+               'tip-in-arrears', 'take-in-arrears',
+               'leftover-take',
+               'partial-tip', 'partial-take'
+           )
+     LIMIT 10001
+""", (participant.id, period_start_time, period_end_time))
+if len(incoming_transfers) > 10000:
+    raise response.redirect(participant.path('receiving/report', dict(
+        error='too_much_data',
+        period_start_date=period_start_date.isoformat(),
+        period_end_date=period_end_date.isoformat(),
+        time_zone=time_zone.key,
+    )))
+for t in incoming_transfers:
+    t.type = 'incoming_transfer'
+outgoing_transfers = website.db.all("""
+    SELECT t.id, t.amount, t.timestamp, t.context
+      FROM transfers t
+     WHERE t.tipper = %s
+       AND t.timestamp >= %s
+       AND t.timestamp < %s
+       AND t.virtual IS NOT true
+       AND t.status = 'succeeded'
+       AND t.context IN ('chargeback', 'refund', 'swap')
+""", (participant.id, period_start_time, period_end_time))
+for t in outgoing_transfers:
+    t.type = 'outgoing_transfer'
+rows = [*payin_transfers, *payin_transfer_reversals, *incoming_transfers, *outgoing_transfers]
+rows.sort(key=lambda row: row.timestamp)
+payin_transfers_sum = MoneyBasket(pt.amount for pt in payin_transfers)
+reversals_sum = MoneyBasket(pt.amount for pt in payin_transfer_reversals)
+incoming_transfers_sum = MoneyBasket(t.amount for t in incoming_transfers)
+outgoing_transfers_sum = MoneyBasket(t.amount for t in outgoing_transfers)
+net_income_sum = (
+    payin_transfers_sum - reversals_sum +
+    incoming_transfers_sum - outgoing_transfers_sum
+)
+
+identity = participant.get_current_identity() or {}
+recipient_name = identity.get('organization_name') or identity.get('name')
+postal_address = render_postal_address(
+    identity.get('headquarters_address') or identity.get('postal_address'),
+    single_line=True,
+)
+
+title = participant.username
+subhead = _("Income report")
+
+[---] text/html
+% extends "templates/layouts/paper.html"
+
+% block content
+    <h1>{{ _("Income report") }}</h1>
+
+    <dl>
+        <dt><label for="recipient">{{ _("Income recipient") }}</label></dt>
+        <dd><textarea id="recipient" placeholder='{{ _("Information on who received the funds: name, postal address, etc.") }}{{ "\n " }}' required>{{ recipient_name or '' }}{{ '\n' }}{{ postal_address or '' }}</textarea></dd>
+        <dt>{{ _("Income amount") }}</dt>
+        <dd>{{ locale.format_money_basket(net_income_sum) }}</dd>
+        <dt>{{ _("Income type") }}</dt>
+        <dd>{{ _(
+            "All payments were donations. No goods or services were to be provided "
+            "in exchange."
+        ) }}</dd>
+        <dt>{{ _("Taxes") }}</dt>
+        <dd>{{ _("No taxes were collected by the Liberapay platform.") }}</dd>
+        <dt>{{ _("Reporting period") }}</dt>
+        <dd>{{ period_start_time }} → {{ period_end_time }}</dd>
+        <dt>{{ _("Account number") }}</dt>
+        <dd>{{ participant.id }}</dd>
+    </dl>
+
+    <h2>{{ _("Transaction record") }}</h2>
+
+    <table class="table table-bordered last-col-right">
+        <tr>
+            <th>{{ _("ID") }}
+            <th>{{ _("Date") }}
+            <th>{{ _("Description") }}
+            <th>{{ _("Amount") }}
+        </tr>
+    % for row in rows
+        <tr>
+        % if row.type == 'payin_transfer'
+            % set pt = row
+            <td>{{ pt.id }}
+            <td>{{ locale.format_date(pt.timestamp.date()) }}
+            <td>{{ _(
+                "public donation"
+            ) if pt.visibility == 3 else _(
+                "private donation"
+            ) if pt.visibility == 2 else _(
+                "secret donation"
+            ) }}
+            <td>{{ locale.format_money(pt.amount) }}
+        % elif row.type == 'payin_transfer_reversal'
+            % set ptr = row
+            <td>{{ ptr.payin_transfer }}-{{ ptr.id }}
+            <td>{{ locale.format_date(ptr.timestamp.date()) }}
+            <td>{{ _("donation reversal") }}
+            <td>{{ locale.format_money(-ptr.amount) }}
+        % elif row.type in ('incoming_transfer', 'outgoing_transfer')
+            % set t = row
+            <td>M{{ t.id }}
+            <td>{{ locale.format_date(t.timestamp.date()) }}
+            <td>{{ _(
+                "chargeback"
+            ) if t.context == 'chargeback' else _(
+                "donation refund"
+            ) if t.context == 'refund' else _(
+                "currency exchange"
+            ) if t.context == 'swap' else _(
+                "secret donation"
+            ) }}
+            <td>{{ locale.format_money(t.amount if row.type == 'incoming_transfer' else -t.amount) }}
+        % endif
+        </tr>
+    % endfor
+    </table>
+
+    <footer>
+        <div>{{ locale.format_date(today) }}</div>
+        <div></div>
+        <div></div>
+    </footer>
+% endblock

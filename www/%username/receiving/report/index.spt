@@ -1,0 +1,60 @@
+from datetime import timedelta
+
+from liberapay.utils import get_participant, utcnow
+
+[---]
+
+participant = get_participant(state, restrict=True)
+now = utcnow()
+
+title = participant.username
+subhead = _("Income reports")
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+    % if request.qs.get('error') == 'too_much_data'
+        <p class="alert alert-danger">{{ _(
+            "There were a lot of transactions during the reporting period you "
+            "requested. Please select a shorter period."
+        ) }}</p>
+    % else
+        <p>{{ _("Liberapay can generate income reports for accounting purposes.") }}</p>
+    % endif
+    <form action="{{ participant.path('receiving/report/print') }}" method="GET">
+        <label>
+            <span>{{ _("First day of the reporting period") }}</span>
+            <input type="date" name="period_start_date" class="form-control"
+                   placeholder="{{ _('YYYY-MM-DD') }}" required
+                   min="{{ constants.LAUNCH_TIME.date().replace(month=1, day=1) }}"
+                   value="{{ request.qs.get('period_start_date') }}" />
+        </label><br/>
+        <label>
+            <span>{{ _("Last day of the reporting period") }}</span>
+            <input type="date" name="period_end_date" class="form-control"
+                   placeholder="{{ _('YYYY-MM-DD') }}" required
+                   max="{{ (now - timedelta(hours=24)).date() }}"
+                   value="{{ request.qs.get('period_end_date') }}" />
+        </label><br/>
+        <label>
+            <span>{{ _("Time zone") }}</span>
+            % set time_zone = request.qs.get('time_zone')
+            <select class="form-control" name="time_zone" required>
+            % for group_label, time_zones in locale.grouped_time_zones
+                <optgroup label="{{ group_label }}">
+                % for city_name, zone in time_zones
+                    <option value="{{ zone.key }}"{% if zone.key == time_zone %} selected{% endif %}>{{
+                        city_name
+                    }} | {{
+                        now.astimezone(zone).isoformat()[-6:].replace('-', '−')
+                    }}</option>
+                % endfor
+                </optgroup>
+            % endfor
+            </select>
+        </label><br/>
+        <br/>
+        <button class="btn btn-lg btn-primary">{{ _("Go") }}</button>
+    </form>
+% endblock
