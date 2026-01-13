@@ -1824,12 +1824,15 @@ class TestRefundsStripe(EmailHarness):
         super().tearDown()
 
     @patch('stripe.BalanceTransaction.retrieve')
+    @patch('stripe.Charge.modify')
+    @patch('stripe.Charge.retrieve')
     @patch('stripe.Customer.create')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_destination_charge(
-        self, construct_event, tr_retrieve, tr_modify, cus_create, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, cus_create, ch_retrieve,
+        ch_modify, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -2048,6 +2051,17 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        ch_retrieve.return_value = stripe.Charge.construct_from(
+            json.loads('''{
+              "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "charge",
+              "amount": 40000,
+              "created": 1564038240,
+              "currency": "eur",
+              "metadata": {}
+            }'''),
+            stripe.api_key
+        )
         tr_retrieve.return_value = stripe.Transfer.construct_from(
             json.loads('''{
               "amount": 40000,
@@ -2141,13 +2155,15 @@ class TestRefundsStripe(EmailHarness):
         assert ' fully refunded ' in r.text
 
     @patch('stripe.BalanceTransaction.retrieve')
+    @patch('stripe.Charge.modify')
+    @patch('stripe.Charge.retrieve')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
         self, construct_event, tr_retrieve, tr_modify, tr_create_reversal,
-        bt_retrieve
+        ch_retrieve, ch_modify, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -2312,6 +2328,17 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        ch_retrieve.return_value = stripe.Charge.construct_from(
+            json.loads('''{
+              "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "charge",
+              "amount": 25000,
+              "created": 1564038240,
+              "currency": "usd",
+              "metadata": {}
+            }'''),
+            stripe.api_key
+        )
         tr_create_reversal.return_value = stripe.Reversal.construct_from(
             json.loads('''{
               "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
@@ -2393,6 +2420,7 @@ class TestRefundsStripe(EmailHarness):
         assert ' fully refunded ' in r.text
 
     @patch('stripe.BalanceTransaction.retrieve')
+    @patch('stripe.Charge.modify')
     @patch('stripe.Charge.retrieve')
     @patch('stripe.PaymentMethod.detach')
     @patch('stripe.Transfer.create_reversal')
@@ -2401,7 +2429,7 @@ class TestRefundsStripe(EmailHarness):
     @patch('stripe.Webhook.construct_event')
     def test_charge_dispute(
         self, construct_event, tr_retrieve, tr_modify, create_reversal,
-        pm_detach, ch_retrieve, bt_retrieve,
+        pm_detach, ch_retrieve, ch_modify, bt_retrieve,
     ):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
