@@ -592,10 +592,11 @@ def execute_transfer(db, pt, source_transaction, update_donor=True):
         )
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
+    destination_amount = update_transfer_metadata(tr, pt)
     pt = update_payin_transfer(
-        db, pt.id, tr.id, 'succeeded', None, update_donor=update_donor,
+        db, pt.id, tr.id, 'succeeded', None, destination_amount=destination_amount,
+        update_donor=update_donor,
     )
-    update_transfer_metadata(tr, pt)
     return pt
 
 
@@ -699,15 +700,15 @@ def sync_transfer(db, pt, update_donor=True):
     """
     assert pt.remote_id, "can't sync a transfer lacking a `remote_id`"
     tr = stripe.Transfer.retrieve(pt.remote_id)
-    update_transfer_metadata(tr, pt)
+    destination_amount = update_transfer_metadata(tr, pt)
     if tr.amount_reversed:
         reversed_amount = min(int_to_Money(tr.amount_reversed, tr.currency), pt.amount)
     else:
         reversed_amount = None
     record_reversals(db, pt, tr)
     return update_payin_transfer(
-        db, pt.id, tr.id, 'succeeded', None, reversed_amount=reversed_amount,
-        update_donor=update_donor,
+        db, pt.id, tr.id, 'succeeded', None, destination_amount=destination_amount,
+        reversed_amount=reversed_amount, update_donor=update_donor,
     )
 
 
@@ -743,10 +744,10 @@ def settle_destination_charge(
     if charge.refunds.data:
         record_refunds(db, payin, charge)
 
-    reversed_amount = None
+    destination_amount = reversed_amount = None
     if getattr(charge, 'transfer', None):
         tr = stripe.Transfer.retrieve(charge.transfer)
-        update_transfer_metadata(tr, pt)
+        destination_amount = update_transfer_metadata(tr, pt)
         if tr.amount_reversed < bt.fee:
             try:
                 tr.reversals.create(
@@ -768,7 +769,8 @@ def settle_destination_charge(
     pt_remote_id = getattr(charge, 'transfer', None)
     pt = update_payin_transfer(
         db, pt.id, pt_remote_id, status, error, amount=net_amount,
-        reversed_amount=reversed_amount, update_donor=update_donor,
+        destination_amount=destination_amount, reversed_amount=reversed_amount,
+        update_donor=update_donor,
     )
 
     return payin
@@ -781,6 +783,9 @@ def update_transfer_metadata(tr, pt):
         tr (Transfer): the `stripe.Transfer` object to update
         pt (Record): the row from the `payin_transfers` table
 
+    Returns the amount actually credited to the destination account, which may
+    be in a different currency than the Transfer amount.
+
     """
     attrs = {}
     if not getattr(tr, 'description', None):
@@ -789,7 +794,7 @@ def update_transfer_metadata(tr, pt):
         attrs['metadata'] = {'payin_transfer_id': pt.id}
     if attrs:
         try:
-            tr = tr.modify(tr.id, **attrs)
+            tr.modify(tr.id, **attrs)
         except Exception as e:
             website.tell_sentry(e)
             return tr
@@ -803,10 +808,11 @@ def update_transfer_metadata(tr, pt):
                     pass
                 else:
                     website.tell_sentry(e)
-                return tr
+                return None
             except Exception as e:
                 website.tell_sentry(e)
-                return tr
+                return None
+        destination_amount = int_to_Money(py.amount, py.currency)
         attrs = {}
         if not getattr(py, 'description', None):
             attrs['description'] = tr.description
@@ -825,7 +831,9 @@ def update_transfer_metadata(tr, pt):
                     website.tell_sentry(e)
             except Exception as e:
                 website.tell_sentry(e)
-    return tr
+        return destination_amount
+    else:
+        return None
 
 
 def generate_charge_description(payin):
