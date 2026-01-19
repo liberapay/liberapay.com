@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '192'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '193'::jsonb);
 
 
 -- app configuration
@@ -576,6 +576,7 @@ CREATE TABLE payin_transfers
 , reversed_amount   currency_amount      CHECK (NOT (reversed_amount < 0))
 , visibility    int                      NOT NULL CHECK (visibility >= 1 AND visibility <= 3)
   -- same meanings as for tips, but negative numbers aren't allowed
+, destination_amount   currency_amount
 , CONSTRAINT reversal_currency_chk CHECK (reversed_amount::currency = amount::currency)
 , CONSTRAINT self_chk CHECK (payer <> recipient)
 , CONSTRAINT team_chk CHECK ((context = 'team-donation') = (team IS NOT NULL))
