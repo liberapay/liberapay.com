@@ -799,20 +799,21 @@ def update_transfer_metadata(tr, pt):
             website.tell_sentry(e)
             return tr
     if getattr(tr, 'destination_payment', None):
-        py = tr.destination_payment
-        if isinstance(py, str):
-            try:
-                py = stripe.Charge.retrieve(py, stripe_account=tr.destination)
-            except stripe.PermissionError as e:
-                if str(e).endswith(" Application access may have been revoked."):
-                    pass
-                else:
-                    website.tell_sentry(e)
-                return None
-            except Exception as e:
+        try:
+            py = stripe.Charge.retrieve(
+                tr.destination_payment,
+                expand=['balance_transaction'],
+                stripe_account=tr.destination,
+            )
+        except stripe.PermissionError as e:
+            if str(e).endswith(" Application access may have been revoked."):
+                pass
+            else:
                 website.tell_sentry(e)
-                return None
-        destination_amount = int_to_Money(py.amount, py.currency)
+            return None
+        except Exception as e:
+            website.tell_sentry(e)
+            return None
         attrs = {}
         if not getattr(py, 'description', None):
             attrs['description'] = tr.description
@@ -831,6 +832,10 @@ def update_transfer_metadata(tr, pt):
                     website.tell_sentry(e)
             except Exception as e:
                 website.tell_sentry(e)
+        destination_amount = None
+        bt = py.balance_transaction
+        if bt:
+            destination_amount = int_to_Money(bt.amount, bt.currency)
         return destination_amount
     else:
         return None

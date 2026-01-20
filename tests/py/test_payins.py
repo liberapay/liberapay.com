@@ -850,7 +850,7 @@ class TestPayinsStripe(Harness):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.offset = 2100
+        cls.offset = 100
         # https://stripe.com/docs/connect/testing
         ba_ch_token = stripe.Token.create(bank_account=dict(
             country='CH',
@@ -1185,7 +1185,7 @@ class TestPayinsStripe(Harness):
         charge = stripe.Charge.retrieve(payin.remote_id)
         if charge.status == 'pending':
             # Wait ten seconds for the payment to succeed.
-            sleep(10)
+            sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
@@ -1411,7 +1411,7 @@ class TestPayinsStripe(Harness):
         charge = stripe.Charge.retrieve(payin.remote_id)
         if charge.status == 'pending':
             # Wait ten seconds for the payment to succeed.
-            sleep(10)
+            sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
@@ -2056,6 +2056,12 @@ class TestRefundsStripe(EmailHarness):
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
               "amount": 40000,
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "amount": 40000,
+                "currency": "eur"
+              },
               "created": 1564038240,
               "currency": "eur",
               "metadata": {}
@@ -2332,9 +2338,15 @@ class TestRefundsStripe(EmailHarness):
             json.loads('''{
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
-              "amount": 25000,
+              "amount": 40000,
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "amount": 25000,
+                "currency": "usd"
+              },
               "created": 1564038240,
-              "currency": "usd",
+              "currency": "eur",
               "metadata": {}
             }'''),
             stripe.api_key
@@ -2499,7 +2511,13 @@ class TestRefundsStripe(EmailHarness):
               "application": null,
               "application_fee": null,
               "application_fee_amount": null,
-              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "amount": 40000,
+                "currency": "eur",
+                "fee": 0
+              },
               "billing_details": {
                 "address": {
                   "city": null,
