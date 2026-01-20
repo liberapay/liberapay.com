@@ -1187,6 +1187,11 @@ class TestPayinsStripe(Harness):
             # Wait ten seconds for the payment to succeed.
             sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
+            if charge.status == 'succeeded':
+                raise Exception(
+                    f"please remove the first GET request for {payin.remote_id} from "
+                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
+                )
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -1413,6 +1418,11 @@ class TestPayinsStripe(Harness):
             # Wait ten seconds for the payment to succeed.
             sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
+            if charge.status == 'succeeded':
+                raise Exception(
+                    f"please remove the first GET request for {payin.remote_id} from "
+                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
+                )
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -2339,6 +2349,7 @@ class TestRefundsStripe(EmailHarness):
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
               "amount": 40000,
+              "amount_refunded": 0,
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",

@@ -487,7 +487,8 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     incoming_transfers = db.all("""
         SELECT tr.id, tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
              , tr.amount, tr.fee, tr.unit_amount, tr.n_units, tr.period
-             , tr.reversed_amount, tr.visibility, tr.destination_amount
+             , tr.reversed_amount, tr.visibility
+             , tr.destination_amount, tr.reversed_destination_amount
              , p.username AS payer_username, p2.username AS team_name
              , r.network AS payin_method
           FROM payin_transfers tr
@@ -518,6 +519,15 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
         if 'team_name' in event:
             event['kind'] = 'payin_transfer'
             if 'payer_username' in event and event['status'] == 'succeeded':
+                use_destination_amounts = (
+                    event['destination_amount'] and (
+                        event['reversed_destination_amount'] or
+                        not event['reversed_amount']
+                    )
+                )
+                if use_destination_amounts:
+                    event['amount'] = event['destination_amount']
+                    event['reversed_amount'] = event['reversed_destination_amount']
                 totals['received'][event_date.month] += event['amount']
                 if event['reversed_amount']:
                     totals['received'][event_date.month] -= event['reversed_amount']
