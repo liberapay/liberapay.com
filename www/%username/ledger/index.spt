@@ -310,6 +310,8 @@ if participant.join_time:
             <br>{{ locale.format_money(event['amount'] - event['reversed_amount']) }}
             % endif
         </td>
+        % elif 'payer' in event
+        <td class="amount">{{ locale.format_money(event['destination_amount'] or event['amount']) }}</td>
         % else
         <td class="amount">{{ locale.format_money(event['amount']) }}</td>
         % endif
