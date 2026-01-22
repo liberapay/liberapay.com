@@ -667,11 +667,21 @@ def reverse_transfer(
             reversal = stripe.Transfer.create_reversal(
                 pt.remote_id,
                 amount=Money_to_int(reversal_amount),
+                expand=['transfer'],
                 idempotency_key=(
                     idempotency_key or
                     f'reverse_{Money_to_int(reversal_amount)}_from_pt_{pt.id}'
                 )
             )
+            destination_refund = next((
+                refund for refund in stripe.Refund.list(
+                    charge=reversal.transfer.destination_payment,
+                    expand=['data.balance_transaction'],
+                    limit=100,
+                    stripe_account=reversal.transfer.destination,
+                ).auto_paging_iter()
+                if refund.source_transfer_reversal == reversal.id
+            ))
         except stripe.InvalidRequestError as e:
             if str(e).endswith(" is already fully reversed."):
                 return update_payin_transfer(
@@ -681,8 +691,13 @@ def reverse_transfer(
             else:
                 raise
         else:
+            destination_amount = int_to_Money(
+                destination_refund.balance_transaction.amount,
+                destination_refund.balance_transaction.currency
+            )
             record_payin_transfer_reversal(
-                db, pt.id, reversal.id, reversal_amount, payin_refund_id=payin_refund_id,
+                db, pt.id, reversal.id, reversal_amount, destination_amount,
+                payin_refund_id=payin_refund_id,
                 ctime=(EPOCH + timedelta(seconds=reversal.created)),
             )
     return update_payin_transfer(
@@ -946,11 +961,27 @@ def record_reversals(db, pt, transfer):
     r = []
     fee = transfer.amount - Money_to_int(pt.amount)
     reversals = list(transfer.reversals.auto_paging_iter())
+    if not reversals:
+        return r
     if fee:
         reversal = reversals.pop()
         assert reversal.amount == fee
+    destination_refunds = {
+        refund.source_transfer_reversal: refund
+        for refund in stripe.Refund.list(
+            charge=transfer.destination_payment,
+            expand=['data.balance_transaction'],
+            limit=100,
+            stripe_account=transfer.destination,
+        ).auto_paging_iter()
+    }
     for reversal in reversals:
-        reversal_amount = int_to_Money(reversal.amount, reversal.currency)
+        amount = int_to_Money(reversal.amount, reversal.currency)
+        destination_refund = destination_refunds[reversal.id]
+        destination_amount = int_to_Money(
+            destination_refund.balance_transaction.amount,
+            destination_refund.balance_transaction.currency
+        )
         payin_refund_id = db.one("""
             SELECT pr.id
               FROM payin_refunds pr
@@ -958,7 +989,8 @@ def record_reversals(db, pt, transfer):
                AND pr.remote_id = %s
         """, (pt.payin, reversal.source_refund))
         r.append(record_payin_transfer_reversal(
-            db, pt.id, reversal.id, reversal_amount, payin_refund_id=payin_refund_id,
+            db, pt.id, reversal.id, amount, destination_amount,
+            payin_refund_id=payin_refund_id,
             ctime=(EPOCH + timedelta(seconds=reversal.created)),
         ))
     return r

@@ -992,7 +992,7 @@ def record_payin_refund(
 
 
 def record_payin_transfer_reversal(
-    db, pt_id, remote_id, amount, payin_refund_id=None, ctime=None
+    db, pt_id, remote_id, amount, destination_amount, payin_refund_id=None, ctime=None
 ):
     """Record a transfer reversal.
 
@@ -1000,6 +1000,7 @@ def record_payin_transfer_reversal(
         pt_id (int): the ID of the reversed transfer in our database
         remote_id (int): the ID of the reversal in the payment processor's database
         amount (Money): the reversal amount, must be less or equal to the transfer amount
+        destination_amount (Money): the amount debited from the transfer recipient's balance
         payin_refund_id (int): the ID of the associated payin refund in our database
         ctime (datetime): when the refund was initiated
 
@@ -1009,10 +1010,10 @@ def record_payin_transfer_reversal(
     """
     return db.one("""
         INSERT INTO payin_transfer_reversals
-               (payin_transfer, remote_id, amount, payin_refund,
-                ctime)
-        VALUES (%(pt_id)s, %(remote_id)s, %(amount)s, %(payin_refund_id)s,
-                coalesce(%(ctime)s, current_timestamp))
+               (payin_transfer, remote_id, amount, destination_amount,
+                payin_refund, ctime)
+        VALUES (%(pt_id)s, %(remote_id)s, %(amount)s, %(destination_amount)s,
+                %(payin_refund_id)s, coalesce(%(ctime)s, current_timestamp))
    ON CONFLICT (payin_transfer, remote_id) DO UPDATE
            SET amount = excluded.amount
              , payin_refund = excluded.payin_refund
