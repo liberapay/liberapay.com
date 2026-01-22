@@ -1,6 +1,6 @@
 import json
 from time import sleep
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from markupsafe import Markup
 from pando.utils import utcnow
@@ -1187,6 +1187,11 @@ class TestPayinsStripe(Harness):
             # Wait ten seconds for the payment to succeed.
             sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
+            if charge.status == 'succeeded':
+                raise Exception(
+                    f"please remove the first GET request for {payin.remote_id} from "
+                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
+                )
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -1413,6 +1418,11 @@ class TestPayinsStripe(Harness):
             # Wait ten seconds for the payment to succeed.
             sleep(20)
             charge = stripe.Charge.retrieve(payin.remote_id)
+            if charge.status == 'succeeded':
+                raise Exception(
+                    f"please remove the first GET request for {payin.remote_id} from "
+                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
+                )
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -1827,12 +1837,13 @@ class TestRefundsStripe(EmailHarness):
     @patch('stripe.Charge.modify')
     @patch('stripe.Charge.retrieve')
     @patch('stripe.Customer.create')
+    @patch('stripe.Refund.list')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_destination_charge(
-        self, construct_event, tr_retrieve, tr_modify, cus_create, ch_retrieve,
-        ch_modify, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, rf_list, cus_create,
+        ch_retrieve, ch_modify, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -2068,6 +2079,34 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        fake_list = rf_list.return_value = MagicMock()
+        fake_list.auto_paging_iter = lambda: [stripe.Refund.construct_from(
+            json.loads('''{
+              "id": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "refund",
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
+                "amount": 39655,
+                "currency": "eur"
+              },
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        ), stripe.Refund.construct_from(
+            json.loads('''{
+              "id": "pyr_XXXXXXXXXXXXXXXXXXXXXXXY",
+              "object": "refund",
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXX0",
+                "amount": 345,
+                "currency": "eur"
+              },
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        )]
         tr_retrieve.return_value = stripe.Transfer.construct_from(
             json.loads('''{
               "amount": 40000,
@@ -2163,13 +2202,14 @@ class TestRefundsStripe(EmailHarness):
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Charge.modify')
     @patch('stripe.Charge.retrieve')
+    @patch('stripe.Refund.list')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
         self, construct_event, tr_retrieve, tr_modify, tr_create_reversal,
-        ch_retrieve, ch_modify, bt_retrieve
+        rf_list, ch_retrieve, ch_modify, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -2339,6 +2379,7 @@ class TestRefundsStripe(EmailHarness):
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
               "amount": 40000,
+              "amount_refunded": 0,
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
@@ -2351,6 +2392,21 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        fake_list = rf_list.return_value = MagicMock()
+        fake_list.auto_paging_iter = lambda: [stripe.Refund.construct_from(
+            json.loads('''{
+              "id": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "refund",
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
+                "amount": 125,
+                "currency": "usd"
+              },
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        )]
         tr_create_reversal.return_value = stripe.Reversal.construct_from(
             json.loads('''{
               "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
@@ -2362,7 +2418,12 @@ class TestRefundsStripe(EmailHarness):
               "destination_payment_refund": null,
               "metadata": {},
               "source_refund": null,
-              "transfer": "po_XXXXXXXXXXXXXXXXXXXXXXXX"
+              "transfer": {
+                "id": "po_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "object": "transfer",
+                "destination": "acct_XXXXXXXXXXXXXXXX",
+                "destination_payment": "py_XXXXXXXXXXXXXXXXXXXXXXXX"
+              }
             }'''),
             stripe.api_key
         )
@@ -2435,12 +2496,13 @@ class TestRefundsStripe(EmailHarness):
     @patch('stripe.Charge.modify')
     @patch('stripe.Charge.retrieve')
     @patch('stripe.PaymentMethod.detach')
+    @patch('stripe.Refund.list')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_charge_dispute(
-        self, construct_event, tr_retrieve, tr_modify, create_reversal,
+        self, construct_event, tr_retrieve, tr_modify, create_reversal, rf_list,
         pm_detach, ch_retrieve, ch_modify, bt_retrieve,
     ):
         alice = self.make_participant('alice')
@@ -2651,10 +2713,30 @@ class TestRefundsStripe(EmailHarness):
                   "payin_transfer_id": %(payin_transfer_id)s
               },
               "source_refund": null,
-              "transfer": "tr_XXXXXXXXXXXXXXXXXXXXXXXX"
+              "transfer": {
+                "id": "tr_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "object": "transfer",
+                "destination": "acct_XXXXXXXXXXXXXXXX",
+                "destination_payment": "py_XXXXXXXXXXXXXXXXXXXXXXXX"
+              }
             }''' % params),
             stripe.api_key
         )
+        fake_list = rf_list.return_value = MagicMock()
+        fake_list.auto_paging_iter = lambda: [stripe.Refund.construct_from(
+            json.loads('''{
+              "id": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "refund",
+              "balance_transaction": {
+                "object": "balance_transaction",
+                "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
+                "amount": 20000,
+                "currency": "eur"
+              },
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        )]
         pm_detach.return_value = None
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
