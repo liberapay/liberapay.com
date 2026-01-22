@@ -1,2 +1,0 @@
-ALTER TABLE payin_transfers ADD COLUMN reversed_destination_amount currency_amount;
-ALTER TABLE payin_transfer_reversals ADD COLUMN destination_amount currency_amount;
