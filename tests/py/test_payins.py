@@ -2067,6 +2067,7 @@ class TestRefundsStripe(EmailHarness):
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
               "amount": 40000,
+              "amount_refunded": 40000,
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
@@ -2075,7 +2076,8 @@ class TestRefundsStripe(EmailHarness):
               },
               "created": 1564038240,
               "currency": "eur",
-              "metadata": {}
+              "metadata": {},
+              "refunded": true
             }'''),
             stripe.api_key
         )
@@ -2103,7 +2105,7 @@ class TestRefundsStripe(EmailHarness):
                 "amount": 345,
                 "currency": "eur"
               },
-              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXY"
             }'''),
             stripe.api_key
         )]
@@ -2401,7 +2403,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 125,
+                "amount": 12500,
                 "currency": "usd"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
