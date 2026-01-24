@@ -125,13 +125,14 @@ elif event.type == 'transfer.reversed':
         raise response.error(409, "This callback is too early.")
     assert pt.status == 'succeeded', \
         f"received a `transfer.reversed` callback for a transfer whose status is {pt.status!r}"
-    record_reversals(website.db, pt, transfer)
+    reversed_destination_amount = record_reversals(website.db, pt, transfer)
     fee = transfer.amount - Money_to_int(pt.amount)
     reversed_amount = transfer.amount_reversed - fee
     if reversed_amount:
         update_payin_transfer(
             website.db, pt.id, None, pt.status, pt.error,
             reversed_amount=int_to_Money(reversed_amount, transfer.currency),
+            reversed_destination_amount=reversed_destination_amount
         )
 
 elif event.type == 'account.updated':

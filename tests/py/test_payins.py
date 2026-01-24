@@ -2188,6 +2188,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('396.55')
+        assert reversal.destination_amount == EUR('396.55')
         tip = alice.get_tip_to(bob)
         assert tip.paid_in_advance == 0
         # Check that a notification was sent
@@ -2479,6 +2480,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('200.00')
+        assert reversal.destination_amount == USD('125.00')
         tip1 = alice.get_tip_to(bob)
         tip2 = alice.get_tip_to(LiberapayOrg)
         assert tip1.paid_in_advance == 0
@@ -2814,6 +2816,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund is None
         assert reversal.amount == EUR('200.00')
+        assert reversal.destination_amount == EUR('200.00')
         tip1 = alice.get_tip_to(bob)
         tip2 = alice.get_tip_to(LiberapayOrg)
         assert tip1.paid_in_advance == 0
