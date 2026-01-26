@@ -692,7 +692,7 @@ def reverse_transfer(
                 raise
         else:
             destination_amount = int_to_Money(
-                destination_refund.balance_transaction.amount,
+                -destination_refund.balance_transaction.amount,
                 destination_refund.balance_transaction.currency
             )
             record_payin_transfer_reversal(
@@ -971,7 +971,7 @@ def record_reversals(db, pt, transfer):
             try:
                 destination_refund = destination_refunds[reversal.id]
                 destination_amount = int_to_Money(
-                    destination_refund.balance_transaction.amount,
+                    -destination_refund.balance_transaction.amount,
                     destination_refund.balance_transaction.currency
                 )
             except Exception as e:

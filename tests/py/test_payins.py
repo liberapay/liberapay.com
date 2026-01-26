@@ -2089,7 +2089,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 39655,
+                "amount": -39655,
                 "currency": "eur"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -2102,7 +2102,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXX0",
-                "amount": 345,
+                "amount": -345,
                 "currency": "eur"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXY"
@@ -2403,7 +2403,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 12500,
+                "amount": -12500,
                 "currency": "usd"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -2734,7 +2734,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 20000,
+                "amount": -20000,
                 "currency": "eur"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
