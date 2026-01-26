@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from functools import partial
+import gc
 import json
 from operator import itemgetter
 import os
@@ -20,6 +21,7 @@ from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 from psycopg2_pool import PoolError
+import requests
 import sass
 import sentry_sdk
 from state_chain import StateChain
@@ -375,7 +377,23 @@ def version(env):
         if env.instance_type == 'production':
             raise
         version = None
-    return {'version': version}
+    if env.instance_type == 'production':
+        user_agent = f'Liberapay/{version}'
+    else:
+        user_agent = "Liberapay (development version)"
+    # The `requests` module doesn't provide a clean way to change the default
+    # User-Agent, so we monkey patch it.
+    requests.utils.default_user_agent = lambda: user_agent
+    test_session = requests.Session()
+    assert test_session.headers['User-Agent'] == user_agent
+    sessions = [
+        o for o in gc.get_referrers(requests.Session)
+        if isinstance(o, requests.Session)
+    ]
+    assert len(sessions) >= 1
+    for sess in sessions:
+        sess.headers['User-Agent'] = user_agent
+    return {'user_agent': user_agent, 'version': version}
 
 
 def make_sentry_teller(env, version):

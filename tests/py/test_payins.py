@@ -2067,6 +2067,7 @@ class TestRefundsStripe(EmailHarness):
               "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "object": "charge",
               "amount": 40000,
+              "amount_refunded": 40000,
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
@@ -2075,7 +2076,8 @@ class TestRefundsStripe(EmailHarness):
               },
               "created": 1564038240,
               "currency": "eur",
-              "metadata": {}
+              "metadata": {},
+              "refunded": true
             }'''),
             stripe.api_key
         )
@@ -2087,7 +2089,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 39655,
+                "amount": -39655,
                 "currency": "eur"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -2100,10 +2102,10 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXX0",
-                "amount": 345,
+                "amount": -345,
                 "currency": "eur"
               },
-              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
+              "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXY"
             }'''),
             stripe.api_key
         )]
@@ -2188,6 +2190,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('396.55')
+        assert reversal.destination_amount == EUR('396.55')
         tip = alice.get_tip_to(bob)
         assert tip.paid_in_advance == 0
         # Check that a notification was sent
@@ -2400,7 +2403,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 125,
+                "amount": -12500,
                 "currency": "usd"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -2479,6 +2482,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('200.00')
+        assert reversal.destination_amount == USD('125.00')
         tip1 = alice.get_tip_to(bob)
         tip2 = alice.get_tip_to(LiberapayOrg)
         assert tip1.paid_in_advance == 0
@@ -2730,7 +2734,7 @@ class TestRefundsStripe(EmailHarness):
               "balance_transaction": {
                 "object": "balance_transaction",
                 "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
-                "amount": 20000,
+                "amount": -20000,
                 "currency": "eur"
               },
               "source_transfer_reversal": "trr_XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -2814,6 +2818,7 @@ class TestRefundsStripe(EmailHarness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund is None
         assert reversal.amount == EUR('200.00')
+        assert reversal.destination_amount == EUR('200.00')
         tip1 = alice.get_tip_to(bob)
         tip2 = alice.get_tip_to(LiberapayOrg)
         assert tip1.paid_in_advance == 0

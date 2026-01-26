@@ -65,7 +65,7 @@ team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_memb
 if user_id or (not team and platform.single_domain) or action != 'connect':
     extra_scopes = body.get('extra_scopes', '').split()
     url, query_id, query_data = platform.get_auth_url(
-        domain, extra_scopes=extra_scopes, user=user
+        domain, extra_scopes=extra_scopes
     )
 
     cookie_name = platform.name+'_'+domain+('_' if domain else '')+query_id

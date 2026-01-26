@@ -1016,6 +1016,7 @@ def record_payin_transfer_reversal(
                 %(payin_refund_id)s, coalesce(%(ctime)s, current_timestamp))
    ON CONFLICT (payin_transfer, remote_id) DO UPDATE
            SET amount = excluded.amount
+             , destination_amount = excluded.destination_amount
              , payin_refund = excluded.payin_refund
      RETURNING *
     """, locals())

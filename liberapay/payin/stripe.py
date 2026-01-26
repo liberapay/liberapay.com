@@ -593,7 +593,7 @@ def execute_transfer(db, pt, source_transaction, update_donor=True):
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
     destination_amount, reversed_destination_amount = update_transfer_metadata(
-        tr, pt, charge
+        db, tr, pt, charge
     )
     pt = update_payin_transfer(
         db, pt.id, tr.id, 'succeeded', None, destination_amount=destination_amount,
@@ -692,7 +692,7 @@ def reverse_transfer(
                 raise
         else:
             destination_amount = int_to_Money(
-                destination_refund.balance_transaction.amount,
+                -destination_refund.balance_transaction.amount,
                 destination_refund.balance_transaction.currency
             )
             record_payin_transfer_reversal(
@@ -719,13 +719,12 @@ def sync_transfer(db, pt, charge, update_donor=True):
     assert pt.remote_id, "can't sync a transfer lacking a `remote_id`"
     tr = stripe.Transfer.retrieve(pt.remote_id)
     destination_amount, reversed_destination_amount = update_transfer_metadata(
-        tr, pt, charge
+        db, tr, pt, charge
     )
     if tr.amount_reversed:
         reversed_amount = min(int_to_Money(tr.amount_reversed, tr.currency), pt.amount)
     else:
         reversed_amount = None
-    record_reversals(db, pt, tr)
     return update_payin_transfer(
         db, pt.id, tr.id, 'succeeded', None, destination_amount=destination_amount,
         reversed_destination_amount=reversed_destination_amount,
@@ -769,7 +768,7 @@ def settle_destination_charge(
     if getattr(charge, 'transfer', None):
         tr = stripe.Transfer.retrieve(charge.transfer)
         destination_amount, reversed_destination_amount = update_transfer_metadata(
-            tr, pt, charge
+            db, tr, pt, charge
         )
         if tr.amount_reversed < bt.fee:
             try:
@@ -787,7 +786,6 @@ def settle_destination_charge(
                 website.tell_sentry(e)
         elif tr.amount_reversed > bt.fee:
             reversed_amount = int_to_Money(tr.amount_reversed, tr.currency) - fee
-            record_reversals(db, pt, tr)
 
     pt_remote_id = getattr(charge, 'transfer', None)
     pt = update_payin_transfer(
@@ -800,7 +798,7 @@ def settle_destination_charge(
     return payin
 
 
-def update_transfer_metadata(tr, pt, charge):
+def update_transfer_metadata(db, tr, pt, charge):
     """Set `description` and `metadata` if they're missing.
 
     Args:
@@ -861,32 +859,9 @@ def update_transfer_metadata(tr, pt, charge):
         bt = py.balance_transaction
         if bt:
             destination_amount = int_to_Money(bt.amount, bt.currency)
-            if destination_amount.currency == pt.amount.currency:
-                destination_amount = pt.amount
-                reversed_destination_amount = pt.reversed_amount
-            elif py.amount_refunded:
+            if py.amount_refunded:
                 try:
-                    destination_refunds = list(stripe.Refund.list(
-                        charge=tr.destination_payment,
-                        expand=['data.balance_transaction'],
-                        limit=100,
-                        stripe_account=tr.destination,
-                    ).auto_paging_iter())
-                    if charge.destination:
-                        # On a destination charge, the first refund is actually
-                        # us recovering Stripe's fee, so it should be deducted.
-                        refund = destination_refunds.pop()
-                        destination_amount -= int_to_Money(
-                            refund.balance_transaction.amount,
-                            refund.balance_transaction.currency
-                        )
-                    reversed_destination_amount = Money.sum((
-                        int_to_Money(
-                            refund.balance_transaction.amount,
-                            refund.balance_transaction.currency
-                        )
-                        for refund in destination_refunds
-                    ), bt.currency)
+                    reversed_destination_amount = record_reversals(db, pt, tr)
                 except stripe.PermissionError as e:
                     if str(e).endswith(" Application access may have been revoked."):
                         pass
@@ -894,6 +869,9 @@ def update_transfer_metadata(tr, pt, charge):
                         website.tell_sentry(e)
                 except Exception as e:
                     website.tell_sentry(e)
+            if destination_amount.currency == pt.amount.currency:
+                destination_amount = pt.amount
+                reversed_destination_amount = pt.reversed_amount
     return destination_amount, reversed_destination_amount
 
 
@@ -953,7 +931,7 @@ def record_reversals(db, pt, transfer):
         pt (Record): a row from the `payin_transfers` table
         transfer (Transfer): a `stripe.Transfer` object
 
-    Returns: the list of rows upserted into the `payin_transfer_reversals` table
+    Returns the total amount debited from the Transfer recipient's balance.
 
     """
     if transfer.currency.upper() != pt.amount.currency:
@@ -963,25 +941,41 @@ def record_reversals(db, pt, transfer):
     reversals = list(transfer.reversals.auto_paging_iter())
     if not reversals:
         return r
+    try:
+        destination_refunds = {
+            refund.source_transfer_reversal: refund
+            for refund in stripe.Refund.list(
+                charge=transfer.destination_payment,
+                expand=['data.balance_transaction'],
+                limit=100,
+                stripe_account=transfer.destination,
+            ).auto_paging_iter()
+        }
+    except stripe.PermissionError as e:
+        if str(e).endswith(" Application access may have been revoked."):
+            destination_refunds = None
+        else:
+            raise
     if fee:
         reversal = reversals.pop()
         assert reversal.amount == fee
-    destination_refunds = {
-        refund.source_transfer_reversal: refund
-        for refund in stripe.Refund.list(
-            charge=transfer.destination_payment,
-            expand=['data.balance_transaction'],
-            limit=100,
-            stripe_account=transfer.destination,
-        ).auto_paging_iter()
-    }
+        if destination_refunds is not None:
+            try:
+                destination_refunds.pop(reversal.id)
+            except Exception as e:
+                website.tell_sentry(e)
     for reversal in reversals:
         amount = int_to_Money(reversal.amount, reversal.currency)
-        destination_refund = destination_refunds[reversal.id]
-        destination_amount = int_to_Money(
-            destination_refund.balance_transaction.amount,
-            destination_refund.balance_transaction.currency
-        )
+        destination_amount = None
+        if destination_refunds is not None:
+            try:
+                destination_refund = destination_refunds[reversal.id]
+                destination_amount = int_to_Money(
+                    -destination_refund.balance_transaction.amount,
+                    destination_refund.balance_transaction.currency
+                )
+            except Exception as e:
+                website.tell_sentry(e)
         payin_refund_id = db.one("""
             SELECT pr.id
               FROM payin_refunds pr
@@ -993,4 +987,14 @@ def record_reversals(db, pt, transfer):
             payin_refund_id=payin_refund_id,
             ctime=(EPOCH + timedelta(seconds=reversal.created)),
         ))
-    return r
+    if destination_refunds:
+        reversed_destination_amount = Money.sum((
+            int_to_Money(
+                -refund.balance_transaction.amount,
+                refund.balance_transaction.currency
+            )
+            for refund in destination_refunds.values()
+        ), next(iter(destination_refunds.values())).balance_transaction.currency.upper())
+    else:
+        reversed_destination_amount = None
+    return reversed_destination_amount

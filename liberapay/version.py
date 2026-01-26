@@ -25,13 +25,13 @@ def get_version():
         try:
             version = check_output(cmd.split()).decode().strip()[len(PREFIX):]
         except CalledProcessError:
-            raise RuntimeError('Unable to get version number from git tags')
+            raise Exception('Unable to get version number from git tags')
 
         # PEP 440 compatibility
         if '-' in version:
             if version.endswith('-dirty'):
-                raise RuntimeError('The working tree is dirty')
-            version = '.post'.join(version.split('-')[:2])
+                raise Exception('The working tree is dirty')
+            version = version.replace('-', '.post', 1)
 
     else:
         # Extract the version from the PKG-INFO file.
