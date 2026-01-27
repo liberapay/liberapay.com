@@ -26,29 +26,26 @@ msgstr "تم وضع علامة على حسابك في Liberapay على أنه ا
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "تم وضع علامة على ملفك الشخصي في Liberapay كبريد عشوائي من قبل أحد أعضاء فريق العمل. هو الآن مخفي."
 
-#, fuzzy
 msgid "Your Liberapay account is at risk of being disabled"
 msgstr "حساب Liberapay الخاص بك معرض لخطر التعطيل"
 
-#, fuzzy
 msgid "The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate."
 msgstr "المعلومات التي أدخلتها في ملفك الشخصي على Liberapay ليست كافية للتحقق من أن محاولتك لجمع التبرعات مشروعة."
 
-#, fuzzy
 msgid "The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate."
 msgstr "المعلومات الموجودة في ملفك الشخصي على Liberapay قديمة جدًا ولا تمكننا من التحقق من أن استخدامك لخدمتنا لا يزال شرعيًا."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}."
-msgstr "يبدو أنك تستخدم Liberapay {link_start}الاستخدام المصرح بها{link_end} لشيء آخر غير حالات."
+msgstr "يبدو أنك تستخدم Liberapay لغرض آخر غير {link_start}حالات الاستخدام المصرح بها{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please {link_start}edit your profile{link_end} to rectify this problem. If you don't, your account may be disabled."
 msgstr "يُرجى {link_start}تعديل ملفك الشخصي{link_end} لحلّ هذه المشكلة. إذا لم تفعل، فقد يتم تعطيل حسابك."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you no longer want to use Liberapay, please {link_start}close your account{link_end}."
-msgstr "إذا كنت لم تعد ترغب في استخدام Liberapay، فيرجى {link_start}إغلاق حسابك{link_end}."
+msgstr "إذا كنت لا ترغب في الاستمرار باستخدام Liberapay، يرجى {link_start}إغلاق حسابك{link_end}."
 
 msgid "Greetings,"
 msgstr "تحية طيبة،"
@@ -76,13 +73,13 @@ msgid_plural "You have {n} donations waiting to be renewed:"
 msgstr[0] "ليس لديك تبرعات بإنتظار التجديد:"
 msgstr[1] "لديك تبرع واحد بإنتظار التجديد:"
 msgstr[2] "لديك تبرعان بإنتظار التجديد:"
-msgstr[3] "لديك {n} تبرع بإنتظار التجديد:"
-msgstr[4] "لديك {n} تبرعات بإنتظار التجديد:"
-msgstr[5] "لديك {n} تبرعات بإنتظار التجديد:"
+msgstr[3] "لديك {n} عدد من التبرعات بإنتظار التجديد:"
+msgstr[4] "لديك {n} العديد من التبرعات بإنتظار التجديد:"
+msgstr[5] "لديك {n} عدد كبير جدا من التبرعات بإنتظار التجديد:"
 
 #, python-brace-format
 msgid "{amount} to {username}"
-msgstr "مبلغ {amount} الي {username}"
+msgstr "مبلغ {amount} الى {username}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
@@ -105,7 +102,7 @@ msgstr "لقد حان الوقت لتجديد تبرعاتك على Liberapay"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr "تبرعك بمبلغ {amount} في الأسبوع ل{username} يحتاج إلى تجديد قبل {date}"
+msgstr "تبرعك البالغ {amount} أسبوعياً لـ {username} يحتاج إلى تجديد قبل {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
@@ -598,12 +595,12 @@ msgstr "تم استبدال الدفع اليدوي المجدول لـ {old_dat
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] "لديك الآن {n} دفعة مجدولة:"
-msgstr[1] "لديك الآن {n} دفعة مجدولة:"
-msgstr[2] "لديك الآن {n} دفعة مجدولة:"
-msgstr[3] "لديك الآن {n} دفعة مجدولة:"
-msgstr[4] "لديك الآن {n} دفعة مجدولة:"
-msgstr[5] "لديك الآن {n} دفعة مجدولة:"
+msgstr[0] "ليس لديك الآن {n} اي دفعة مجدولة:"
+msgstr[1] "لديك الآن {n} دفعة واحدة مجدولة:"
+msgstr[2] "لديك الآن {n} دفعتان مجدولتان:"
+msgstr[3] "لديك الآن {n} عدة دفعات مجدولة:"
+msgstr[4] "لديك الآن {n} العديد من الدفعات المجدولة:"
+msgstr[5] "لديك الآن {n} الكثير من الدفعات المجدولة:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
