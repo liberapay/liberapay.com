@@ -730,6 +730,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 supported_currencies_en, l.currencies, supported_currencies_en,
                 l.title,
             )
+            l.grouped_time_zones
         if l.script and l.language not in LOCALES_DEFAULT_MAP:
             tell_sentry(Warning(
                 f"the default script for language {l.language!r} is not "
@@ -773,6 +774,8 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             l.countries = base.countries
             l.accepted_languages = base.accepted_languages
             l.supported_currencies = base.supported_currencies
+            if l.grouped_time_zones == base.grouped_time_zones:
+                l.grouped_time_zones = base.grouped_time_zones
             if l.script:
                 scriptless_tag = f"{l.language}-{l.territory.lower()}"
                 if scriptless_tag not in LOCALES_DEFAULT_MAP:

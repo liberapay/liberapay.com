@@ -30,6 +30,30 @@ thead {
 img {
     max-width: 100% !important;
 }
+label {
+    margin: 0;
+    padding: 0;
+}
+dd {
+    margin: 0 0 .3em 0;
+}
+textarea {
+    appearance: none;
+    border: none;
+    box-shadow: none;
+    display: block;
+    field-sizing: content;
+    outline: none;
+    padding: 0;
+    resize: none;
+    width: 100%;
+    &:invalid {
+        appearance: revert;
+        border: revert;
+        box-shadow: revert;
+        outline: revert;
+    }
+}
 
 @font-face {
     font-family: 'Ubuntu Mono';
@@ -148,4 +172,8 @@ h2 {
     td:not(:first-child) {
         text-align: right;
     }
+}
+
+.last-col-right th:last-child, .last-col-right td:last-child {
+    text-align: right;
 }

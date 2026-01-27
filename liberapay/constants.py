@@ -1,10 +1,12 @@
 from collections import namedtuple
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
+import os.path
 import re
+from sys import intern
+import zoneinfo
 
 from markupsafe import Markup
-from pando.utils import utc
 
 from .i18n.currencies import (  # noqa: F401
     convert_symbolic_amount, CURRENCIES, D_CENT, Money, MoneyAutoConvertDict,
@@ -134,7 +136,7 @@ EMAIL_RE = re.compile(r'''
     $
 ''', re.VERBOSE)
 
-EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
+EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, timezone.utc)
 
 EUROZONE = {
     'AT', 'BE', 'BG', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'IE', 'IT',
@@ -186,7 +188,7 @@ INVOICE_STATUSES = {
     'rejected': _("Rejected"),
 }
 
-LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
+LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, timezone.utc)
 
 PARTICIPANT_KINDS = {
     'individual': _("Individual"),
@@ -418,6 +420,58 @@ FEEDBACK_MAX_SIZE = 1000
 TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
     {k: Money('1.00', k) for k in ('EUR', 'USD')}
 )
+
+def get_time_zones() -> dict[str, zoneinfo.ZoneInfo]:
+    """This function parses the time zone database file `zone1970.tab`.
+
+    The documentation of the time zone database can be found in its source code
+    (https://www.iana.org/time-zones). Some information about the database can
+    also be found on Wikipedia (https://en.wikipedia.org/wiki/Tz_database).
+
+    We don't use Python's `zoneinfo.available_timezones()` because it returns
+    all the time zone identifiers it finds, including obsolete aliases.
+
+    This code is in a function so that its transient variables are garbage
+    collected automatically, without needing an explicit `del` statement.
+    """
+    zones = [zoneinfo.ZoneInfo('Etc/UTC')]
+    for path in zoneinfo.TZPATH:
+        try:
+            with open(os.path.join(path, 'zone1970.tab')) as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    line = line.split('\t')
+                    zone_id = intern(line[2])
+                    zones.append(zoneinfo.ZoneInfo(zone_id))
+        except FileNotFoundError:
+            pass
+        else:
+            break
+    return {
+        zone.key: zone for zone in sorted(zones, key=lambda zone: (
+            -zone.key.startswith('Etc'),
+            zone.key
+        ))
+    }
+
+TIME_ZONES = get_time_zones()
+assert len(TIME_ZONES) > 25, "time zones are missing"
+
+TIME_ZONE_AREAS = {
+    'Etc': _("Universal"),
+    'Africa': _("Africa"),
+    'America': _("America"),
+    'Antarctica': _("Antarctica"),
+    'Arctic': _("Arctic"),
+    'Asia': _("Asia"),
+    'Atlantic': _("Atlantic"),
+    'Australia': _("Australia"),
+    'Europe': _("Europe"),
+    'Indian': _("Indian"),
+    'Pacific': _("Pacific"),
+}
 
 USERNAME_MAX_SIZE = 32
 USERNAME_SUFFIX_BLACKLIST = {'.txt', '.html', '.htm', '.json', '.xml'}
