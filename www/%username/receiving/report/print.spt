@@ -2,7 +2,7 @@ from datetime import datetime, time
 
 from liberapay.constants import TIME_ZONES
 from liberapay.i18n.currencies import MoneyBasket
-from liberapay.utils import get_participant, render_postal_address, utcnow
+from liberapay.utils import get_participant, render, render_postal_address, utcnow
 
 [---]
 
@@ -113,6 +113,8 @@ postal_address = render_postal_address(
 
 title = participant.username
 subhead = _("Income report")
+
+output.body = render(globals(), allow_partial_i18n=False)
 
 [---] text/html
 % extends "templates/layouts/paper.html"
