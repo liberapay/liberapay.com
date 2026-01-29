@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 from liberapay.constants import TIME_ZONES
 from liberapay.i18n.currencies import MoneyBasket
@@ -16,7 +16,7 @@ if period_end_date < period_start_date:
     raise response.error(400, "period_end_date must be greater than period_start_date")
 time_zone = TIME_ZONES[request.qs.get_choice('time_zone', TIME_ZONES)]
 period_start_time = datetime.combine(period_start_date, time(), tzinfo=time_zone)
-period_end_time = datetime.combine(period_end_date, time(), tzinfo=time_zone)
+period_end_time = datetime.combine(period_end_date + timedelta(days=1), time(), tzinfo=time_zone)
 now = utcnow()
 today = now.date()
 if period_end_time > now:
