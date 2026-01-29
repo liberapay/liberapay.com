@@ -1,3 +1,4 @@
+from calendar import monthrange
 from datetime import datetime, time, timedelta
 
 from liberapay.constants import TIME_ZONES
@@ -115,8 +116,32 @@ postal_address = render_postal_address(
     single_line=True,
 )
 
-title = participant.username
-subhead = _("Income report")
+period = f"{period_start_date}_{period_end_date}"
+if period_end_date.year == period_start_date.year:
+    year = period_start_date.year
+    if period_end_date.month == period_start_date.month:
+        month = period_start_date.month
+        if period_start_date.day == 1 and period_end_date.day == monthrange(year, month)[1]:
+            period = f"{year}-{month:>02}"
+    elif period_start_date.month == 1 and period_start_date.day == 1:
+        if period_end_date.month == 12 and period_end_date.day == 31:
+            period = str(year)
+        elif period_end_date.month == 3 and period_end_date.day == 31:
+            period = _("{year}Q{quarter}", year=str(year), quarter=str(1))
+        elif period_end_date.month == 6 and period_end_date.day == 30:
+            period = _("{year}S{semester}", year=str(year), semester=str(1))
+    elif period_start_date.month == 4 and period_start_date.day == 1:
+        if period_end_date.month == 6 and period_end_date.day == 30:
+            period = _("{year}Q{quarter}", year=str(year), quarter=str(2))
+    elif period_start_date.month == 7 and period_start_date.day == 1:
+        if period_end_date.month == 9 and period_end_date.day == 30:
+            period = _("{year}Q{quarter}", year=str(year), quarter=str(3))
+        elif period_end_date.month == 12 and period_end_date.day == 31:
+            period = _("{year}S{semester}", year=str(year), semester=str(2))
+    elif period_start_date.month == 10 and period_start_date.day == 1:
+        if period_end_date.month == 12 and period_end_date.day == 31:
+            period = _("{year}Q{quarter}", year=str(year), quarter=str(4))
+title = _("liberapay_income_report_{period}", period=period)
 
 output.body = render(globals(), allow_partial_i18n=False)
 
