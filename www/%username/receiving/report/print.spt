@@ -155,12 +155,14 @@ output.body = render(globals(), allow_partial_i18n=False)
         <dt><label for="recipient">{{ _("Income recipient") }}</label></dt>
         <dd><textarea id="recipient" placeholder='{{ _("Information on who received the funds: name, postal address, etc.") }}{{ "\n " }}' required>{{ recipient_name or '' }}{{ '\n' }}{{ postal_address or '' }}</textarea></dd>
         <dt>{{ _("Income amount") }}</dt>
-        <dd>{{ locale.format_money_basket(net_income_sum) }}</dd>
+        <dd>{{ locale.format_money_basket(net_income_sum) if rows else _("No income.") }}</dd>
+        % if rows
         <dt>{{ _("Income type") }}</dt>
         <dd>{{ _(
             "All payments were donations. No goods or services were to be provided "
             "in exchange."
         ) }}</dd>
+        % endif
         <dt>{{ _("Taxes") }}</dt>
         <dd>{{ _("No taxes were collected by the Liberapay platform.") }}</dd>
         <dt>{{ _("Reporting period") }}</dt>
@@ -169,6 +171,7 @@ output.body = render(globals(), allow_partial_i18n=False)
         <dd>{{ participant.id }}</dd>
     </dl>
 
+    % if rows
     <h2>{{ _("Transaction record") }}</h2>
 
     <table class="table table-bordered last-col-right">
@@ -216,6 +219,7 @@ output.body = render(globals(), allow_partial_i18n=False)
         </tr>
     % endfor
     </table>
+    % endif
 
     <footer>
         <div>{{ locale.format_date(today) }}</div>
