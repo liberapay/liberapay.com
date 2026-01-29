@@ -42,6 +42,7 @@ if len(payin_transfers) > 10000:
     )))
 for t in payin_transfers:
     t.type = 'payin_transfer'
+    t.timestamp = t.timestamp.astimezone(time_zone)
 payin_transfer_reversals = website.db.all("""
     SELECT ptr.id, ptr.payin_transfer
          , coalesce(ptr.destination_amount, ptr.amount) AS amount
@@ -54,6 +55,7 @@ payin_transfer_reversals = website.db.all("""
 """, (participant.id, period_start_time, period_end_time))
 for t in payin_transfer_reversals:
     t.type = 'payin_transfer_reversal'
+    t.timestamp = t.timestamp.astimezone(time_zone)
 incoming_transfers = website.db.all("""
     SELECT t.id, t.amount, t.timestamp, t.context
          , 'incoming_transfer' AS type
@@ -81,6 +83,7 @@ if len(incoming_transfers) > 10000:
     )))
 for t in incoming_transfers:
     t.type = 'incoming_transfer'
+    t.timestamp = t.timestamp.astimezone(time_zone)
 outgoing_transfers = website.db.all("""
     SELECT t.id, t.amount, t.timestamp, t.context
       FROM transfers t
@@ -93,6 +96,7 @@ outgoing_transfers = website.db.all("""
 """, (participant.id, period_start_time, period_end_time))
 for t in outgoing_transfers:
     t.type = 'outgoing_transfer'
+    t.timestamp = t.timestamp.astimezone(time_zone)
 rows = [*payin_transfers, *payin_transfer_reversals, *incoming_transfers, *outgoing_transfers]
 rows.sort(key=lambda row: row.timestamp)
 payin_transfers_sum = MoneyBasket(pt.amount for pt in payin_transfers)
