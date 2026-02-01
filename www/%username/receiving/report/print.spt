@@ -59,7 +59,6 @@ for t in payin_transfer_reversals:
     t.timestamp = t.timestamp.astimezone(time_zone)
 incoming_transfers = website.db.all("""
     SELECT t.id, t.amount, t.timestamp, t.context
-         , 'incoming_transfer' AS type
       FROM transfers t
      WHERE t.tippee = %s
        AND t.timestamp >= %s
