@@ -163,6 +163,10 @@ output.body = render(globals(), allow_partial_i18n=False)
         <dd>{{ period_start_time }} → {{ period_end_time }}</dd>
         <dt>{{ _("Account number") }}</dt>
         <dd>{{ participant.id }}</dd>
+        % if period_start_time <= participant.join_time
+        <dt>{{ _("Account creation time") }}</dt>
+        <dd>{{ participant.join_time.replace(microsecond=0).astimezone(time_zone) }}</dd>
+        % endif
     </dl>
 
     % if rows
