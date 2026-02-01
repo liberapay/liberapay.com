@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Hungarian "
-"<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2026-02-01 04:01+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.16-dev\n"
 "Generated-By: Babel 2.17.0\n"
 
 #, python-brace-format
@@ -865,47 +867,36 @@ msgstr "Nagy"
 msgid "Maximum"
 msgstr "Maximális"
 
-#, fuzzy
 msgid "Universal"
 msgstr "Univerzális"
 
-#, fuzzy
 msgid "Africa"
 msgstr "Afrika"
 
-#, fuzzy
 msgid "America"
 msgstr "Amerika"
 
-#, fuzzy
 msgid "Antarctica"
 msgstr "Antarktisz"
 
-#, fuzzy
 msgid "Arctic"
-msgstr "Északi-sarkvidék"
+msgstr "Északi-sark"
 
-#, fuzzy
 msgid "Asia"
 msgstr "Ázsia"
 
-#, fuzzy
 msgid "Atlantic"
 msgstr "Atlanti-óceán"
 
-#, fuzzy
 msgid "Australia"
 msgstr "Ausztrália"
 
-#, fuzzy
 msgid "Europe"
 msgstr "Európa"
 
-#, fuzzy
 msgid "Indian"
 msgstr "indiai"
 
-#, fuzzy
 msgid "Pacific"
 msgstr "Csendes-óceáni"
 
@@ -3615,7 +3606,7 @@ msgstr "Kedvezményezettek"
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
-msgstr[0] "A pénzt a következő kedvezményezettnek adományozták:"
+msgstr[0] "A pénzt a következő kedvezményezett(ek)nek adományozták:"
 
 msgid "Recipient"
 msgstr "Címzett"
@@ -3644,7 +3635,7 @@ msgid "Headquarters address: {0}"
 msgstr "Székhely címe: {0}"
 
 msgid "Payment details"
-msgstr "Fizetési Részletek"
+msgstr "Fizetési részletek"
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
@@ -3652,7 +3643,7 @@ msgstr "Fizetési mód: a {last4} végű {brand} kártya"
 
 #, python-brace-format
 msgid "Payment method: direct debit of bank account {partial_account_number}"
-msgstr "Fizetési mód: közvetlen terhelés a(z) {partial_account_number} bankszámlán"
+msgstr "A fizetési mód közvetlen terhelés (beszedés) a következő bankszámlán: {partial_account_number}"
 
 #, python-brace-format
 msgid "Payment method: {0}"
@@ -3664,7 +3655,7 @@ msgstr "Elszámolás időpontja: {0}"
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
-msgstr "Tranzakciós azonosító: {0}"
+msgstr "A tranzakció azonosítója: {0}"
 
 msgid "Taxes"
 msgstr "Adók"
@@ -3680,7 +3671,7 @@ msgstr "Addig nem fogadhat támogatásokat, amíg nem állította be a fizetési
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
-msgstr "A csapatokon keresztüli adományozás teszik ki a {income_percent} bevételét ({team_income} a(z) {total_income} összesből) és a {patrons_percent} fő támogatót jelent ({nteampatrons} a(z) {npatrons} összesből)."
+msgstr "A csapatokon keresztüli adományozás {income_percent}-át teszi ki a teljes bevételének (ez a teljes, {total_income} összegből {team_income} összeget jelent) és az adományozói közül {patrons_percent}-os részt, {npatrons} támogató közül {nteampatrons} támogatót tesz ki."
 
 msgid "Details of personal donations"
 msgstr "A személyes adományok részletei"
@@ -3734,101 +3725,80 @@ msgstr "Az adományok {x_percent}-a"
 msgid "{x_percent} of total income"
 msgstr "A teljes bevétel {x_percent}-a"
 
-#, fuzzy
 msgid "Income reports"
-msgstr "Jövedelemjelentések"
+msgstr "Bevételi jelentések"
 
-#, fuzzy
 msgid "There were a lot of transactions during the reporting period you requested. Please select a shorter period."
-msgstr "A kért jelentési időszakban nagyon sok tranzakció történt. Kérjük, válasszon rövidebb időszakot."
+msgstr "A kért jelentési időszakban túl sok tranzakció történt. Kérjük, válasszon rövidebb időszakot."
 
-#, fuzzy
 msgid "Liberapay can generate income reports for accounting purposes."
-msgstr "A Liberapay könyvelési célokra bevételi jelentéseket tud generálni."
+msgstr "A Liberapay könyvelési célokra bevételi jelentéseket tud készíteni."
 
-#, fuzzy
 msgid "First day of the reporting period"
-msgstr "A jelentési időszak első napja"
+msgstr "A jelentési időszak kezdő napja"
 
-#, fuzzy
 msgid "Last day of the reporting period"
-msgstr "A jelentési időszak utolsó napja"
+msgstr "A jelentési időszak záró napja"
 
-#, fuzzy
 msgid "Time zone"
 msgstr "Időzóna"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{year}Q{quarter}"
-msgstr "{year}Q{quarter}"
+msgstr "{year}.{quarter}. negyedév"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{year}S{semester}"
-msgstr "{year}S{semester}"
+msgstr "{year}.{semester}. félév"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "liberapay_income_report_{period}"
-msgstr "liberapay_income_report_{period}"
+msgstr "liberapay_bevételi_jelentés_{period}"
 
-#, fuzzy
 msgid "Income report"
-msgstr "Jövedelemjelentés"
+msgstr "Bevételi jelentés"
 
-#, fuzzy
 msgid "Income recipient"
-msgstr "Jövedelemkedvezményezett"
+msgstr "A bevétel kedvezményezettje"
 
-#, fuzzy
 msgid "Information on who received the funds: name, postal address, etc."
-msgstr "Információk a pénzeszközök átvételéről: név, postai cím stb."
+msgstr "A pénzeszközöket átvevő személyre vonatkozó információk: név, postai cím stb."
 
-#, fuzzy
 msgid "Income amount"
-msgstr "Jövedelem összege"
+msgstr "A bevétel összege"
 
-#, fuzzy
 msgid "No income."
-msgstr "Nincs jövedelem."
+msgstr "Nincs bevétel."
 
-#, fuzzy
 msgid "Income type"
-msgstr "Jövedelem típusa"
+msgstr "A bevétel típusa"
 
-#, fuzzy
 msgid "All payments were donations. No goods or services were to be provided in exchange."
-msgstr "Minden fizetés adományozás volt. Cserébe semmilyen áru vagy szolgáltatás nem volt nyújtandó."
+msgstr "Minden fizetés adományozás volt. Cserébe semmilyen áru- vagy szolgáltatásnyújtás nem történt."
 
-#, fuzzy
 msgid "No taxes were collected by the Liberapay platform."
-msgstr "A Liberapay környezet nem szedett be adót."
+msgstr "A Liberapay nem szedett be adót."
 
-#, fuzzy
 msgid "Reporting period"
-msgstr "Beszámolási időszak"
+msgstr "Jelentési időszak"
 
-#, fuzzy
 msgid "Account number"
 msgstr "Számlaszám"
 
-#, fuzzy
 msgid "Transaction record"
 msgstr "Tranzakciós nyilvántartás"
 
-#, fuzzy
 msgid "ID"
-msgstr "azonosító szám"
+msgstr "azonosító"
 
-#, fuzzy
 msgid "public donation"
 msgstr "nyilvános adományok"
 
-#, fuzzy
 msgid "private donation"
 msgstr "magánadomány"
 
-#, fuzzy
 msgid "donation reversal"
-msgstr "adományozás visszavonása"
+msgstr "adomány visszavonása"
 
 msgid "chargeback"
 msgstr "visszatérítés"
