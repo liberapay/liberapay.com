@@ -10,17 +10,6 @@ a, a:hover, a:visited {
 a.btn {
     text-decoration: none;
 }
-a[href]:after {
-    content: " (" attr(href) ")";
-}
-abbr[title]:after {
-    content: " (" attr(title) ")";
-}
-a.printable:after,
-a[href^="#"]:after,
-a[href^="javascript:"]:after {
-    content: "";
-}
 pre, blockquote {
     border: 1px solid #999;
 }
@@ -65,6 +54,20 @@ textarea {
     font-style: normal;
 }
 
+body > header, body > footer {
+    display: flex;
+    width: 100%;
+    & > div {
+        width: 35%;
+        &:nth-child(2) {
+            text-align: center;
+            width: 30%;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+    }
+}
 .page {
     position: relative;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -92,6 +95,17 @@ textarea {
     }
     & > h1 {
         text-align: center;
+    }
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+    a.printable:after,
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+        content: "";
     }
     & > footer {
         bottom: 0;

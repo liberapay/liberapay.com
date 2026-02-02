@@ -10,8 +10,10 @@
 </head>
 <body>
 
-    <header class="text-center">
-        <a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>
+    <header>
+        <div>{% block top_left %}{% endblock %}</div>
+        <div>{% block top_center %}<a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>{% endblock %}</div>
+        <div>{% block top_right %}{% endblock %}</div>
     </header>
 
     <div class="sheet"><div class="page">
@@ -28,8 +30,10 @@
         {% block content %}{% endblock %}
     </div></div>
 
-    <footer class="text-center">
-        <a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>
+    <footer>
+        <div>{% block bottom_left %}{% endblock %}</div>
+        <div>{% block bottom_center %}<a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>{% endblock %}</div>
+        <div>{% block bottom_right %}{% endblock %}</div>
     </footer>
 
     <script src="{{ website.asset('paper.js') }}"></script>

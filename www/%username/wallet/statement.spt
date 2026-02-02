@@ -39,6 +39,17 @@ if (year, month) > (last_event_date.year, last_event_date.month):
         f"your last account statement is {last_event_date.year}-{last_event_date.month:>02}"
     )
 
+previous_statement = (year, month - 1)
+if previous_statement[1] == 0:
+    previous_statement = (year - 1, 12)
+if previous_statement < (join_time.year, join_time.month):
+    previous_statement = None
+next_statement = (year, month + 1)
+if next_statement[1] == 13:
+    next_statement = (year + 1, 1)
+if next_statement > (last_event_date.year, last_event_date.month):
+    next_statement = None
+
 ledger = get_wallet_ledger(
     website.db, participant, year, month, reverse=False, minimize=True, past_only=True
 )
@@ -56,6 +67,18 @@ output.body = render(globals(), allow_partial_i18n=False)
 
 [---] text/html
 % extends "templates/layouts/paper.html"
+
+% block top_left
+% if previous_statement
+    <a class="btn btn-default btn-lg" href="?year={{ previous_statement[0] }}&amp;month={{ previous_statement[1] }}">← Previous statement</a>
+% endif
+% endblock
+
+% block top_right
+% if next_statement
+    <a class="btn btn-default btn-lg" href="?year={{ next_statement[0] }}&amp;month={{ next_statement[1] }}">Next statement →</a>
+% endif
+% endblock
 
 % block content
 
