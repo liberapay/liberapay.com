@@ -11,21 +11,33 @@ STATUS_MAP = {
 [---]
 
 participant = get_participant(state, restrict=True)
-title = _("Account Statement")
 
-now = datetime.now(timezone.utc)
-today = now.date()
-year = request.qs.get_int('year', now.year, minimum=2016)
-month = request.qs.get_int('month', None, minimum=1, maximum=12)
-if not month:
-    if today.day > participant.join_time.day:
-        month = (now.month - 1) or 12
-    else:
-        month = (now.month - 3) % 12 + 1
+last_event_date = website.db.one("""
+    SELECT timestamp::date AS date
+      FROM transfers
+     WHERE (tipper = %(p_id)s OR tippee = %(p_id)s)
+       AND virtual IS NOT true
+ UNION ALL
+    SELECT timestamp::date AS date
+      FROM exchanges
+     WHERE participant = %(p_id)s
+  ORDER BY date DESC
+     LIMIT 1
+""", dict(p_id=participant.id))
+if not last_event_date:
+    raise response.error(400, "no statements are available for this account")
 
 join_time = participant.join_time
+now = datetime.now(timezone.utc)
+today = now.date()
+year = request.qs.get_int('year', minimum=2016, maximum=2022)
+month = request.qs.get_int('month', minimum=1, maximum=12)
 if (year, month) < (join_time.year, join_time.month):
     raise response.error(400, "the requested month predates the account's creation")
+if (year, month) > (last_event_date.year, last_event_date.month):
+    raise response.error(400,
+        f"your last account statement is {last_event_date.year}-{last_event_date.month:>02}"
+    )
 
 ledger = get_wallet_ledger(
     website.db, participant, year, month, reverse=False, minimize=True, past_only=True
@@ -39,6 +51,7 @@ translated_status = {
     'succeeded': _('succeeded')
 }
 
+title = f"liberapay_account_statement_{year}-{month:>02}"
 output.body = render(globals(), allow_partial_i18n=False)
 
 [---] text/html

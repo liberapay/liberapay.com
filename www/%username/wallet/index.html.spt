@@ -1,12 +1,8 @@
-from datetime import datetime, timezone
+from calendar import monthrange
+from datetime import date, timedelta
 
 from liberapay.utils import get_participant
-from liberapay.utils.history import get_wallet_ledger
-
-STATUS_MAP = {
-    'failed': 'danger',
-    'succeeded': 'success',
-}
+from liberapay.utils.history import month_plus_one
 
 [-----------------------------------------------------------------------------]
 
@@ -14,39 +10,29 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Wallet")
 user_is_admin = user.is_acting_as('admin')
-subpath = 'wallet/' if user_is_admin else ''
-admin_override = user_is_admin and (participant != user or 'override' in request.qs)
-translated_status = {
-    None: '',
-    'pre-mandate': _('awaiting confirmation'),
-    'pre': _('preparing'),
-    'created': _('pending'),
-    'failed': _('failed'),
-    'succeeded': _('succeeded')
-}
 
-current_year = datetime.now(timezone.utc).year
-year = request.qs.get_int('year', 0, minimum=2016, maximum=current_year)
-if not year:
-    # Try to detect the year of the last transaction
-    last_event_year = website.db.one("""
-        SELECT extract(year from timestamp)::int AS year
-          FROM transfers
-         WHERE (tipper = %(p_id)s OR tippee = %(p_id)s)
-           AND virtual IS NOT true
-     UNION ALL
-        SELECT extract(year from timestamp)::int AS year
-          FROM exchanges
-         WHERE participant = %(p_id)s
-      ORDER BY year DESC
-         LIMIT 1
-    """, dict(p_id=participant.id))
-    year = last_event_year or current_year
-
-totals, start, end, events = get_wallet_ledger(website.db, participant, year)
-years = []
-if participant.join_time:
-    years = list(range(current_year, participant.join_time.year-1, -1))
+available_statements = []
+last_event_date = website.db.one("""
+    SELECT timestamp::date AS date
+      FROM transfers
+     WHERE (tipper = %(p_id)s OR tippee = %(p_id)s)
+       AND virtual IS NOT true
+ UNION ALL
+    SELECT timestamp::date AS date
+      FROM exchanges
+     WHERE participant = %(p_id)s
+  ORDER BY date DESC
+     LIMIT 1
+""", dict(p_id=participant.id))
+if last_event_date:
+    first_month = (participant.join_time.year, participant.join_time.month)
+    last_month = (last_event_date.year, last_event_date.month)
+    for year in range(last_event_date.year, participant.join_time.year-1, -1):
+        for month in range(12, 0, -1):
+            year_month = (year, month)
+            if year_month > last_month or year_month < first_month:
+                continue
+            available_statements.append(year_month)
 
 if user_is_admin:
     wallets = website.db.all("""
@@ -60,18 +46,11 @@ if user_is_admin:
 % extends "templates/layouts/settings.html"
 % block content
 
-% if year >= 2018
-    <p class="alert alert-warning">{{ _(
-        "This page only shows transactions processed by Mangopay, to view other "
-        "payments {link_start}go to the Ledger page{link_end}."
-        , link_start=('<a href="%s">'|safe) % participant.path('ledger/?year=%i' % year)
-        , link_end='</a>'|safe
-    ) }}</p>
-% endif
-
 % if user_is_admin
+<div class="text-muted">
     <h3>Admin</h3>
     <p>User ID: {{ participant.id }}</p>
+    % if wallets
     <p>Wallets:</p>
     <table class="table-bordered table-condensed monospace text-right">
         <tr>
@@ -89,301 +68,25 @@ if user_is_admin:
         </tr>
         % endfor
     </table>
+    % else
+        <p>No wallets.</p>
+    % endif
+</div>
 % endif
 
 <h3>{{ _("Account Statement") }}</h3>
 
-% if len(years) > 1
-<ul class="nav nav-pills">
-    % for y in years
-        <li class="{{ 'active' if y == year }}"><a href="?year={{ y }}">{{ y }}</a></li>
-    % endfor
-</ul>
-<br>
-% endif
-
-<div class="row col-lg-10">
-% if totals
-    % set donations = totals['donations']
-    % set reimbursements = totals['reimbursements']
-    % set total_sent = donations['sent'] + reimbursements['sent']
-    {{ _("Total money sent: {0}", total_sent) }}<br>
-    % if total_sent
-    <ul>
-    % if donations['sent']
-    % for money_amount in donations['sent']
-    % if money_amount
-    <li>
-    {{ ngettext(
-        "{money_amount} in donations to {n} person",
-        "{money_amount} in donations to {n} people",
-        donations['ntippees'][money_amount.currency],
-        money_amount=money_amount
-    ) }}
-        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
-            _("Export as CSV")
-        }}</a>)
-    </li>
-    % endif
-    % endfor
-    % endif
-    % if reimbursements['sent']
-    % for money_amount in reimbursements['sent']
-    % if money_amount
-    <li>
-    {{ ngettext(
-        "{money_amount} in expense reimbursements to {n} person",
-        "{money_amount} in expense reimbursements to {n} people",
-        reimbursements['nrecipients'][money_amount.currency],
-        money_amount=money_amount
-    ) }}
-        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
-            _("Export as CSV")
-        }}</a>)
-    </li>
-    % endif
-    % endfor
-    % endif
-    </ul>
-    % endif
-    % set total_received = donations['received'] + reimbursements['received']
-    {{ _("Total money received: {0}", total_received) }}
-    % if total_received
-    <ul>
-    % if donations['received']
-    % for money_amount in donations['received']
-    % if money_amount
-    <li>{{ ngettext(
-        "{money_amount} in donations from {n} donor",
-        "{money_amount} in donations from {n} donors",
-        donations['npatrons'][money_amount.currency],
-        money_amount=money_amount
-    ) }}</li>
-    % endif
-    % endfor
-    % endif
-    % if reimbursements['received']
-    % for money_amount in reimbursements['received']
-    % if money_amount
-    <li>{{ ngettext(
-        "{money_amount} in expense reimbursements from {n} organization",
-        "{money_amount} in expense reimbursements from {n} organizations",
-        reimbursements['npayers'][money_amount.currency],
-        money_amount=money_amount
-    ) }}</li>
-    % endif
-    % endfor
-    % endif
-    </ul>
-    % endif
-<br>
-% endif
-
-% if events
-<table class="table table-condensed" id="history">
-<thead>
-    <tr>
-        <th>{{ _("Description") }}</th>
-        <th class="balances">{{ _("End of day balance") }}</th>
-        <th class="wallet">{{ _("Amount") }}</th>
-        <th class="fees">{{ _("Fees") }}</th>
-        <th class="bank" title="{{ _('The amount you should see on your bank account statement.') }}"
-            >{{ _("Amount in bank") }}</th>
-    </tr>
-</thead>
-<tbody>
-% for event in events
-    % if event['kind'] == 'day-end'
-    <tr class="day-open">
-        <td class="date">
-            {{ locale.format_date(event['date'], 'long') }}
-            % if event.get('payday_number')
-                &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
-            % endif
-        </td>
-        <td class="balances">{{
-            locale.format_money_basket(event['balances'], sep=' + ')
-        }}</td>
-        <td class="wallet">
-        % set wallet_deltas = event['wallet_delta']
-        % if wallet_deltas
-        % set n = len(wallet_deltas.currencies_present)
-        % for delta in wallet_deltas
-            % if delta.amount or n == 0 and delta.currency == participant.main_currency
-                {{ locale.format_money_delta(delta) }}
-            % endif
-        % endfor
-        % endif
-        </td>
-        <td class="fees"></td>
-        <td class="bank"></td>
-    </tr>
-    % elif 'fee' in event
-    <tr class="{{ 'zero' if not event['wallet_delta'] }}">
-        <td class="description" colspan="2">
-        % if event['kind'] == 'payin-refund'
-            % if event['error'] and event['status'] == 'succeeded'
-                {{ event['error'] }}
-            % else
-                {{ _("refund") }}
-            % endif
-        % elif event['kind'] in ('credit', 'charge')
-            {{ _("withdrawal") if event['kind'] == 'credit' else _("deposit") }}
-        % elif event['kind'] == 'payout-refund'
-            {{ _("refund of failed withdrawal (error message: {0})", event['error']) }}
-        % endif
-        % if event['error'] == 'canceled'
-            &mdash; <span class="text-warning">{{ _("canceled") }}</span>
-        % elif event['status'] == 'succeeded' and event['kind'] == 'charge'
-        % else
-            &mdash;
-            <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
-                translated_status[event['status']]
-            }}</span>
-            % if event['error']
-                &mdash; {{ _("error message: {0}", event['error']) }}
-            % endif
-        % endif
-        </td>
-        <td class="wallet">{{ locale.format_money_delta(event['wallet_delta'] or event['amount']) }}</td>
-        <td class="fees">{{ locale.format_money(event['fee']) }}</td>
-        <td class="bank">{{ locale.format_money_delta(event['bank_delta']) }}</td>
-    </tr>
-    % elif event['kind'] == 'transfer'
-    <tr class="{{ 'zero' if not event['wallet_delta'] }}">
-        <td class="description" colspan="2">
-        % set context = event['context']
-        % if event['tippee'] == participant.id
-            % if admin_override
-                {{ context }} from
-                <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
-                % if event['team']
-                    for team <a href="/{{ event['team_name'] }}/">{{ event['team_name'] }}</a>
-                % endif
-            % elif context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
-                {{ _("anonymous donation for your role in the {0} team",
-                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
-                % if event['unit_amount']
-                    % set weeks = int(event['amount'] / event['unit_amount'])
-                    ({{ ngettext(
-                        "{n} week of {money_amount}",
-                        "{n} weeks of {money_amount}",
-                        weeks, money_amount=event['unit_amount']
-                    ) }})
-                % endif
-                % if context == 'take-in-arrears'
-                    ({{ _("in arrears") }})
-                % endif
-            % elif context == 'refund'
-                {{ _("donation refund") }}
-            % elif context == 'expense'
-                {{ _("reimbursement of {link_start}expense #{invoice_id}{link_end} from {payer}",
-                     link_start='<a href="%s">'|safe % event['invoice_url'],
-                     invoice_id=event['invoice'],
-                     link_end='</a>'|safe,
-                     payer=('<a href="/{0}/">{0}</a>'|safe).format(event['username']),
-                ) }}
-            % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
-                {{ _("anonymous donation") }}
-                % if event['unit_amount']
-                    % set weeks = int(event['amount'] / event['unit_amount'])
-                    ({{ ngettext(
-                        "{n} week of {money_amount}",
-                        "{n} weeks of {money_amount}",
-                        weeks, money_amount=event['unit_amount']
-                    ) }})
-                % endif
-                % if context == 'tip-in-arrears'
-                    ({{ _("in arrears") }})
-                % endif
-            % elif context == 'final-gift'
-                {{ _("one-off donation from someone closing their account") }}
-            % elif context == 'chargeback'
-                {{ _("chargeback") }}
-            % elif context == 'debt'
-                {{ _("debt repayment") }}
-            % elif context == 'swap'
-                {{ _("currency exchange") }}
-            % elif context == 'fee-refund'
-                {{ _("fee refund") }}
-            % elif context == 'indirect-payout'
-                indirect payout for
-                <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
-            % endif
-        % else
-            % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
-            % if context == 'final-gift'
-                {{ _("final gift to {0}", to) }}
-            % elif context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
-                {{ _("donation to {0} for their role in the {1} team", to,
-                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
-                % if event['unit_amount']
-                    % set weeks = int(abs(event['amount'] / event['unit_amount']))
-                    ({{ ngettext(
-                        "{n} week of {money_amount}",
-                        "{n} weeks of {money_amount}",
-                        weeks, money_amount=event['unit_amount']
-                    ) }})
-                % endif
-                % if context == 'take-in-arrears'
-                    ({{ _("in arrears") }})
-                % endif
-            % elif context == 'refund'
-                {{ _("refund of anonymous donation") }}
-            % elif context == 'expense'
-                {{ _("payment of {link_start}expense #{invoice_id}{link_end} to {payee}",
-                     link_start='<a href="%s">'|safe % event['invoice_url'],
-                     invoice_id=event['invoice'],
-                     link_end='</a>'|safe,
-                     payee=to,
-                ) }}
-            % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
-                {{ _("donation to {0}", to) }}
-                % if event['unit_amount']
-                    % set weeks = int(abs(event['amount'] / event['unit_amount']))
-                    ({{ ngettext(
-                        "{n} week of {money_amount}",
-                        "{n} weeks of {money_amount}",
-                        weeks, money_amount=event['unit_amount']
-                    ) }})
-                % endif
-                % if context == 'tip-in-arrears'
-                    ({{ _("in arrears") }})
-                % endif
-            % elif context == 'chargeback'
-                {{ _("chargeback") }}
-            % elif context == 'debt'
-                {{ _("debt repayment") }}
-            % elif context == 'swap'
-                {{ _("currency exchange") }}
-            % elif context == 'fee-refund'
-                {{ _("fee refund") }}
-            % elif context == 'indirect-payout'
-                indirect withdrawal
-            % endif
-        % endif
-        % if event['status'] != 'succeeded'
-            &mdash;
-            <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
-                translated_status[event['status']]
-            }}</span>
-            % if event['error']
-                &mdash; {{ _("error message: {0}", event['error']) }}
-            % endif
-        % endif
-        </td>
-        <td class="wallet">{{ locale.format_money_delta(event['amount']) }}</td>
-        <td class="fees"></td>
-        <td class="bank"></td>
-
-    </tr>
-    % endif
-% endfor
-</tbody>
-</table>
+% for year, month in available_statements
+    % set start_day = min(participant.join_time.day, monthrange(year, month)[1])
+    % set start_date = date(year, month, start_day)
+    % set end_date = month_plus_one(year, month, start_day) - timedelta(days=1)
+    <a href="{{ participant.path('wallet/statement?year=%i&month=%i' % (year, month)) }}">{{
+        locale.format_date(start_date)
+    }} → {{
+        locale.format_date(end_date)
+    }}</a><br/>
 % else
-    <p>{{ _("There were no transactions during this period.") }}</p>
-% endif
-</div>
+    <p>No statements are available for this account.</p>
+% endfor
 
 % endblock
