@@ -533,6 +533,9 @@ class Participant(Model, MixinTeam):
                     cookies,
                     suffix='.ro',  # stands for "read only"
                 )
+                if not p.session:
+                    # Downgrading the session failed, probably due to a race condition.
+                    return None, 'expired'
             else:
                 set_cookie(cookies, SESSION, f"{p.id}:!:", expires=now + TEN_YEARS)
                 return None, 'expired'
