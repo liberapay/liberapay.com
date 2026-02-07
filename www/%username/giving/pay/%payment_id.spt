@@ -276,9 +276,9 @@ title = _("Funding your donations")
                 % endif
             </div>
         </div>
-        % set sepa = payment.tips[0].tippee_p.has_stripe_sepa_for(payer)
+        % set sepa = payment.tips[0].tippee_p.can_receive_grouped_payment_from(payer)
         % set possible = allow_stripe_sdd and sepa and payment.currency == 'EUR'
-        % set warn = payer.guessed_country not in constants.SEPA
+        % set warn = payer.guessed_country not in constants.EUROZONE
         <div class="panel panel-default {{ '' if possible else 'muted' }}">
             <div class="panel-body overlaid">
                 {{ icon('direct-debit', size=32) }}
@@ -286,7 +286,7 @@ title = _("Funding your donations")
                     % if not allow_stripe_sdd
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
                     % elif not sepa
-                    <small class="text-danger">{{ _("Only for donations to SEPA countries") }}</small>
+                    <small class="text-danger">{{ _("Only for donations to fully supported countries") }}</small>
                     % elif payment.currency != 'EUR'
                     <small class="text-warning">{{ _("Only for donations in euros") }}</small>
                     % else

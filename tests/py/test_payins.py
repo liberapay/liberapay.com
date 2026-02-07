@@ -15,7 +15,7 @@ from liberapay.payin.cron import execute_reviewed_payins
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import settle_charge_and_transfers, try_other_destinations
-from liberapay.testing import Harness, EUR, KRW, JPY, USD
+from liberapay.testing import AUD, EUR, Harness, JPY, KRW, USD
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.types import Object
 
@@ -136,7 +136,7 @@ class TestResolveAmounts(Harness):
 
 class TestResolveTeamDonation(Harness):
 
-    def resolve(self, team, provider, payer, payer_country, payment_amount, sepa_only=False):
+    def resolve(self, team, provider, payer, payer_country, payment_amount, transfer_only=False):
         tip = self.db.one("""
             SELECT *
               FROM current_tips
@@ -145,7 +145,7 @@ class TestResolveTeamDonation(Harness):
         """, (payer.id, team.id))
         donations = resolve_team_donation(
             self.db, team, provider, payer, payer_country, payment_amount, tip,
-            sepa_only=sepa_only,
+            transfer_only=transfer_only,
         )
         if len(donations) == 1:
             assert donations[0].amount == payment_amount
@@ -301,7 +301,7 @@ class TestResolveTeamDonation(Harness):
         assert payin_transfers[1].amount == USD('8.00')
         assert payin_transfers[1].destination == stripe_account_carl.pk
 
-    def test_resolve_team_donation_sepa_only(self):
+    def test_resolve_team_donation_transfer_only(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -311,56 +311,56 @@ class TestResolveTeamDonation(Harness):
         # Test without payment account
         team.add_member(bob)
         with self.assertRaises(MissingPaymentAccount):
-            self.resolve(team, 'stripe', alice, 'FR', EUR('10'), sepa_only=True)
+            self.resolve(team, 'stripe', alice, 'FR', EUR('10'), transfer_only=True)
 
         # Test with a single member and the take set to `auto`
         stripe_account_bob = self.add_payment_account(bob, 'stripe', country='FR')
-        account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test self donation
         bob.set_tip_to(team, EUR('0.06'))
         with self.assertRaises(NoSelfTipping):
-            self.resolve(team, 'stripe', bob, 'FR', EUR('6'), sepa_only=True)
+            self.resolve(team, 'stripe', bob, 'FR', EUR('6'), transfer_only=True)
 
         # Test with two members but only one Stripe account
         team.add_member(carl)
         self.add_payment_account(carl, 'paypal')
-        account = self.resolve(team, 'stripe', alice, 'CH', EUR('8'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'CH', EUR('8'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test with two members and both takes set to `auto`
         self.add_payment_account(carl, 'stripe', country='JP', default_currency='JPY')
-        account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test with two members and one non-auto take
         team.set_take_for(carl, EUR('200.00'), carl)
-        account = self.resolve(team, 'stripe', alice, 'RU', EUR('50.02'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('50.02'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test with two members and two different non-auto takes
         team.set_take_for(bob, EUR('100.00'), bob)
-        account = self.resolve(team, 'stripe', alice, 'BR', EUR('10'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('10'), transfer_only=True)
         assert account == stripe_account_bob
-        account = self.resolve(team, 'stripe', alice, 'BR', EUR('1'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('1'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test that self donation is avoided when there are two members
         carl.set_tip_to(team, EUR('17.89'))
-        account = self.resolve(team, 'stripe', carl, 'FR', EUR('71.56'), sepa_only=True)
+        account = self.resolve(team, 'stripe', carl, 'FR', EUR('71.56'), transfer_only=True)
         assert account == stripe_account_bob
 
         # Test with a suspended member
         self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
-        account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'), sepa_only=True)
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'), transfer_only=True)
         assert account == stripe_account_bob
         self.db.run("UPDATE participants SET is_suspended = false WHERE id = %s", (carl.id,))
 
         # Test when the only member the payment can go to has their take at zero
         team.set_take_for(bob, EUR('0'), bob)
         with self.assertRaises(MissingPaymentAccount):
-            self.resolve(team, 'stripe', alice, 'CN', EUR('10'), sepa_only=True)
+            self.resolve(team, 'stripe', alice, 'CN', EUR('10'), transfer_only=True)
 
 
 class TestPayinAmountSuggestions(Harness):
@@ -850,7 +850,7 @@ class TestPayinsStripe(Harness):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.offset = 100
+        cls.offset = 400
         # https://stripe.com/docs/connect/testing
         ba_ch_token = stripe.Token.create(bank_account=dict(
             country='CH',
@@ -1184,14 +1184,14 @@ class TestPayinsStripe(Harness):
         # Settle
         charge = stripe.Charge.retrieve(payin.remote_id)
         if charge.status == 'pending':
-            # Wait ten seconds for the payment to succeed.
-            sleep(20)
-            charge = stripe.Charge.retrieve(payin.remote_id)
-            if charge.status == 'succeeded':
-                raise Exception(
-                    f"please remove the first GET request for {payin.remote_id} from "
-                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
-                )
+            # Wait for the payment to succeed.
+            self.forget_last_request()
+            for i in range(5):
+                sleep(10)
+                charge = stripe.Charge.retrieve(payin.remote_id)
+                if charge.status != 'pending':
+                    break
+                self.forget_last_request()
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -1213,11 +1213,13 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, str(r)
         assert "2606" in r.text
 
-    def test_04_payin_intent_stripe_card(self):
+    def test_04_stripe_destination_charge(self):
         self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
         self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
-        self.add_payment_account(self.creator_1, 'stripe')
-        tip = self.donor.set_tip_to(self.creator_1, EUR('0.25'))
+        self.add_payment_account(
+            self.creator_1, 'stripe', country='AU', id='acct_1RXlv6COkEHpQPGK'
+        )
+        tip = self.donor.set_tip_to(self.creator_1, AUD('1.00'))
 
         # 1st request: test getting the payment page
         r = self.client.GET(
@@ -1228,8 +1230,8 @@ class TestPayinsStripe(Harness):
 
         # 2nd request: prepare the payment
         form_data = {
-            'amount': '25',
-            'currency': 'EUR',
+            'amount': '51.51',
+            'currency': 'AUD',
             'keep': 'true',
             'tips': str(tip['id']),
             'stripe_pm_id': 'pm_card_visa',
@@ -1239,21 +1241,21 @@ class TestPayinsStripe(Harness):
         assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
-        assert payin.amount == EUR('25.00')
+        assert payin.amount == AUD('51.51')
         pt = self.db.one("SELECT * FROM payin_transfers")
         assert pt.status == 'pre'
-        assert pt.amount == EUR('25.00')
+        assert pt.amount == AUD('51.51')
 
         # 3rd request: execute the payment
         r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, str(r)
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded', payin
-        assert payin.amount_settled == EUR('25.00')
-        assert payin.fee == EUR('1.06')
+        assert payin.amount_settled == payin.amount
+        assert payin.fee < AUD('2.00')
         pt = self.db.one("SELECT * FROM payin_transfers")
         assert pt.status == 'succeeded'
-        assert pt.amount == EUR('23.94')
+        assert pt.amount == payin.amount - payin.fee
 
         # 4th request: test getting the payment page again
         r = self.client.GET(
@@ -1272,7 +1274,7 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, str(r)
         assert "We will charge your Visa card " in r.text
 
-    def test_05_payin_intent_stripe_card_one_to_many(self):
+    def test_05_payin_stripe_card_one_to_many_with_origin_check(self):
         self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
         self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
@@ -1415,14 +1417,14 @@ class TestPayinsStripe(Harness):
         # Settle
         charge = stripe.Charge.retrieve(payin.remote_id)
         if charge.status == 'pending':
-            # Wait ten seconds for the payment to succeed.
-            sleep(20)
-            charge = stripe.Charge.retrieve(payin.remote_id)
-            if charge.status == 'succeeded':
-                raise Exception(
-                    f"please remove the first GET request for {payin.remote_id} from "
-                    f"the tests/py/fixtures/{self.__class__.__name__}.yml file"
-                )
+            # Wait for the payment to succeed.
+            self.forget_last_request()
+            for i in range(5):
+                sleep(10)
+                charge = stripe.Charge.retrieve(payin.remote_id)
+                if charge.status != 'pending':
+                    break
+                self.forget_last_request()
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)

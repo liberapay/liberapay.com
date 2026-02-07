@@ -35,8 +35,8 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
-    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT, SESSION_TIMEOUT_LONG,
-    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
+    PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_TIMEOUT, SESSION_TIMEOUT_LONG,
+    STRIPE_TRANSFER_COUNTRIES, USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
     AccountIsPasswordless,
@@ -3463,7 +3463,7 @@ class Participant(Model, MixinTeam):
             self_donation=[], suspended=[],
         )
         n_fundable = 0
-        stripe_europe = {}
+        stripe_grouped = {}
         for tip in tips:
             tippee_p = tip.tippee_p
             if tippee_p.payment_providers == 0:
@@ -3490,9 +3490,9 @@ class Participant(Model, MixinTeam):
                     groups['self_donation'].append(tip)
                 else:
                     n_fundable += 1
-                    in_sepa = tip.tippee_p.has_stripe_sepa_for(self)
-                    if in_sepa:
-                        group = stripe_europe.setdefault(tip.amount.currency, [])
+                    groupable = tip.tippee_p.can_receive_grouped_payment_from(self)
+                    if groupable:
+                        group = stripe_grouped.setdefault(tip.amount.currency, [])
                         if len(group) == 0:
                             groups['fundable'].append(group)
                         group.append(tip)
@@ -3500,9 +3500,9 @@ class Participant(Model, MixinTeam):
                         groups['fundable'].append([tip])
             else:
                 n_fundable += 1
-                in_sepa = tip.tippee_p.has_stripe_sepa_for(self)
-                if in_sepa:
-                    group = stripe_europe.setdefault(tip.amount.currency, [])
+                groupable = tip.tippee_p.can_receive_grouped_payment_from(self)
+                if groupable:
+                    group = stripe_grouped.setdefault(tip.amount.currency, [])
                     if len(group) == 0:
                         groups['fundable'].append(group)
                     group.append(tip)
@@ -3510,7 +3510,7 @@ class Participant(Model, MixinTeam):
                     groups['fundable'].append([tip])
         return groups, n_fundable
 
-    def has_stripe_sepa_for(self, tipper):
+    def can_receive_grouped_payment_from(self, tipper):
         if tipper == self or self.payment_providers & 1 == 0:
             return False
         if self.kind == 'group':
@@ -3526,9 +3526,9 @@ class Participant(Model, MixinTeam):
                    AND a.provider = 'stripe'
                    AND a.is_current
                    AND a.charges_enabled
-                   AND a.country IN %(SEPA)s
+                   AND a.country IN %(STC)s
                  LIMIT 1
-            """, dict(tipper=tipper.id, tippee=self.id, SEPA=SEPA))
+            """, dict(tipper=tipper.id, tippee=self.id, STC=STRIPE_TRANSFER_COUNTRIES))
         else:
             return self.db.one("""
                 SELECT true
@@ -3537,9 +3537,9 @@ class Participant(Model, MixinTeam):
                    AND a.provider = 'stripe'
                    AND a.is_current
                    AND a.charges_enabled
-                   AND a.country IN %(SEPA)s
+                   AND a.country IN %(STC)s
                  LIMIT 1
-            """, dict(tippee=self.id, SEPA=SEPA))
+            """, dict(tippee=self.id, STC=STRIPE_TRANSFER_COUNTRIES))
 
     def get_tips_to(self, tippee_ids):
         return self.db.all("""

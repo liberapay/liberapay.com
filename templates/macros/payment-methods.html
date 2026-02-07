@@ -37,7 +37,7 @@
                 "JCB", "Mastercard", "UnionPay", "Visa"
             ],
         ))
-        % if currency in (None, 'EUR') and tippee.has_stripe_sepa_for(ANON)
+        % if currency in (None, 'EUR') and tippee.can_receive_grouped_payment_from(ANON)
             % do payment_methods.append(_("a euro bank account (SEPA Direct Debit)"))
         % endif
     % endif
@@ -57,7 +57,7 @@
       data-toggle="tooltip" data-placement="bottom">
     % if tippee.payment_providers.__and__(1)
         {{ icon('payment-card', _("Payment Card")) }}
-        % if currency in (None, 'EUR') and tippee.has_stripe_sepa_for(ANON)
+        % if currency in (None, 'EUR') and tippee.can_receive_grouped_payment_from(ANON)
             {{ icon('bank-account', _("Direct Debit")) }}
         % endif
     % endif

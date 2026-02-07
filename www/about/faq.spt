@@ -190,13 +190,15 @@ title = _("Frequently Asked Questions")
         "supported by the recipient. If a payment is processed by Stripe, then "
         "most credit and debit cards ({list_of_card_brands}) are accepted, as "
         "well as SEPA Direct Debits (only for donations in euros to recipients "
-        "in SEPA countries). If a payment is through PayPal, then it's possible "
-        "to pay in various ways, however the donor needs to have or create a "
-        "PayPal account.",
+        "in {link_start}fully supported countries{link_end}). If a payment is "
+        "through PayPal, then it's possible to pay in various ways, however "
+        "the donor needs to have or create a PayPal account.",
         list_of_card_brands=[
             "American Express", "Cartes Bancaires", "Diners", "Discover", "JCB",
             "Mastercard", "UnionPay", "Visa"
-        ]
+        ],
+        link_start='<a href="/about/global#top-tier">'|safe,
+        link_end='</a>'|safe,
     ) }}</dd>
 
 
