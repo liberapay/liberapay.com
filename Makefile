@@ -22,6 +22,7 @@ $(env): Makefile requirements*.txt
 	@$(python) cli/check-python-version.py
 	$(python) -m venv --upgrade-deps $(env)
 	$(pip) install wheel
+	$(pip) install --require-hashes -r requirements_setup.txt
 	$(pip) install --require-hashes -r requirements_base.txt
 	$(pip) install -r requirements_tests.txt
 	@touch $(env)
