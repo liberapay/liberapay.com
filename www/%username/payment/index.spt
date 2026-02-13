@@ -196,7 +196,9 @@ subhead = _("Payment Processors")
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
-            <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
+            <p class="text-muted" title="{{ locale.format_datetime(account.connection_ts) }}">{{ _(
+                "Added on {date}", date=account.connection_ts.date()
+            ) }}</p>
             % if account.independent
                 % if not account.charges_enabled
                     <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
