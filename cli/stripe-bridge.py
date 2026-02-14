@@ -16,8 +16,8 @@ api_key = website.app_conf.stripe_secret_key
 webhook_secret = subprocess.run(
     ['stripe', 'listen', '--api-key', api_key, '--print-secret'],
     stdout=subprocess.PIPE, check=True, universal_newlines=True,
-).stdout
-assert re.match(r'^whsec_\w{32,}$', webhook_secret), webhook_secret
+).stdout.strip()
+assert re.fullmatch(r'whsec_\w{32,}', webhook_secret), repr(webhook_secret)
 
 # Insert the secret into the database
 website.db.run("""
