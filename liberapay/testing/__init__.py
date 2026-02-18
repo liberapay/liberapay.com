@@ -28,12 +28,16 @@ from liberapay.payin.common import (
     update_payin, update_payin_transfer,
 )
 from liberapay.security.csrf import CSRF_TOKEN
-from liberapay.testing.vcr import use_cassette
+from liberapay.testing.vcr import vcr
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
+
+
+def AUD(amount):
+    return Money(amount, 'AUD')
 
 
 def EUR(amount):
@@ -175,7 +179,6 @@ class Harness(unittest.TestCase):
         cls.setUpVCR()
         cls.make_table_read_only('currency_exchange_rates')
 
-
     @classmethod
     def setUpVCR(cls):
         """Set up VCR.
@@ -188,22 +191,30 @@ class Harness(unittest.TestCase):
         information, and you can commit that with your updated tests.
 
         """
-        cls.vcr_cassette = use_cassette(cls.__name__)
-        cls.vcr_cassette.__enter__()
-
+        cls.vcr_context = vcr.use_cassette(
+            f'{cls.__name__}.yml',
+            serializer='custom',
+        )
+        cls.vcr_context.__enter__()
+        cls.vcr_cassette = cls.vcr_context._CassetteContextDecorator__cassette
 
     @classmethod
     def tearDownClass(cls):
-        cls.vcr_cassette.__exit__(None, None, None)
+        cls.vcr_context.__exit__(None, None, None)
+
+    @classmethod
+    def forget_last_request(cls):
+        """Remove the last request from the VCR cassette.
+        """
+        request = cls.vcr_cassette.data.pop()[0]
+        print(f"removed request {request} from the cassette")
 
 
     def setUp(self):
         self.clear_tables()
 
-
     def tearDown(self):
         self.clear_tables()
-
 
     def clear_tables(self):
         tried = set()
@@ -340,7 +351,7 @@ class Harness(unittest.TestCase):
         provider = route.network.split('-', 1)[0]
         proto_transfers = []
         net_amount = 0
-        sepa_only = len(transfers) > 1
+        transfer_only = len(transfers) > 1
         for tippee, pt_amount, opt in transfers:
             net_amount += pt_amount
             tip = opt.get('tip')
@@ -359,7 +370,7 @@ class Harness(unittest.TestCase):
                 try:
                     proto_transfers.extend(resolve_tip(
                         self.db, tip, tippee, provider, payer, payer_country, pt_amount,
-                        sepa_only=sepa_only,
+                        transfer_only=transfer_only,
                     ))
                 except MissingPaymentAccount as e:
                     if i > 95:

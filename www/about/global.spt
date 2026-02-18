@@ -44,19 +44,19 @@ title = _("Global")
     link_end='</a>'|safe,
 ) }}</p>
 
-<h4>{{ _("Best supported territories") }}</h4>
+<h4 id="top-tier">{{ _("Best supported territories") }}</h4>
 
 % set stripe_countries = constants.PAYOUT_COUNTRIES['stripe']
-% set stripe_sepa_countries = stripe_countries.intersection(constants.SEPA)
+% set stripe_transfer_countries = stripe_countries.intersection(constants.STRIPE_TRANSFER_COUNTRIES)
 <p>{{ ngettext(
     "",
     "Creators in these {n} territories benefit from all of Liberapay's features:",
-    n=len(stripe_sepa_countries),
+    n=len(stripe_transfer_countries),
 ) }}</p>
 
 <ul class="columns-sm-2 columns-md-4">
 % for country_code, localized_country_name in locale.countries.items()
-% if country_code in stripe_sepa_countries
+% if country_code in stripe_transfer_countries
     <li>{{ localized_country_name }}</li>
 % endif
 % endfor
@@ -65,19 +65,19 @@ title = _("Global")
 <h4>{{ _("Well supported territories") }}</h4>
 
 % set paypal_only_countries = constants.PAYOUT_COUNTRIES['paypal'] - stripe_countries
-% set stripe_countries_outside_sepa = stripe_countries - constants.SEPA
+% set stripe_countries_without_transfers = stripe_countries - constants.STRIPE_TRANSFER_COUNTRIES
 <p>{{ ngettext(
     "",
     "Liberapay is also available to creators in the {n} territories listed below. "
     "However, donations going to those territories cannot be grouped to lower the "
     "payment processing fees, and the euro direct debit payment method isn't "
     "available to the donors.",
-    n=len(stripe_countries_outside_sepa),
+    n=len(stripe_countries_without_transfers),
 ) }}</p>
 
 <ul class="columns-sm-2 columns-md-4">
 % for country_code, localized_country_name in locale.countries.items()
-% if country_code in stripe_countries_outside_sepa
+% if country_code in stripe_countries_without_transfers
     <li>{{ localized_country_name }}</li>
 % endif
 % endfor

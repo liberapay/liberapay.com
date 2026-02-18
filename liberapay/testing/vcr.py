@@ -1,6 +1,7 @@
 import logging
 import os
 from os.path import join, dirname, realpath
+from unittest.mock import MagicMock
 
 from vcr import VCR
 import yaml
@@ -40,16 +41,16 @@ class CustomSerializer:
         return yaml.safe_load(cassette_str)
 
 
-vcr = VCR(
-    cassette_library_dir=FIXTURES_ROOT,
-    record_mode=os.environ.get('VCR', 'once'),
-    match_on=['method', 'scheme', 'host', 'path', 'query'],
-)
-vcr.register_serializer('custom', CustomSerializer)
-
-
-def use_cassette(name):
-    return vcr.use_cassette(
-        '{}.yml'.format(name),
-        serializer='custom',
+# https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes
+record_mode = os.environ.get('VCR', 'once')
+if record_mode == 'off':
+    vcr = MagicMock()
+else:
+    vcr = VCR(
+        cassette_library_dir=FIXTURES_ROOT,
+        decode_compressed_response=True,
+        match_on=['method', 'scheme', 'host', 'path', 'query'],
+        record_mode=record_mode,
+        record_on_exception=False,
     )
+    vcr.register_serializer('custom', CustomSerializer)

@@ -8,7 +8,7 @@ import warnings
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
 
-from ..constants import SEPA
+from ..constants import STRIPE_TRANSFER_COUNTRIES
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
     NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
@@ -240,7 +240,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                 try:
                     team_donations = resolve_team_donation(
                         db, team, provider, payer, payer_country,
-                        prorated_amount, tip, sepa_only=True,
+                        prorated_amount, tip, transfer_only=True,
                     )
                 except (AccountSuspended, MissingPaymentAccount, NoSelfTipping, RecipientAccountSuspended):
                     team_amounts = resolve_amounts(prorated_amount, {
@@ -285,7 +285,7 @@ def adjust_payin_transfers(db, payin, net_amount):
 
 def resolve_tip(
     db, tip, tippee, provider, payer, payer_country, payment_amount,
-    sepa_only=False, excluded_destinations=set(),
+    transfer_only=False, excluded_destinations=set(),
 ):
     """Prepare to fund a tip.
 
@@ -296,7 +296,7 @@ def resolve_tip(
         payer (Participant): the donor
         payer_country (str): the country the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
-        sepa_only (bool): only consider destination accounts within SEPA
+        transfer_only (bool): only consider destination accounts we can transfer funds to
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
@@ -323,12 +323,12 @@ def resolve_tip(
     if tippee.kind == 'group':
         return resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip,
-            sepa_only=sepa_only, excluded_destinations=excluded_destinations,
+            transfer_only=transfer_only, excluded_destinations=excluded_destinations,
         )
     else:
         destination = resolve_destination(
             db, tippee, provider, payer, payer_country, payment_amount,
-            sepa_only=sepa_only, excluded_destinations=excluded_destinations,
+            transfer_only=transfer_only, excluded_destinations=excluded_destinations,
         )
         return [ProtoTransfer(
             payment_amount, tippee, destination, 'personal-donation',
@@ -338,7 +338,7 @@ def resolve_tip(
 
 def resolve_destination(
     db, tippee, provider, payer, payer_country, payin_amount,
-    sepa_only=False, excluded_destinations=(),
+    transfer_only=False, excluded_destinations=(),
 ):
     """Figure out where to send a payment.
 
@@ -348,7 +348,7 @@ def resolve_destination(
         payer (Participant): the user who wants to pay
         payer_country (str): the country the money is supposedly coming from
         payin_amount (Money): the payment amount
-        sepa_only (bool): only consider destination accounts within SEPA
+        transfer_only (bool): only consider destination accounts we can transfer funds to
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
@@ -373,12 +373,12 @@ def resolve_destination(
            AND verified
            AND coalesce(charges_enabled, true)
            AND array_position(%(excluded_destinations)s::bigint[], pk) IS NULL
-           AND ( country IN %(SEPA)s OR NOT %(sepa_only)s )
+           AND ( country IN %(STC)s OR NOT %(transfer_only)s )
       ORDER BY default_currency = %(currency)s DESC
              , country = %(payer_country)s DESC
              , connection_ts
          LIMIT 1
-    """, dict(locals(), SEPA=SEPA))
+    """, dict(locals(), STC=STRIPE_TRANSFER_COUNTRIES))
     if destination:
         return destination
     else:
@@ -387,7 +387,7 @@ def resolve_destination(
 
 def resolve_team_donation(
     db, team, provider, payer, payer_country, payment_amount, tip,
-    sepa_only=False, excluded_destinations=(),
+    transfer_only=False, excluded_destinations=(),
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -398,7 +398,7 @@ def resolve_team_donation(
         payer_country (str): the country code the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
         tip (Tip): the donation this payment will fund
-        sepa_only (bool): only consider destination accounts within SEPA
+        transfer_only (bool): only consider destination accounts we can transfer funds to
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
@@ -450,8 +450,8 @@ def resolve_team_donation(
         t.ctime
     ))
     # Try to distribute the donation to multiple members.
-    if sepa_only or provider == 'stripe':
-        sepa_accounts = {a.participant: a for a in db.all("""
+    if transfer_only or provider == 'stripe':
+        usable_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
              WHERE a.participant IN %(member_ids)s
@@ -460,15 +460,17 @@ def resolve_team_donation(
                AND a.verified
                AND coalesce(a.charges_enabled, true)
                AND array_position(%(excluded_destinations)s::bigint[], a.pk) IS NULL
-               AND a.country IN %(SEPA)s
+               AND a.country IN %(STC)s
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
                  , a.country = %(payer_country)s DESC
                  , a.connection_ts
-        """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
-        if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
+        """, dict(
+            locals(), STC=STRIPE_TRANSFER_COUNTRIES, member_ids={t.member for t in takes})
+        )}
+        if transfer_only or len(usable_accounts) > 1 and takes[0].member in usable_accounts:
             selected_takes = [
-                t for t in takes if t.member in sepa_accounts and t.nominal_amount != 0
+                t for t in takes if t.member in usable_accounts and t.nominal_amount != 0
             ]
             if selected_takes:
                 min_transfer_amount = get_minimum_transfer_amount(provider, currency)
@@ -482,7 +484,7 @@ def resolve_team_donation(
                     ProtoTransfer(
                         t.resolved_amount,
                         db.Participant.from_id(t.member),
-                        sepa_accounts[t.member],
+                        usable_accounts[t.member],
                         'team-donation',
                         (t.resolved_amount / n_periods).round(allow_zero=False),
                         tip.period,
@@ -491,7 +493,7 @@ def resolve_team_donation(
                     )
                     for t in selected_takes if t.resolved_amount != 0
                 ]
-            elif sepa_only:
+            elif transfer_only:
                 raise MissingPaymentAccount(team)
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = db.Participant.from_id(takes[0].member)

@@ -1,9 +1,9 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 
 import stripe
 
-from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
+from ..constants import EEA, EPOCH, PAYIN_SETTLEMENT_DELAYS, STRIPE_TRANSFER_COUNTRIES
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
 from ..i18n.currencies import CurrencyMismatch, Money, ZERO_DECIMAL_CURRENCIES
 from ..models.exchange_route import ExchangeRoute
@@ -198,6 +198,39 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
     return payin, charge
 
 
+def resolve_on_behalf_of(route, destination):
+    """Try to determine whether the Stripe Charge should use `on_behalf_of`.
+
+    When called before the route is known, the result is biased in favour of
+    using `on_behalf_of`.
+
+    Args:
+        route (ExchangeRoute | None): the payment instrument
+        destination (Row): the Stripe account the payment must go to
+
+    Returns either None or the Account ID to be passed to Stripe.
+    """
+    if destination.id == 'acct_1ChyayFk4eGpfLOC':
+        # Stripe rejects the charge if the destination is our own account
+        return None
+    elif destination.country in STRIPE_TRANSFER_COUNTRIES:
+        # A separate transfer is generally preferable to a destination charge,
+        # but it can cause problems by turning a domestic payment into an
+        # international one or by changing the country an international
+        # payment is settled in. We try to avoid those problems here.
+        on_behalf_of = destination.country in ('CA', 'US') and (
+            route is None
+            or
+            route.country == destination.country
+            or
+            route.ctime.date() < date(2026, 2, 20) and
+            route.country not in EEA
+        )
+        if not on_behalf_of:
+            return None
+    return destination.id
+
+
 def create_charge(
     db, payin, payin_transfers, payer, statement_descriptor, update_donor=True,
 ):
@@ -215,19 +248,12 @@ def create_charge(
     route = ExchangeRoute.from_id(payer, payin.route)
     description = generate_charge_description(payin)
     destination = None
-    if len(payin_transfers) == 1:
-        destination, country = db.one("""
+    if len(payin_transfers) == 1 and route.network != 'stripe-sdd':
+        destination = resolve_on_behalf_of(route, db.one("""
             SELECT id, country
               FROM payment_accounts
              WHERE pk = %s
-        """, (payin_transfers[0].destination,))
-        if destination == 'acct_1ChyayFk4eGpfLOC':
-            # Stripe rejects the charge if the destination is our own account
-            destination = None
-        elif country in SEPA:
-            # Don't use destination charges when we can use separate transfers
-            destination = None
-        del country
+        """, (payin_transfers[0].destination,)))
     if payin.intent_id:
         intent = stripe.PaymentIntent.retrieve(payin.intent_id)
     else:
@@ -562,11 +588,14 @@ def execute_transfer(db, pt, source_transaction, update_donor=True):
                    AND provider = 'stripe'
                    AND is_current
                    AND charges_enabled
-                   AND country IN %(SEPA)s
+                   AND country IN %(STC)s
               ORDER BY default_currency = %(currency)s DESC
                      , connection_ts
                  LIMIT 1
-            """, dict(p_id=pt.recipient, SEPA=SEPA, currency=pt.amount.currency))
+            """, dict(
+                p_id=pt.recipient, STC=STRIPE_TRANSFER_COUNTRIES,
+                currency=pt.amount.currency,
+            ))
             if alternate_destination:
                 pt = db.one("""
                     UPDATE payin_transfers

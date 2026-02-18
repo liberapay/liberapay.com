@@ -87,6 +87,8 @@ has_current_stripe_account = any(
 
 countries = set(a.country for a in accounts if a.is_current)
 country = list(countries)[0] if len(countries) == 1 else participant.guessed_country
+if country == 'PR':
+    country = 'US'
 
 has_paypal_but_not_stripe = (
     has_current_paypal_account and not has_current_stripe_account and

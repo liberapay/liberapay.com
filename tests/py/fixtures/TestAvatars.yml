@@ -8,48 +8,23 @@ interactions:
     body: {string: ''}
     headers:
       Access-Control-Allow-Origin: ['*']
-      Cache-Control: [max-age=300]
+      Cache-Control: [max-age=31536000]
       Connection: [Keep-Alive]
-      Content-Language: [en]
-      Content-Length: ['7037']
+      Content-Length: ['7615']
       Content-Type: [image/png]
-      Date: ['Sun, 04 Aug 2019 06:56:54 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.39 (Fedora) OpenSSL/1.1.0i-fips mod_wsgi/4.5.20 Python/3.6]
-      Strict-Transport-Security: [max-age=31536000; preload; includeSubDomains]
-      Vary: ['Accept-Language,Cookie']
-      X-Frame-Options: [SAMEORIGIN]
+      Cross-Origin-Opener-Policy: [same-origin]
+      Date: ['Tue, 17 Feb 2026 15:18:51 GMT']
+      Expires: ['Wed, 17 Feb 2027 15:18:51 GMT']
+      Keep-Alive: ['timeout=5, max=10000']
+      Referrer-Policy: [strict-origin-when-cross-origin, same-origin]
+      Server: [gunicorn]
+      Strict-Transport-Security: [max-age=31536000; includeSubDomains; preload, max-age=31536000;
+          includeSubDomains; preload]
+      X-Cache-Detail: ['"cache miss: attempting entity save" from libravatar.org']
+      X-Content-Type-Options: [nosniff, nosniff]
+      X-Frame-Options: [DENY, DENY]
+      X-XSS-Protection: [1; mode=block]
     status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: HEAD
-    uri: https://liberapay.com/assets/nonexistent.jpg
-  response:
-    body: {string: ''}
-    headers:
-      Access-Control-Allow-Origin: ['*']
-      CF-Cache-Status: [EXPIRED]
-      CF-RAY: [500ea25e9c82b7db-CDG]
-      Cache-Control: ['private, max-age=14400']
-      Connection: [keep-alive]
-      Content-Encoding: [gzip]
-      Content-Security-Policy: ['default-src ''self'' liberapay.com;connect-src ''self''
-          *.liberapay.org;form-action ''self'';img-src * blob: data:;object-src ''none'';report-uri
-          https://liberapay.report-uri.com/r/d/csp/enforce;upgrade-insecure-requests;']
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Sun, 04 Aug 2019 06:56:56 GMT']
-      Expect-CT: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
-      Referrer-Policy: [strict-origin-when-cross-origin]
-      Server: [cloudflare]
-      Set-Cookie: ['__cfduid=deb8dbdbd444facd3cda0f26f95af0a9e1564901816; expires=Mon,
-          03-Aug-20 06:56:56 GMT; path=/; domain=.liberapay.com; HttpOnly']
-      Strict-Transport-Security: [max-age=31536000; includeSubDomains; preload]
-      Vary: [Accept-Encoding]
-      X-Content-Type-Options: [nosniff]
-      X-Frame-Options: [SAMEORIGIN]
-      X-Xss-Protection: [1; mode=block]
-    status: {code: 404, message: Not Found}
 - request:
     body: null
     headers: {}
@@ -58,26 +33,22 @@ interactions:
   response:
     body: {string: ''}
     headers:
-      Access-Control-Allow-Origin: ['*']
-      CF-Cache-Status: [EXPIRED]
-      CF-RAY: [500ea261483d68b8-CDG]
-      Cache-Control: ['private, max-age=14400']
+      CF-RAY: [9cf6427c08ba5d26-CDG]
+      Cache-Control: [no-cache]
       Connection: [keep-alive]
-      Content-Encoding: [gzip]
-      Content-Security-Policy: ['default-src ''self'' liberapay.com;connect-src ''self''
-          *.liberapay.org;form-action ''self'';img-src * blob: data:;object-src ''none'';report-uri
-          https://liberapay.report-uri.com/r/d/csp/enforce;upgrade-insecure-requests;']
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Sun, 04 Aug 2019 06:56:56 GMT']
-      Expect-CT: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
-      Referrer-Policy: [strict-origin-when-cross-origin]
+      Content-Type: [text/plain; charset=UTF-8]
+      Date: ['Tue, 17 Feb 2026 15:18:51 GMT']
+      Nel: ['{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}']
+      Report-To: ['{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=vo4TuLzXDhDSaTUIM4fFAFXBPNtWhGXe1OFMt3SpthOmf%2FVs14KoFv0OCM0pzskZvZoMDnD62CFV%2BZv7Z%2B0Grb0Gy%2Ft3QGSimXfCnY8jrp1xc1ddje8BtAc%3D"}]}']
       Server: [cloudflare]
-      Set-Cookie: ['__cfduid=dd10e0b25a14ae183c36daf7d343600491564901816; expires=Mon,
-          03-Aug-20 06:56:56 GMT; path=/; domain=.liberapay.com; HttpOnly']
-      Strict-Transport-Security: [max-age=31536000; includeSubDomains; preload]
-      Vary: [Accept-Encoding]
       X-Content-Type-Options: [nosniff]
-      X-Frame-Options: [SAMEORIGIN]
-      X-Xss-Protection: [1; mode=block]
+      access-control-allow-origin: ['*']
+      alt-svc: ['h3=":443"; ma=86400']
+      cf-cache-status: [BYPASS]
+      content-length: ['0']
+      content-security-policy: ['default-src ''self'' liberapay.com;connect-src ''self''
+          *.liberapay.org;form-action ''self'';img-src * blob: data:;object-src ''none'';upgrade-insecure-requests;']
+      referrer-policy: [strict-origin-when-cross-origin]
+      strict-transport-security: [max-age=31536000; includeSubDomains; preload]
     status: {code: 404, message: Not Found}
 version: 1

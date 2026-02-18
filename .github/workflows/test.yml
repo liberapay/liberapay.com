@@ -44,8 +44,8 @@ jobs:
       - name: Enable expensive tests, on the master branch only
         if: ${{ env.GITHUB_HEAD_REF == 'master' }}
         run: |
-          rm -rfv tests/py/fixtures
           echo LIBERAPAY_I18N_TEST=yes >> $GITHUB_ENV
+          echo VCR=off >> $GITHUB_ENV
       - name: Install tox
         run: pip install tox
       - name: Write liberapay environment file for tests

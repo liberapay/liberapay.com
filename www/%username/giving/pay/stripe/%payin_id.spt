@@ -10,7 +10,9 @@ from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_tip,
 )
 from liberapay.payin.prospect import PayinProspect
-from liberapay.payin.stripe import charge, repr_stripe_error, set_up_payment_method
+from liberapay.payin.stripe import (
+    charge, repr_stripe_error, resolve_on_behalf_of, set_up_payment_method,
+)
 from liberapay.utils import check_address_v2, get_participant
 
 STRIPE_BIT = 1
@@ -112,11 +114,11 @@ if request.method == 'POST':
         )
         payer_country = route.country or payer.guessed_country
         proto_transfers = []
-        sepa_only = len(tips) > 1 or route.network == 'stripe-sdd'
+        transfer_only = len(tips) > 1 or route.network == 'stripe-sdd'
         for tip in tips:
             proto_transfers.extend(resolve_tip(
                 website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
-                transfer_amounts[tip.id], sepa_only=sepa_only,
+                transfer_amounts[tip.id], transfer_only=transfer_only,
             ))
         payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
 
@@ -225,15 +227,14 @@ if tippees:
              LIMIT 1
         """, tippee_ids=tuple(tip.tippee for tip in tips))
     )
-    stripe_on_behalf_of = ''
+    stripe_on_behalf_of = None
     if len(tips) == 1:
         proto_transfers = resolve_tip(
             website.db, tips[0], tips[0].tippee_p, 'stripe', payer, payer.guessed_country,
             tips[0].amount * 52
         )
-        if len(proto_transfers) == 1:
-            if proto_transfers[0].destination.country not in constants.SEPA:
-                stripe_on_behalf_of = proto_transfers[0].destination.id
+        if len(proto_transfers) == 1 and payment_type == 'card':
+            stripe_on_behalf_of = resolve_on_behalf_of(None, proto_transfers[0].destination)
         del proto_transfers
     del tips
     # Note: the `stripe_on_behalf_of` value isn't 100% accurate. This can be fixed
@@ -354,7 +355,7 @@ title = _("Funding your donations")
               "make sure it’s allowing requests to the “stripe.com” domain."
           ) }}'
           data-msg-submitting="{{ _('Request in progress, please wait…') }}"
-          data-stripe-on-behalf-of="{{ stripe_on_behalf_of }}"
+          data-stripe-on-behalf-of="{{ stripe_on_behalf_of or '' }}"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % if len(payment.recipient_names) == 1

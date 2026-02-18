@@ -244,7 +244,7 @@ title = _("Payment Instruments")
             <h4>{{ _("Euro Bank Account") }}<br>
                 <small>
                     <span class="text-warning">{{
-                        _("Only for donations in euros to recipients in SEPA countries") }}</span><br>
+                        _("Only for donations in euros to recipients in fully supported countries") }}</span><br>
                 </small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"

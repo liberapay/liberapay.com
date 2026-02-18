@@ -1148,12 +1148,12 @@ class TestPaydayForTeams(EmailHarness):
         alice = self.make_participant('alice', main_currency='EUR',
                                       accepted_currencies='EUR,USD')
         team.set_take_for(alice, EUR('1.00'), team)
-        bob = self.make_participant('bob', main_currency='USD',
-                                    accepted_currencies='EUR,USD')
+        bob = self.make_participant('bob', main_currency='AUD',
+                                    accepted_currencies='EUR,AUD')
         team.set_take_for(bob, EUR('1.00'), team)
 
         stripe_account_alice = self.add_payment_account(alice, 'stripe', default_currency='EUR')
-        self.add_payment_account(bob, 'stripe', country='US', default_currency='USD')
+        self.add_payment_account(bob, 'stripe', country='AU', default_currency='AUD')
 
         carl = self.make_participant('carl')
         carl.set_tip_to(team, EUR('10'))
@@ -1197,12 +1197,12 @@ class TestPaydayForTeams(EmailHarness):
         alice = self.make_participant('alice', main_currency='EUR',
                                       accepted_currencies='EUR,USD')
         team.set_take_for(alice, EUR('1.00'), team)
-        bob = self.make_participant('bob', main_currency='USD',
-                                    accepted_currencies='EUR,USD')
+        bob = self.make_participant('bob', main_currency='AUD',
+                                    accepted_currencies='EUR,AUD')
         team.set_take_for(bob, USD('1.00'), team)
 
         stripe_account_alice = self.add_payment_account(alice, 'stripe', default_currency='EUR')
-        self.add_payment_account(bob, 'stripe', country='US', default_currency='USD')
+        self.add_payment_account(bob, 'stripe', country='AU', default_currency='AUD')
 
         carl = self.make_participant('carl')
         carl.set_tip_to(team, JPY('1250'))
@@ -1231,7 +1231,7 @@ class TestPaydayForTeams(EmailHarness):
             alice, 'stripe', default_currency='EUR'
         )
         stripe_account_bob = self.add_payment_account(
-            bob, 'stripe', country='US', default_currency='USD'
+            bob, 'stripe', country='AU', default_currency='AUD'
         )
 
         carl = self.make_participant('carl')
@@ -1304,7 +1304,7 @@ class TestPaydayForTeams(EmailHarness):
             member_1, 'stripe', default_currency='EUR'
         )
         stripe_account_member_2 = self.add_payment_account(
-            member_2, 'stripe', country='US', default_currency='USD'
+            member_2, 'stripe', country='AU', default_currency='AUD'
         )
         stripe_account_member_3 = self.add_payment_account(
             member_3, 'stripe', country='JP', default_currency='JPY'
@@ -1378,7 +1378,7 @@ class TestPaydayForTeams(EmailHarness):
             member_1, 'stripe', default_currency='EUR'
         )
         stripe_account_member_2 = self.add_payment_account(
-            member_2, 'stripe', country='US', default_currency='USD'
+            member_2, 'stripe', country='AU', default_currency='AUD'
         )
         stripe_account_member_3 = self.add_payment_account(
             member_3, 'stripe', country='JP', default_currency='JPY'

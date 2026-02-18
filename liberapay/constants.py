@@ -142,10 +142,10 @@ EUROZONE = {
     'AT', 'BE', 'BG', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'IE', 'IT',
     'LT', 'LU', 'LV', 'MT', 'NL', 'PT', 'SI', 'SK',
 }
-SEPA = {
+EEA = {
     *EUROZONE,
-    'AD', 'AL', 'CH', 'CZ', 'DK', 'GB', 'GI', 'HU', 'IS', 'LI', 'MC', 'MD', 'ME',
-    'MK', 'NO', 'PL', 'RO', 'SE', 'VA',
+    'CZ', 'DK', 'HU', 'PL', 'RO', 'SE',  # EU member states outside the Eurozone
+    'IS', 'LI', 'NO',  # non-EU member states
 }
 
 EVENTS = [
@@ -282,7 +282,6 @@ PAYOUT_COUNTRIES = {
         'PE', 'PF', 'PH', 'PL', 'PT', 'PW', 'QA', 'RO', 'RS', 'SA', 'SC', 'SE',
         'SG', 'SI', 'SK', 'SM', 'SN', 'SV', 'TC', 'TH', 'TT', 'TW', 'US', 'UY',
         'VE', 'VN', 'ZA',
-        'PR'
     },  # see `cli/paypal_payout_countries.py`
 
     'stripe': {
@@ -290,7 +289,6 @@ PAYOUT_COUNTRIES = {
         'FI', 'FR', 'GB', 'GI', 'GR', 'HK', 'HR', 'HU', 'IE', 'IT', 'JP', 'LI',
         'LT', 'LU', 'LV', 'MT', 'MX', 'MY', 'NL', 'NO', 'NZ', 'PL', 'PT', 'RO',
         'SE', 'SG', 'SI', 'SK', 'US',
-        'PR'
     },  # https://stripe.com/global
 }
 
@@ -413,6 +411,9 @@ STANDARD_TIPS = _StandardTips({
     'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
     'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
 })
+
+# https://docs.stripe.com/connect/separate-charges-and-transfers#cross-border-transfers
+STRIPE_TRANSFER_COUNTRIES = {*EEA, 'CA', 'CH', 'GB', 'GI', 'US'}
 
 SUMMARY_MAX_SIZE = 100
 FEEDBACK_MAX_SIZE = 1000

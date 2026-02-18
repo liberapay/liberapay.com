@@ -6,7 +6,7 @@ from time import sleep
 from pando import json
 
 from ..billing.payday import compute_next_payday_date
-from ..constants import SEPA
+from ..constants import STRIPE_TRANSFER_COUNTRIES
 from ..cron import logger
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
@@ -235,14 +235,14 @@ def send_upcoming_debit_notifications():
                 -(r.network == 'stripe-sdd'),
                 -(r.ctime.timestamp()),
             ))
-            recipients_are_in_sepa = (
+            accept_sepa_direct_debit = (
                 len(sp['transfers']) > 1 or db.Participant.from_id(
                     sp['transfers'][0]['tippee_id']
-                ).has_stripe_sepa_for(payer)
+                ).can_receive_grouped_payment_from(payer)
             )
             suitable_route = None
             for route in routes:
-                if route.network == 'stripe-sdd' and not recipients_are_in_sepa:
+                if route.network == 'stripe-sdd' and not accept_sepa_direct_debit:
                     continue
                 suitable_route = route
                 break
@@ -318,7 +318,7 @@ def execute_scheduled_payins():
                                           AND a.is_current IS TRUE
                                           AND a.verified IS TRUE
                                           AND a.charges_enabled IS TRUE
-                                          AND a.country IN %(SEPA)s
+                                          AND a.country IN %(STC)s
                                         LIMIT 1
                                    ) a ON true
                              LIMIT 1
@@ -339,7 +339,7 @@ def execute_scheduled_payins():
            AND p.is_suspended IS NOT TRUE
       GROUP BY p.id
       ORDER BY p.id
-    """, dict(SEPA=SEPA,))
+    """, dict(STC=STRIPE_TRANSFER_COUNTRIES))
     for payer, scheduled_payins in rows:
         scheduled_payins[:] = [Object(**sp) for sp in scheduled_payins]
         for sp in scheduled_payins:
@@ -361,13 +361,13 @@ def execute_scheduled_payins():
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
-            sepa_only = len(transfers) > 1 or route.network == 'stripe-sdd'
+            transfer_only = len(transfers) > 1 or route.network == 'stripe-sdd'
             for tr in list(transfers):
                 try:
                     proto_transfers.extend(resolve_tip(
                         db, tr['tip'], tr['beneficiary'], 'stripe',
                         payer, route.country, tr['amount'],
-                        sepa_only=sepa_only,
+                        transfer_only=transfer_only,
                     ))
                 except (
                     MissingPaymentAccount,
