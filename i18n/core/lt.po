@@ -3133,9 +3133,8 @@ msgstr "Šiuo metu neprieinamas"
 msgid "Pay by card"
 msgstr "Mokėti kortele"
 
-#, fuzzy
-msgid "Only for donations to SEPA countries"
-msgstr "Tik aukojant į SEPA šalis"
+msgid "Only for donations to fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Only for donations in euros"
@@ -4547,9 +4546,8 @@ msgstr "Pridėti kortelę"
 msgid "Euro Bank Account"
 msgstr "Banko sąskaita eurais"
 
-#, fuzzy
-msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "Tik aukojant eurais gavėjams SEPA šalyse"
+msgid "Only for donations in euros to recipients in fully supported countries"
+msgstr ""
 
 msgid "Add a bank account"
 msgstr "Pridėti banko paskyrą"
@@ -4999,9 +4997,9 @@ msgstr "Kokios šalys ir valiutos yra palaikomos?"
 msgid "See the “{page_name}” page."
 msgstr "Žiūrėkite „{page_name}“ puslapį."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Galimi mokėjimo būdai priklauso nuo to, kokius mokėjimo procesorius palaiko gavėjas. Jei mokėjimą apdoroja \"Stripe\", priimama dauguma kredito ir debeto kortelių ({list_of_card_brands}), taip pat SEPA tiesioginio debeto (tik aukojant eurais gavėjams SEPA šalyse). Jei mokėjimas atliekamas per \"PayPal\", tada galima mokėti įvairiais būdais, tačiau aukotojas turi turėti arba susikurti \"PayPal\" paskyrą."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in {link_start}fully supported countries{link_end}). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "What are the payment processing fees?"

@@ -2798,9 +2798,8 @@ msgstr "현재 사용 불가능"
 msgid "Pay by card"
 msgstr "카드로 지불"
 
-#, fuzzy
-msgid "Only for donations to SEPA countries"
-msgstr "SEPA 국가에 기부하는 경우에만 해당됩니다."
+msgid "Only for donations to fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Only for donations in euros"
@@ -4099,9 +4098,8 @@ msgstr "카드 추가"
 msgid "Euro Bank Account"
 msgstr "유로 은행 계좌"
 
-#, fuzzy
-msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "SEPA 국가의 수혜자에게 유로로 기부하는 경우에만 해당됩니다."
+msgid "Only for donations in euros to recipients in fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4512,9 +4510,9 @@ msgstr "어떤 국가와 통화가 지원됩니까?"
 msgid "See the “{page_name}” page."
 msgstr "\"{page_name}\" 페이지를 참조하십시오."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "사용 가능한 결제 방법은 수취인이 지원하는 결제 처리업체에 따라 다릅니다. Stripe에서 결제를 처리하는 경우 대부분의 신용카드 및 직불카드({list_of_card_brands})는 물론 SEPA 자동 이체(SEPA 국가의 수취인에게 유로로 기부하는 경우에만 해당)도 사용할 수 있습니다. PayPal을 통한 결제의 경우 다양한 방법으로 결제가 가능하지만, 기부자가 PayPal 계정을 가지고 있거나 만들어야 합니다."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in {link_start}fully supported countries{link_end}). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "지불 대행자 수수료가 뭡니까?"

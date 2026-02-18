@@ -2755,9 +2755,8 @@ msgstr "目前無法使用"
 msgid "Pay by card"
 msgstr "信用卡支付"
 
-#, fuzzy
-msgid "Only for donations to SEPA countries"
-msgstr "僅限向 SEPA 國家/地區的捐贈"
+msgid "Only for donations to fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Only for donations in euros"
@@ -3844,7 +3843,7 @@ msgstr "賬戶號碼"
 
 #, fuzzy
 msgid "Account creation time"
-msgstr "帳號建立時間"
+msgstr "賬戶創建時間"
 
 msgid "Transaction record"
 msgstr "交易記錄"
@@ -3994,9 +3993,8 @@ msgstr "新增信用卡資料"
 msgid "Euro Bank Account"
 msgstr "歐元銀行賬戶"
 
-#, fuzzy
-msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "僅適用於給 SEPA 國家/地區收款人的歐元捐贈"
+msgid "Only for donations in euros to recipients in fully supported countries"
+msgstr ""
 
 msgid "Add a bank account"
 msgstr "新增銀行帳戶資料"
@@ -4388,9 +4386,9 @@ msgstr "目前支援哪些貨幣和國家？"
 msgid "See the “{page_name}” page."
 msgstr "請見「{page_name}」頁面。"
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "可用的支付方式取決於收款人支持哪些支付處理商。如果通過 Stripe 支付處理，則接受大多數信用卡和借記卡 ({list_of_card_brands}) 以及 SEPA 直接借記（僅適用於向 SEPA 國家/地區收款人的歐元捐贈）。如果通過 PayPal 付款，則可以多種方式付款，但捐贈者需要擁有或創建一個 PayPal 賬戶。"
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in {link_start}fully supported countries{link_end}). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"

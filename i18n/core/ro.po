@@ -2970,9 +2970,8 @@ msgstr "Indisponibil momentan"
 msgid "Pay by card"
 msgstr "Plătiți cu cardul"
 
-#, fuzzy
-msgid "Only for donations to SEPA countries"
-msgstr "Numai pentru Donații către țările SEPA"
+msgid "Only for donations to fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Only for donations in euros"
@@ -4325,9 +4324,8 @@ msgstr "Adăugați un card"
 msgid "Euro Bank Account"
 msgstr "Cont bancar în euro"
 
-#, fuzzy
-msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "Numai pentru donații în euro către destinatari din țările SEPA"
+msgid "Only for donations in euros to recipients in fully supported countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4744,9 +4742,9 @@ msgstr "Ce țări și ce valute sunt suportate?"
 msgid "See the “{page_name}” page."
 msgstr "Consultați pagina „{page_name}”."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Metodele de plată disponibile depind de procesoarele de plată acceptate de destinatar. Dacă o plată este procesată prin Stripe, atunci majoritatea cardurilor de credit și de debit ({list_of_card_brands}) sunt acceptate, precum și debitele directe SEPA (numai pentru donații în euro către destinatari din țările SEPA). Dacă o plată este efectuată prin PayPal, atunci este posibilă plata în diverse moduri, însă donatorul trebuie să aibă sau să creeze un cont PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in {link_start}fully supported countries{link_end}). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "Care sunt taxele de procesare ale plăților?"
