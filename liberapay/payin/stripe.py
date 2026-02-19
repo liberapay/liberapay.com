@@ -23,6 +23,26 @@ REFUND_REASONS_MAP = {
     'requested_by_customer': 'requested_by_payer',
 }
 
+STRIPE_ERRORS_MAP = {
+    'card_decline': _("Your card was declined."),
+    'card_not_supported': _("Your card does not support this type of purchase."),
+    'currency_not_supported': _("Stripe doesn't currently support destination charges with accounts in this currency."),
+    'insufficient_funds': _("Your card has insufficient funds."),
+    'expired_card': _("Your card has expired."),
+    'card_velocity_exceeded ': _("Your card was declined for making repeated attempts too frequently or exceeding its amount limit."),
+    'account_closed': _("The payment can't be processed because your customer's bank account is closed. Reach out to your customer to provide new account details, then try the transaction again."),
+    'payment_intent_authentication_failure': _("The provided payment method has failed authentication. Try again or use a new payment method to attempt to fulfill this payment."),
+    'invalid_account': _("Invalid account."),
+    'incorrect_number': _("Your card number is incorrect."),
+    'incorrect_cvc': _("Your card's security code is incorrect."),
+    'invalid_expiry_year ': _("Invalid expiry year."),
+    'unknown_risk_level': _("The payment failed."),
+    'bank_account_restricted': _("The payment can't be processed because your customer's bank has blocked Direct Debits, either by the bank's actions or your customer's. Reach out to your customer to understand the reason for the block. If the bank unblocks the account, attempt the transaction again."),
+    'canceled duplicate payment': _("Duplicate payment canceled."),
+    'canceled on suspicion of fraud': _("Canceled on suspicion of fraud."),
+    'processing_error': _("An error occurred while processing your card. Try again in a little bit."),
+    'refer_to_customer': _("The payment failed and we don't have detailed information regarding the cause of this failure. The bank didn't return an error code. Try again later."),
+}
 
 def int_to_Money(amount, currency):
     currency = currency.upper()
