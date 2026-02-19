@@ -517,3 +517,5 @@ class Tests(Harness):
         stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_stub()
         assert actual == "/on/openstreetmap/alice/"
+
+        
