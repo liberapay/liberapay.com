@@ -413,7 +413,7 @@ STANDARD_TIPS = _StandardTips({
 })
 
 # https://docs.stripe.com/connect/separate-charges-and-transfers#cross-border-transfers
-STRIPE_TRANSFER_COUNTRIES = {*EEA, 'CA', 'CH', 'GB', 'GI', 'US'}
+STRIPE_TRANSFER_COUNTRIES = {*EEA, 'CH', 'GB', 'GI', 'US'}
 
 SUMMARY_MAX_SIZE = 100
 FEEDBACK_MAX_SIZE = 1000
