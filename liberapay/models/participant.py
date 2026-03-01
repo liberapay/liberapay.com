@@ -509,6 +509,7 @@ class Participant(Model, MixinTeam):
               JOIN participants p ON p.id = s.participant
              WHERE s.participant = %s
                AND s.id = %s
+               AND p.status = 'active'
         """, (p_id, session_id))
         if not r:
             erase_cookie(cookies, SESSION)
