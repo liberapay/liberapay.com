@@ -760,22 +760,25 @@ msgstr "Liberapay 계정에 변경사항이 있습니다"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "누군가가 {1} 이메일을 사용하는 Liberapay 계정에 {0} 이메일 주소를 추가하려고 하고 있습니다. 이 작업을 시작하지 않았다면, 아래의 링크를 눌러 이 이메일 주소를 귀하의 계정에서 삭제해야 합니다."
 
+#, fuzzy
 msgid "The requested page couldn't be found."
-msgstr ""
+msgstr "요청하신 페이지를 찾을 수 없습니다."
 
+#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
-msgstr ""
+msgstr "버그를 발견하신 것 같네요! 불편을 드려 죄송합니다. 이 오류는 최대한 빨리 수정하겠습니다."
 
+#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
-msgstr ""
+msgstr "알 수 없는 오류가 발생했습니다. 이런 일이 생겨서는 안 됩니다. 죄송합니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "이 오류의 세부 정보가 기록되었습니다. {link_start}에 문의하시려면{link_end} 로 연락주시고, 메시지에 다음 오류 식별 코드를 포함해 주십시오: {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
-msgstr ""
+msgstr "이 문제에 대해 {link_start}으로 문의하시거나{link_end}으로 연락하실 경우, 메시지에 다음 디버깅 정보를 포함해 주십시오:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "기부를 받는 한 매 주"
@@ -1582,15 +1585,17 @@ msgstr "기부하기"
 msgid "Switch to a different account"
 msgstr "다른 계정으로 전환"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A single-use authentication link has been emailed to {email_address}."
-msgstr ""
+msgstr "일회용 인증 링크가 {email_address}으로 이메일에 발송되었습니다."
 
+#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
-msgstr ""
+msgstr "수신함을 확인해 보세요. 스팸 폴더도 함께 확인해 보세요."
 
+#, fuzzy
 msgid "Open the authentication link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
+msgstr "인증 링크를 새 탭에서 열고, 이 페이지로 돌아와 아래 버튼을 클릭하여 원하던 작업을 계속 진행하세요."
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
@@ -1640,9 +1645,9 @@ msgstr "비밀번호 설정 해제"
 msgid "Maximum length is {0}."
 msgstr "최댓값은 {0}입니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
-msgstr ""
+msgstr "現在のパスワードを{bold}紛失した場合{bold_end}、メール経由でログインして再設定する必要があります："
 
 #, fuzzy
 msgid "2FA"
@@ -1889,8 +1894,9 @@ msgstr "도시 내의 주소"
 msgid "Income"
 msgstr "수입"
 
+#, fuzzy
 msgid "undisclosed"
-msgstr ""
+msgstr "비공개"
 
 msgid "per week"
 msgstr "매주"
@@ -4014,23 +4020,24 @@ msgstr "한 번 결제한 후 이 은행 계좌 번호를 잊어버리십시오.
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "지불을 성공적으로 처리하기 위해 지불인의 우편 주소가 필요할 수 있으므로 아래에 귀하의 주소를 입력하는 것이 좋습니다. 그것은 우리의 데이터베이스에 암호화되어 저장되고 지불 프로세서({processor_name})로 보내질 것입니다."
 
+#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
-msgstr[0] ""
+msgstr[0] "기부금을 후원하세요"
 
 #, fuzzy
 msgid "Setting up the payment instrument failed."
 msgstr "결제 수단 설정에 실패했습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} payment instrument is attached to this account."
 msgid_plural "{n} payment instruments are attached to this account."
-msgstr[0] ""
+msgstr[0] "{n} 이 계좌에는 결제 수단이 연결되어 있습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} valid payment instrument is attached to this account."
 msgid_plural "{n} valid payment instruments are attached to this account."
-msgstr[0] ""
+msgstr[0] "{n} 이 계좌에는 유효한 결제 수단이 연결되어 있습니다."
 
 msgid "Bank Account"
 msgstr "은행 계좌"
@@ -4102,11 +4109,13 @@ msgstr "{currency}의 결제에 대한 기본으로이 악기를 사용합니다
 msgid "Set as default for {currency}"
 msgstr "{currency}의 기본 설정"
 
+#, fuzzy
 msgid "No payment instruments are attached to this account."
-msgstr ""
+msgstr "이 계좌에는 결제 수단이 연결되어 있지 않습니다."
 
+#, fuzzy
 msgid "No valid payment instruments are attached to this account."
-msgstr ""
+msgstr "이 계좌에는 유효한 결제 수단이 연결되어 있지 않습니다."
 
 #, fuzzy
 msgid "Add a payment instrument:"
@@ -4417,21 +4426,25 @@ msgstr "제출된 자격 증명이 유효하지 않습니다."
 msgid "You can try again:"
 msgstr "다시 시도해 보세요:"
 
+#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
-msgstr ""
+msgstr "Liberapay 계정 소유자에게 연락을 시도하시는 경우, 당사는 일반적으로 메시지를 전달하지 않으며 사용자의 신원이나 연락처를 공개할 수 없음을 알려드립니다."
 
+#, fuzzy
 msgid "To contact a Liberapay maintainer privately:"
-msgstr ""
+msgstr "Liberapay 유지보수 담당자에게 비공개로 연락하려면:"
 
 #, fuzzy
 msgid "Send an email to Liberapay"
 msgstr "이메일을 보내세요"
 
+#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
-msgstr ""
+msgstr "저희는 매우 바쁘기 때문에 빠른 답변을 기대하지 마십시오. 특히 무례하거나, 장황하거나, 잘못 전달된 메시지의 경우 답변을 전혀 받지 못할 수도 있습니다."
 
+#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "귀하의 메시지가 영어나 프랑스어로 작성되지 않은 경우, 기계 번역을 통해 자동으로 번역됩니다. 저희의 답변 역시 동일한 방식으로 귀하의 언어로 번역될 것입니다."
 
 #, fuzzy, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
@@ -5304,25 +5317,25 @@ msgstr "생각나는 사람이 있나요?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "계정을 연결하면 서약을 찾는 데 도움을 드릴 수 있습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "Liberapay에서 가장 많은 후원자를 보유한 {n} 개인은 다음과 같습니다:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "Liberapay에서 후원자가 가장 많은 {n} 단체는 다음과 같습니다:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
 msgid_plural "The {n} teams with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "Liberapay에서 후원자가 가장 많은 {n} 팀은 다음과 같습니다:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
-msgstr[0] ""
+msgstr[0] "{n}에서 후원자가 가장 많은 Liberapay 계정은 다음과 같습니다:"
 
 #, fuzzy, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -5344,8 +5357,9 @@ msgid "The Liberapay account receiving the most money is:"
 msgid_plural "The {n} Liberapay accounts receiving the most money are:"
 msgstr[0] "가장 많은 돈을 받은 리베라페이 계정은 {n} 입니다:"
 
+#, fuzzy
 msgid "number of patrons"
-msgstr ""
+msgstr "이용객 수"
 
 #, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"

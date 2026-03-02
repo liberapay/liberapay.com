@@ -762,22 +762,25 @@ msgstr "È in corso la modifica del tuo conto Liberapay"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Qualcuno sta tentando di associare l'indirizzo e-mail {0} al conto Liberapay attualmente associato all'indirizzo {1}. Se non hai dato tu il via a questa operazione ti suggeriamo di fare clic sul collegamento sottostante e rimuovere l'indirizzo anomalo dal tuo conto."
 
+#, fuzzy
 msgid "The requested page couldn't be found."
-msgstr ""
+msgstr "La pagina richiesta non è stata trovata."
 
+#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
-msgstr ""
+msgstr "Sembra che tu abbia trovato un bug! Ci scusiamo per l'inconveniente. Risolveremo questo errore il prima possibile."
 
+#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
-msgstr ""
+msgstr "Si è verificato un errore non specificato. Questo non dovrebbe accadere. Ci scusiamo per l'inconveniente."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "I dettagli di questo errore sono stati registrati. Se decidi di {link_start}contattarci{link_end}, ti preghiamo di includere nel tuo messaggio il seguente codice di identificazione dell'errore: {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
-msgstr ""
+msgstr "Se decidi di {link_start}contattarci{link_end} in merito a questo problema, ti preghiamo di includere nel tuo messaggio le seguenti informazioni di debug:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Tutte le settimane se ricevo almeno una donazione"
@@ -1579,15 +1582,17 @@ msgstr "Dona ora"
 msgid "Switch to a different account"
 msgstr "Passa ad un altro conto"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A single-use authentication link has been emailed to {email_address}."
-msgstr ""
+msgstr "Un collegamento di autenticazione monouso è stato inviato all'indirizzo e-mail {email_address}."
 
+#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
-msgstr ""
+msgstr "Controlla la tua casella di posta elettronica e, eventualmente, anche la cartella dello spam."
 
+#, fuzzy
 msgid "Open the authentication link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
+msgstr "Apri il collegamento di autenticazione in una nuova scheda, poi torna a questa pagina e clicca sul pulsante sottostante per continuare con ciò che desideravi fare."
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
@@ -1634,9 +1639,9 @@ msgstr "Disattiva password"
 msgid "Maximum length is {0}."
 msgstr "La lunghezza massima è {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
-msgstr ""
+msgstr "Se hai {bold}perso la tua password attuale{bold_end}, devi accedere tramite e-mail per poterla sostituire:"
 
 msgid "2FA"
 msgstr "Autenticazione a due fattori (2FA)"
@@ -1874,8 +1879,9 @@ msgstr "Indirizzo all'interno della città"
 msgid "Income"
 msgstr "Guadagno"
 
+#, fuzzy
 msgid "undisclosed"
-msgstr ""
+msgstr "non divulgato"
 
 msgid "per week"
 msgstr "a settimana"
@@ -3933,26 +3939,27 @@ msgstr "Dimentica questo numero di conto bancario dopo un singolo pagamento."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Poiché l'indirizzo postale del pagatore è talvolta necessario per elaborare con successo un pagamento, ti consigliamo di inserire il tuo qui sotto. Sarà memorizzato criptato nel nostro database e inviato all'elaboratore di pagamenti ({processor_name})."
 
+#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Finanzia la tua donazione"
+msgstr[1] "Finanzia le tue donazioni"
 
 #, fuzzy
 msgid "Setting up the payment instrument failed."
 msgstr "L'impostazione dello strumento di pagamento non è riuscita."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} payment instrument is attached to this account."
 msgid_plural "{n} payment instruments are attached to this account."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} strumento di pagamento è collegato a questo conto."
+msgstr[1] "{n} strumenti di pagamento sono collegati a questo conto."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} valid payment instrument is attached to this account."
 msgid_plural "{n} valid payment instruments are attached to this account."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} strumento di pagamento valido è collegato a questo conto."
+msgstr[1] "{n} strumenti di pagamento validi sono collegati a questo conto."
 
 msgid "Bank Account"
 msgstr "Conto bancario"
@@ -4020,11 +4027,13 @@ msgstr "Utilizza questo strumento come predefinito per pagamenti in {currency}."
 msgid "Set as default for {currency}"
 msgstr "Imposta come predefinito per {currency}"
 
+#, fuzzy
 msgid "No payment instruments are attached to this account."
-msgstr ""
+msgstr "A questo conto non sono collegati strumenti di pagamento."
 
+#, fuzzy
 msgid "No valid payment instruments are attached to this account."
-msgstr ""
+msgstr "A questo conto non sono associati strumenti di pagamento validi."
 
 msgid "Add a payment instrument:"
 msgstr "Aggiungi uno strumento di pagamento:"
@@ -4324,20 +4333,24 @@ msgstr "Le credenziali inviate non sono valide."
 msgid "You can try again:"
 msgstr "Puoi riprovare:"
 
+#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
-msgstr ""
+msgstr "Se stai cercando di contattare il proprietario di un conto Liberapay, ti informiamo che generalmente non inoltriamo messaggi e non possiamo rivelare l'identità o i dettagli di contatto dei nostri utenti."
 
+#, fuzzy
 msgid "To contact a Liberapay maintainer privately:"
-msgstr ""
+msgstr "Per contattare privatamente un amministratore di Liberapay:"
 
 msgid "Send an email to Liberapay"
 msgstr "Invia un'e-mail a Liberapay"
 
+#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
-msgstr ""
+msgstr "Siamo molto impegnati, quindi non aspettarti una risposta immediata. Alcuni messaggi potrebbero non ricevere alcuna risposta, specialmente se sono irrispettosi, sconclusionati o indirizzati erroneamente."
 
+#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "Se il tuo messaggio non è scritto in inglese o francese, verrà tradotto automaticamente da un programma. La nostra risposta verrà tradotta nella tua lingua allo stesso modo."
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
@@ -5114,29 +5127,29 @@ msgstr "Hai in mente qualcuno?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Possiamo aiutarti a trovare impegni a donare se associ i tuoi profili:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La persona con il maggior numero di sostenitori su Liberapay è:"
+msgstr[1] "Le {n} individui con il maggior numero di sostenitori su Liberapay sono:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "L'organizzazione con il maggior numero di sostenitori su Liberapay è:"
+msgstr[1] "Le {n} organizzazioni con il maggior numero di sostenitori su Liberapay sono:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
 msgid_plural "The {n} teams with the most patrons on Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La squadra con il maggior numero di sostenitori su Liberapay è:"
+msgstr[1] "Le {n} squadre con il maggior numero di sostenitori su Liberapay sono:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il conto Liberapay con il maggior numero di sostenitori è:"
+msgstr[1] "I {n} conti Liberapay con il maggior numero di sostenitori sono:"
 
 #, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -5162,8 +5175,9 @@ msgid_plural "The {n} Liberapay accounts receiving the most money are:"
 msgstr[0] "Il conto Liberapay che riceve più denaro è:"
 msgstr[1] "I {n} conti Liberapay che ricevono più denaro sono:"
 
+#, fuzzy
 msgid "number of patrons"
-msgstr ""
+msgstr "numero di sostenitori"
 
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"

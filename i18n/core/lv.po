@@ -847,22 +847,25 @@ msgstr "Jūsu Liberapay konts tiek mainīts"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Kāds mēģina saistīt e-pasta adresi {0} ar Liberapay kontu, kura pašreizējā adrese ir {1}. Ja jūs neesat iniciējis šo operāciju, tad jums jānoklikšķina uz tālāk norādītās saites un jādzēš anomālā adrese no konta."
 
+#, fuzzy
 msgid "The requested page couldn't be found."
-msgstr ""
+msgstr "Vēlamā lapa nav atrodama."
 
+#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
-msgstr ""
+msgstr "Šķiet, ka esat atradis kļūdu! Atvainojamies par neērtībām. Mēs šo kļūdu izlabosim pēc iespējas ātrāk."
 
+#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
-msgstr ""
+msgstr "Notika nenoteikta kļūda. Tas nedrīkstētu notikt. Atvainojieties."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "Šīs kļūdas detaļas ir reģistrētas. Ja izlemjat {link_start}sazināties ar mums{link_end}, lūdzu, jūsu ziņā iekļaujiet šādu kļūdas identifikācijas kodu: {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
-msgstr ""
+msgstr "Ja izlemjat {link_start}sazināties ar mums{link_end} par šo problēmu, lūdzu, savā ziņā iekļaujiet šādu informāciju par kļūdu novēršanu:"
 
 #, fuzzy
 msgid "Every week as long as I am receiving donations"
@@ -1819,15 +1822,17 @@ msgstr "Ziedot"
 msgid "Switch to a different account"
 msgstr "Pāreja uz citu kontu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A single-use authentication link has been emailed to {email_address}."
-msgstr ""
+msgstr "Vienreizējās lietošanas autentifikācijas saite ir nosūtīta uz e-pasta adresi {email_address}."
 
+#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
-msgstr ""
+msgstr "Pārbaudiet jūsu iesūtņu pastu un, iespējams, arī mēstuļu pastu."
 
+#, fuzzy
 msgid "Open the authentication link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
+msgstr "Atveriet autentifikācijas saiti jaunā cilnē, pēc tam atgriezieties šajā lapā un noklikšķiniet uz pogas zemāk, lai turpinātu to, ko vēlējāties darīt."
 
 #, fuzzy, python-brace-format
 msgid "You're still not logged in as {0}."
@@ -1885,9 +1890,9 @@ msgstr "Paroles atiestatīšana"
 msgid "Maximum length is {0}."
 msgstr "Maksimālais garums ir {0}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
-msgstr ""
+msgstr "Ja esat {bold}zaudējis savu pašreizējo paroli{bold_end}, jums ir jāpiesakās, izmantojot e-pastu, lai to varētu aizstāt:"
 
 #, fuzzy
 msgid "2FA"
@@ -2197,8 +2202,9 @@ msgstr "Adrese pilsētā"
 msgid "Income"
 msgstr "Ieņēmumi"
 
+#, fuzzy
 msgid "undisclosed"
-msgstr ""
+msgstr "neatklāts"
 
 #, fuzzy
 msgid "per week"
@@ -4654,29 +4660,30 @@ msgstr "Aizmirstiet šo bankas konta numuru pēc viena maksājuma."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Lai veiksmīgi apstrādātu maksājumu, dažkārt ir nepieciešama maksātāja pasta adrese, tāpēc mēs iesakām ievadīt savu pasta adresi tālāk tekstā. Tā tiks saglabāta mūsu datubāzē šifrētā veidā un nosūtīta maksājumu apstrādātājam ({processor_name})."
 
+#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
-msgstr[0] ""
+msgstr[0] "Finansējiet jūsu ziedojumus"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Finansējiet jūsu ziedojumus"
 
 #, fuzzy
 msgid "Setting up the payment instrument failed."
 msgstr "Maksājuma instrumenta iestatīšana neizdevās."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} payment instrument is attached to this account."
 msgid_plural "{n} payment instruments are attached to this account."
-msgstr[0] ""
+msgstr[0] "Šim kontam ir pievienoti 0 maksājumu instrumenti."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} šim kontam ir pievienoti maksājumu instrumenti."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} valid payment instrument is attached to this account."
 msgid_plural "{n} valid payment instruments are attached to this account."
-msgstr[0] ""
+msgstr[0] "Šim kontam ir pievienoti 0 derīgi maksājumu instrumenti."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} šim kontam ir pievienoti derīgi maksāšanas līdzekļi."
 
 #, fuzzy
 msgid "Bank Account"
@@ -4750,11 +4757,13 @@ msgstr "Pēc noklusējuma izmantojiet šo instrumentu maksājumiem {currency}."
 msgid "Set as default for {currency}"
 msgstr "Iestatīts kā noklusējuma iestatījums {currency}"
 
+#, fuzzy
 msgid "No payment instruments are attached to this account."
-msgstr ""
+msgstr "Šim kontam nav pievienoti maksājumu instrumenti."
 
+#, fuzzy
 msgid "No valid payment instruments are attached to this account."
-msgstr ""
+msgstr "Šim kontam nav pievienoti derīgi maksājumu instrumenti."
 
 #, fuzzy
 msgid "Add a payment instrument:"
@@ -4890,7 +4899,7 @@ msgstr "Maki"
 
 #, fuzzy, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
-msgstr "Šajā lapā ir redzami tikai Mangopay apstrādātie darījumi, lai apskatītu citus maksājumus {link_start}, dodieties uz Grāmatvedības lapu{link_end}."
+msgstr "Šajā lapā ir redzami tikai Mangopay apstrādātie darījumi, lai apskatītu citus maksājumus, {link_start}dodieties uz Grāmatvedības lapu{link_end}."
 
 #, fuzzy
 msgid "Account Statement"
@@ -5108,21 +5117,25 @@ msgstr "Iesniegtie akreditācijas dati nav derīgi."
 msgid "You can try again:"
 msgstr "Varat mēģināt vēlreiz:"
 
+#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
-msgstr ""
+msgstr "Ja vēlaties sazināties ar Liberapay konta īpašnieku, ņemiet vērā, ka mēs parasti nepārsūtām ziņojumus un nevaram atklāt mūsu lietotāju identitāti vai kontaktinformāciju."
 
+#, fuzzy
 msgid "To contact a Liberapay maintainer privately:"
-msgstr ""
+msgstr "Lai privāti sazinātos ar Liberapay uzturētāju:"
 
 #, fuzzy
 msgid "Send an email to Liberapay"
 msgstr "Nosūtīt e-pastu Liberapay"
 
+#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
-msgstr ""
+msgstr "Mēs esam ļoti aizņemti, tāpēc nevarat gaidīt ātru atbildi. Uz dažām ziņām varbūt vispār netiks atbildēts, jo īpaši, ja tās ir nepieklājīgas, neskaidras vai nepareizi adresētas."
 
+#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "Ja jūsu ziņojums nav rakstīts angļu vai franču valodā, tas tiks automātiski tulkots ar mašīntulkošanas palīdzību. Mūsu atbilde tiks tulkota jūsu valodā tādā pašā veidā."
 
 #, fuzzy, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
@@ -6072,33 +6085,33 @@ msgstr "Vai esat kādu iecerējis?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Mēs varam jums palīdzēt atrast solītājus, ja savienojat savus kontus:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "0 personas ar visvairāk atbalstītājiem Liberapay ir:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} personas ar vislielāko atbalstītāju skaitu Liberapay ir:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "0 organizācijas ar vislielāko atbalstītāju skaitu Liberapay ir:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} organizācijas ar vislielāko atbalstītāju skaitu Liberapay ir:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
 msgid_plural "The {n} teams with the most patrons on Liberapay are:"
-msgstr[0] ""
+msgstr[0] "0 komandas ar vislielāko atbalstītāju skaitu Liberapay ir:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} komandas ar vislielāko atbalstītāju skaitu Liberapay ir:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
-msgstr[0] ""
+msgstr[0] "0 Liberapay konti ar visvairāk atbalstītājiem ir:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} Liberapay konti ar visvairāk atbalstītājiem ir:"
 
 #, fuzzy, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -6128,8 +6141,9 @@ msgstr[0] "0 Liberapay konti, kas saņem visvairāk naudas, ir šādi:"
 msgstr[1] ""
 msgstr[2] "Visvairāk naudas saņem {n} Liberapay konti:"
 
+#, fuzzy
 msgid "number of patrons"
-msgstr ""
+msgstr "patronu skaits"
 
 #, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
