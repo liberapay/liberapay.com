@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-28 01:10+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2026-03-02 12:44+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -316,13 +316,13 @@ msgid "Your bank didn't provide a specific reason for this dispute."
 msgstr "Uw bank heeft geen specifieke reden voor dit geschil gegeven."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr "De reden die uw bank opgeeft is: de opgegeven rekeninggegevens zijn onjuist."
+msgstr "De reden die uw bank opgeeft is: de opgegeven accountgegevens zijn onjuist."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr "De reden die uw bank opgeeft is: de rekening bevatte niet genoeg geld om de betaling te honoreren."
+msgstr "De reden die uw bank opgeeft is: het account bevatte niet genoeg geld om de betaling te honoreren."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr "De reden die uw bank opgeeft is: de rekeninghouder heeft de betaling niet herkend."
+msgstr "De reden die uw bank opgeeft is: de accounthouder heeft de betaling niet herkend."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
@@ -760,23 +760,20 @@ msgstr "Uw Liberapay-account wordt gewijzigd"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Iemand probeert het emailadres {0} te koppelen aan het Liberapay-account waarvan het huidige adres {1} is. Als u deze actie niet hebt geïnitieerd, dan moet u op onderstaande link klikken en het afwijkende adres van uw account verwijderen."
 
-#, fuzzy
 msgid "The requested page couldn't be found."
 msgstr "De gevraagde pagina kan niet worden gevonden."
 
-#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
 msgstr "Het lijkt erop dat je een bug hebt gevonden! Onze excuses voor het ongemak. We zullen deze fout zo snel mogelijk verhelpen."
 
-#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
 msgstr "Er is een onbekende fout opgetreden. Dit zou niet mogen gebeuren. Sorry."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
 msgstr "De details van deze fout zijn geregistreerd. Als u besluit om {link_start} contact met ons op te nemen via {link_end}, vermeld dan de volgende foutidentificatiecode in uw bericht: {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
 msgstr "Als u besluit om {link_start} contact met ons op te nemen {link_end} over dit probleem, vermeld dan de volgende foutopsporingsinformatie in uw bericht:"
 
@@ -1569,15 +1566,13 @@ msgstr "Doneer"
 msgid "Switch to a different account"
 msgstr "Overschakelen naar een ander account"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A single-use authentication link has been emailed to {email_address}."
 msgstr "Er is een authenticatielink voor eenmalig gebruik per email verzonden naar {email_address}."
 
-#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
 msgstr "Controleer uw inbox en eventueel uw spamfolder."
 
-#, fuzzy
 msgid "Open the authentication link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Open de authenticatielink in een nieuw tabblad, ga vervolgens terug naar deze pagina en klik op de onderstaande knop om verder te gaan met wat u wilde doen."
 
@@ -1626,7 +1621,7 @@ msgstr "Wachtwoord vergeten"
 msgid "Maximum length is {0}."
 msgstr "Maximale lengte is {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
 msgstr "Als u uw huidige wachtwoord {bold_end} bent kwijtgeraakt {bold}, moet u inloggen via email om het te kunnen vervangen:"
 
@@ -1866,7 +1861,6 @@ msgstr "Adres binnen de stad"
 msgid "Income"
 msgstr "Inkomen"
 
-#, fuzzy
 msgid "undisclosed"
 msgstr "niet bekendgemaakt"
 
@@ -3903,7 +3897,6 @@ msgstr "Vergeet dit bankrekeningnummer na één betaling."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Omdat het postadres van de betaler soms nodig is om een betaling succesvol te verwerken, raden wij u aan het uwe hieronder in te voeren. Het wordt gecodeerd opgeslagen in onze database en doorgestuurd naar de betalingsverwerker ({processor_name})."
 
-#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
 msgstr[0] "Doe een donatie"
@@ -3912,13 +3905,13 @@ msgstr[1] "Financier uw donaties"
 msgid "Setting up the payment instrument failed."
 msgstr "Het instellen van de betaalmethode is mislukt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} payment instrument is attached to this account."
 msgid_plural "{n} payment instruments are attached to this account."
 msgstr[0] "{n} Er is een betaalmethode aan deze rekening gekoppeld."
 msgstr[1] "{n} aan deze rekening zijn betaalmethoden gekoppeld."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} valid payment instrument is attached to this account."
 msgid_plural "{n} valid payment instruments are attached to this account."
 msgstr[0] "{n} Er is een geldige betaalmethode aan deze rekening gekoppeld."
@@ -3990,13 +3983,11 @@ msgstr "Gebruik dit instrument standaard voor betalingen in {currency}."
 msgid "Set as default for {currency}"
 msgstr "Als standaard voor {currency} instellen"
 
-#, fuzzy
 msgid "No payment instruments are attached to this account."
-msgstr "Er zijn geen betaalmethoden aan deze rekening gekoppeld."
+msgstr "Er zijn geen betaalmethoden aan dit account gekoppeld."
 
-#, fuzzy
 msgid "No valid payment instruments are attached to this account."
-msgstr "Er zijn geen geldige betaalmethoden aan deze rekening gekoppeld."
+msgstr "Er zijn geen geldige betaalmethoden aan dit account gekoppeld."
 
 msgid "Add a payment instrument:"
 msgstr "Voeg een betaalmethode toe:"
@@ -4295,22 +4286,18 @@ msgstr "De ingevulde gegevens zijn niet geldig."
 msgid "You can try again:"
 msgstr "U kunt het opnieuw proberen:"
 
-#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
-msgstr "Als u contact wilt opnemen met de eigenaar van een Liberapay-account, houd er dan rekening mee dat we over het algemeen geen berichten doorgeven en de identiteit of contactgegevens van onze gebruikers niet kunnen vrijgeven."
+msgstr "Als u contact wilt opnemen met de eigenaar van een Liberapay-account, houd er dan rekening mee dat we over het algemeen geen berichten doorgeven en de identiteit of contactgegevens van onze mensen niet kunnen vrijgeven."
 
-#, fuzzy
 msgid "To contact a Liberapay maintainer privately:"
 msgstr "Om privé contact op te nemen met een Liberapay-beheerder:"
 
 msgid "Send an email to Liberapay"
 msgstr "Stuur een e-mail naar Liberapay"
 
-#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
 msgstr "We hebben het erg druk, dus u kunt niet verwachten dat u snel antwoord krijgt. Sommige berichten worden mogelijk helemaal niet beantwoord, vooral als ze respectloos, onsamenhangend of verkeerd geadresseerd zijn."
 
-#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Als uw bericht niet in het Engels of Frans is geschreven, wordt het automatisch door een machine vertaald. Ons antwoord wordt op dezelfde manier naar uw taal vertaald."
 
@@ -5089,25 +5076,25 @@ msgstr "Heb je iemand in gedachten?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Zoek bekende om aan te doneren met de vriendenzoeker:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
 msgstr[0] "De persoon met de meeste donateurs op Liberapay is:"
 msgstr[1] "De personen met de meeste donateurs op Liberapay zijn: {n}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
 msgstr[0] "De organisatie met de meeste donateurs op Liberapay is:"
 msgstr[1] "De organisaties van de '{n}' met de meeste donateurs op Liberapay zijn:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
 msgid_plural "The {n} teams with the most patrons on Liberapay are:"
 msgstr[0] "Het team met de meeste donateurs op Liberapay is:"
 msgstr[1] "De {n}-teams met de meeste donateurs op Liberapay zijn:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
 msgstr[0] "Het Liberapay-account met de meeste donateurs is:"
@@ -5137,7 +5124,6 @@ msgid_plural "The {n} Liberapay accounts receiving the most money are:"
 msgstr[0] "Het Liberapay-account dat het meeste geld ontvangt is:"
 msgstr[1] "De {n} Liberapay-accounts die het meeste geld ontvangen zijn:"
 
-#, fuzzy
 msgid "number of patrons"
 msgstr "aantal donateurs"
 
