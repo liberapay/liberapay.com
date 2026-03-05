@@ -4,7 +4,9 @@ import re
 from time import sleep
 
 import requests
+from requests.adapters import HTTPAdapter
 from pando.utils import utcnow
+from urllib3.util.retry import Retry
 
 from ..exceptions import (
     PaymentError, ProhibitedSourceCountry, UnableToDeterminePayerCountry,
@@ -20,6 +22,9 @@ from .common import (
 logger = logging.getLogger('paypal')
 
 session = requests.Session()
+session.mount('https://', HTTPAdapter(max_retries=Retry(
+    total=2, backoff_factor=0.1, status_forcelist=[500, 502, 503, 504],
+)))
 
 
 def _extract_error_message(response):
