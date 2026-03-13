@@ -159,6 +159,7 @@ EVENTS = [
     Event('upcoming_debit', 2**14, _("When an automatic donation renewal payment is upcoming")),
     Event('missing_route', 2**15, _("When I no longer have any valid payment instrument")),
     Event('renewal_aborted', 2**16, _("When a donation renewal payment has been aborted")),
+     Event('income_has_passed_goal', 2**16, _("When income has surpassed goal")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = {e.name: e for e in EVENTS}
