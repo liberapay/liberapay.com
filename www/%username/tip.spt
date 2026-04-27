@@ -2,7 +2,7 @@
 """
 from base64 import b64encode
 
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import AuthRequired, BadAmount
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
@@ -24,6 +24,12 @@ del _
 [-----------------------------------------------------------------------------]
 
 out = {}
+form_error = None
+form_currency = None
+form_period = None
+form_periodic_amount = None
+form_renewal_mode = None
+form_visibility = None
 
 # Get tipper and tippee.
 # ======================
@@ -54,10 +60,10 @@ if tippee.status == 'stub':
 if request.method == 'POST':
     user.require_write_permission()
     currency = request.body.get_currency('currency', 'EUR')
-    amount = request.body.get('selected_amount')
-    if amount and amount != 'custom':
+    selected_amount = request.body.get('selected_amount')
+    if selected_amount and selected_amount != 'custom':
         period = 'weekly'
-        amount = Money(amount, currency)
+        amount = Money(selected_amount, currency)
     else:
         period = request.body['period']
         if period not in constants.PERIOD_CONVERSION_RATES:
@@ -69,31 +75,45 @@ if request.method == 'POST':
             raise response.error(400, _("The donation amount is missing."))
     renewal_mode = request.body.get_int('renewal_mode', default=1, minimum=1, maximum=2)
     visibility = request.body.get_int('visibility', default=None, minimum=1, maximum=3)
-    out = tipper.set_tip_to(tippee, amount, period, renewal_mode=renewal_mode, visibility=visibility)
-    if not out:
-        raise response.error(400, _("This donation doesn't exist or has already been stopped."))
-    if out['renewal_mode'] == 0:
-        out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
+    try:
+        out = tipper.set_tip_to(tippee, amount, period, renewal_mode=renewal_mode, visibility=visibility)
+    except BadAmount as e:
+        if (selected_amount != 'custom' or output.media_type == 'application/json' or
+            currency not in tippee.accepted_currencies_set):
+            raise
+        response.code = e.code
+        form_error = e.render_body(state)
+        form_currency = currency
+        form_period = period
+        form_periodic_amount = amount
+        form_renewal_mode = renewal_mode
+        form_visibility = visibility
+        out = tipper.get_tip_to(tippee)
     else:
-        messages = PLEDGE_MESSAGES if out['is_pledge'] else DONATION_MESSAGES
-        msg = messages[out['period']]
-        out["msg"] = _(msg, out['periodic_amount'], tippee_name)
-    if output.media_type != 'application/json':
-        back_to = request.body.get('back_to') or tipper.path('giving/')
-        back_to += '&' if '?' in back_to else '?'
-        back_to += 'success=' + b64encode_s(out["msg"])
-        awaiting_payment = (
-            out['renewal_mode'] > 0 and
-            not out['is_funded'] and
-            not out['is_pledge'] and
-            tippee.accepts_tips and
-            out['pending_payins_count'] == 0
-        )
-        if awaiting_payment:
-            response.redirect(
-                tipper.path('giving/pay/') + '?beneficiary=' + str(tippee.id)
+        if not out:
+            raise response.error(400, _("This donation doesn't exist or has already been stopped."))
+        if out['renewal_mode'] == 0:
+            out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
+        else:
+            messages = PLEDGE_MESSAGES if out['is_pledge'] else DONATION_MESSAGES
+            msg = messages[out['period']]
+            out["msg"] = _(msg, out['periodic_amount'], tippee_name)
+        if output.media_type != 'application/json':
+            back_to = request.body.get('back_to') or tipper.path('giving/')
+            back_to += '&' if '?' in back_to else '?'
+            back_to += 'success=' + b64encode_s(out["msg"])
+            awaiting_payment = (
+                out['renewal_mode'] > 0 and
+                not out['is_funded'] and
+                not out['is_pledge'] and
+                tippee.accepts_tips and
+                out['pending_payins_count'] == 0
             )
-        response.redirect(back_to, trusted_url=False)
+            if awaiting_payment:
+                response.redirect(
+                    tipper.path('giving/pay/') + '?beneficiary=' + str(tippee.id)
+                )
+            response.redirect(back_to, trusted_url=False)
 else:
     out = tipper.get_tip_to(tippee)
 
@@ -114,7 +134,16 @@ if 'ctime' not in out:
 % extends "templates/layouts/base-thin.html"
 
 % block thin_content
-    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+    % if form_error
+        % from 'templates/macros/your-tip.html' import tip_form with context
+        <h2>{{ _("Donate to {0}", tippee_name) }}</h2>
+        {{ tip_form(tippee=tippee, tip=out, form_error=form_error,
+                    form_currency=form_currency, period=form_period,
+                    periodic_amount=form_periodic_amount,
+                    renewal_mode=form_renewal_mode, visibility=form_visibility) }}
+    % else
+        <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+    % endif
 % endblock
 
 [---] application/json via json_dump
