@@ -193,7 +193,7 @@ If for some reason you need to rehash all requirements, run `make rehash-require
 
 To upgrade all the dependencies in the requirements file, run `hashin -u -r requirements_base.txt`. You may have to run extra `hashin` commands if new subdependencies are missing.
 
-The testing dependencies in `requirements_tests.txt` don't follow these rules because they're not installed in production. It's up to you to isolate your development environment from the rest of your system in order to protect it from possible vulnerabilities in the testing dependencies.
+The testing dependencies in `requirements_tests.txt` may not be as thoroughly reviewed as the others since they're not installed in production. It's currently up to you to isolate your development environment from the rest of your system in order to protect it from vulnerabilities that might slip into dependencies without being detected. See [issue #2345](https://github.com/liberapay/liberapay.com/issues/2345) for possible solutions.
 
 ### Processing personal data
 

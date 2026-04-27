@@ -26,4 +26,10 @@ updates:
         patterns: ["requests-oauthlib", "oauthlib"]
       requests:
         patterns: ["requests", "certifi", "chardet", "charset-normalizer", "idna", "urllib3"]
+      testing:
+        patterns: [
+          "coverage", "execnet", "Faker", "gprof2dot", "html5lib", "iniconfig",
+          "pluggy", "Pygments", "pytest", "pytest-*", "PyYAML", "ruff", "vcrpy",
+          "webencodings", "wrapt"
+        ]
     open-pull-requests-limit: 10
