@@ -19,6 +19,7 @@ from .common import (
 REFUND_REASONS_MAP = {
     None: None,
     'duplicate': 'duplicate',
+    'expired_uncaptured_charge': 'uncaptured',
     'fraudulent': 'fraud',
     'requested_by_customer': 'requested_by_payer',
 }
