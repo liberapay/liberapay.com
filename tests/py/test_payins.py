@@ -2456,7 +2456,7 @@ class TestRefundsStripe(EmailHarness):
               "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "source_type": "card",
               "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
-            }''' % params),
+            }'''),
             stripe.api_key
         )
         self.db.run("UPDATE payins SET ctime = ctime - interval '24 hours'")
@@ -2703,7 +2703,7 @@ class TestRefundsStripe(EmailHarness):
               "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "source_type": "card",
               "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
-            }''' % params),
+            }'''),
             stripe.api_key
         )
         create_reversal.return_value = stripe.Reversal.construct_from(
