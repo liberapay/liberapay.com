@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '195'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '196'::jsonb);
 
 
 -- app configuration
@@ -614,7 +614,7 @@ CREATE TABLE payin_transfer_events
 
 -- payin refunds
 
-CREATE TYPE refund_reason AS ENUM ('duplicate', 'fraud', 'requested_by_payer');
+CREATE TYPE refund_reason AS ENUM ('duplicate', 'fraud', 'requested_by_payer', 'uncaptured');
 
 CREATE TYPE refund_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
 
