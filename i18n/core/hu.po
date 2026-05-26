@@ -3856,10 +3856,9 @@ msgstr "Felejtse el ezt a bankszámlaszámot egy fizetés után."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Mivel a fizetés sikeres feldolgozásához néha szükség van a fizető postacímére, javasoljuk, hogy adja meg lentebb. A cím titkosítva kerül tárolásra az adatbázisunkban, és elküldjük a pénzforgalmi feldolgozónak ({processor_name})."
 
-#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
-msgstr[0] "Adományozzon adományokat"
+msgstr[0] "Az adományai finanszírozása"
 
 msgid "Setting up the payment instrument failed."
 msgstr "A fizetőeszköz beállítása nem sikerült."
@@ -3940,16 +3939,14 @@ msgstr "Használja ezt az eszközt alapértelmezettként a(z) {currency} pénzne
 msgid "Set as default for {currency}"
 msgstr "Állítsa be alapértelmezettként {currency} esetén"
 
-#, fuzzy
 msgid "No payment instruments are attached to this account."
-msgstr "Ehhez a számlához nincs kapcsolódó fizetőeszköz."
+msgstr "Nincs kapcsolódó fizetőeszköz ehhez a számlához."
 
-#, fuzzy
 msgid "No valid payment instruments are attached to this account."
 msgstr "Ehhez a számlához nincs érvényes fizetőeszköz kapcsolva."
 
 msgid "Add a payment instrument:"
-msgstr "Fizetési eszköz hozzáadása:"
+msgstr "Fizetőeszköz hozzáadása:"
 
 msgid "Add a card"
 msgstr "Kártya hozzáadása"
@@ -3988,7 +3985,7 @@ msgid "Reason for closing account"
 msgstr "A fiók megszüntetésének oka"
 
 msgid "Ready?"
-msgstr "Készen áll?"
+msgstr "Kész?"
 
 msgid "Yes, close my Liberapay account"
 msgstr "Igen, zárják be a Liberapay fiókomat"
@@ -4050,7 +4047,7 @@ msgid "This is no longer possible."
 msgstr "Ez többé nem lehetséges."
 
 msgid "Export History"
-msgstr "Előzmények Exportálása"
+msgstr "Előzmények exportálása"
 
 msgid "Wallet"
 msgstr "Tárca"
@@ -4241,24 +4238,20 @@ msgstr "A beküldött hitelesítő adatok érvénytelenek."
 msgid "You can try again:"
 msgstr "Újra megpróbálhatja:"
 
-#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
 msgstr "Ha egy Liberapay-fiók tulajdonosával szeretne kapcsolatba lépni, kérjük, vegye figyelembe, hogy általában nem továbbítunk üzeneteket, és nem adhatjuk ki felhasználóink személyazonosságát vagy elérhetőségi adatait."
 
-#, fuzzy
 msgid "To contact a Liberapay maintainer privately:"
-msgstr "Ha privát módon szeretnél kapcsolatba lépni a Liberapay karbantartójával:"
+msgstr "Ha privát módon szeretne kapcsolatba lépni a Liberapay karbantartójával:"
 
 msgid "Send an email to Liberapay"
 msgstr "Küldjön e-mailt a Liberapay-nek"
 
-#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
 msgstr "Nagyon elfoglaltak vagyunk, ezért ne számítson gyors válaszra. Egyes üzenetekre egyáltalán nem válaszolunk, különösen, ha azok tiszteletlenek, összefüggéstelenek vagy rosszul címezettek."
 
-#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr "Ha üzenete nem angol vagy francia nyelven van megírva, akkor azt egy gép automatikusan lefordítja. Válaszunkat ugyanígy lefordítjuk a te nyelvedre."
+msgstr "Ha üzenete nem angol vagy francia nyelven van megírva, akkor azt egy gép automatikusan lefordítja. Válaszunkat ugyanígy lefordítjuk az Ön nyelvére."
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
@@ -5019,25 +5012,25 @@ msgstr "Esetleg gondolt már valakire?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Segítünk megtalálni a felajánlott adományokat, amikor csatkakoztatja a számláit:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
 msgstr[0] "A Liberapay-en a legtöbb támogatóval rendelkező {n} személy:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
 msgstr[0] "A Liberapay-en a legtöbb támogatóval rendelkező {n} szervezet:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
 msgid_plural "The {n} teams with the most patrons on Liberapay are:"
 msgstr[0] "A Liberapay-en a legtöbb támogatóval rendelkező {n} csapat:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
-msgstr[0] "A legtöbb támogatóval rendelkező {n} Liberapay-fiókok:"
+msgstr[0] "A legtöbb támogatóval rendelkező {n} Liberapay-fiók:"
 
 #, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -5059,9 +5052,8 @@ msgid "The Liberapay account receiving the most money is:"
 msgid_plural "The {n} Liberapay accounts receiving the most money are:"
 msgstr[0] "A legtöbb pénzt fogadó {n} Liberapay fiók:"
 
-#, fuzzy
 msgid "number of patrons"
-msgstr "látogatók száma"
+msgstr "adományozók száma"
 
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
