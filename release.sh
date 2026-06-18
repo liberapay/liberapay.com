@@ -166,8 +166,7 @@ if [ "$run_schema_diff" = 'yes' ]; then
 fi
 
 # Push to GitHub
-git push
-git push --tags
+git push --tags origin master
 
 # Tell Sentry about this release
 curl https://sentry.io/api/0/organizations/liberapay/releases/ \
