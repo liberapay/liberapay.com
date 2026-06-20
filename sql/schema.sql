@@ -1129,6 +1129,24 @@ CREATE TABLE user_secrets
 , UNIQUE (participant, id)
 );
 
+CREATE TABLE user_2fa
+( participant      bigint        NOT NULL REFERENCES participants
+, id               int           NOT NULL
+, type             text          NOT NULL CHECK (type IN ('totp', 'webauthn', 'recovery'))
+, name             text
+, credential_id    text
+, secret           text          NOT NULL
+, latest_counter   bigint
+, ctime            timestamptz   NOT NULL DEFAULT current_timestamp
+, mtime            timestamptz   NOT NULL DEFAULT current_timestamp
+, UNIQUE (participant, id)
+);
+
+CREATE UNIQUE INDEX user_2fa_one_totp_idx ON user_2fa (participant)
+    WHERE type = 'totp';
+CREATE UNIQUE INDEX user_2fa_webauthn_credential_id_idx ON user_2fa (credential_id)
+    WHERE type = 'webauthn';
+
 
 -- encrypted identity data
 

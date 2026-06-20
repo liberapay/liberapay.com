@@ -364,3 +364,37 @@ textarea.vertical-resize {
         display: block;
     }
 }
+
+.two-factor-setup {
+    margin-top: 1em;
+
+    .two-factor-qr {
+        margin: 1em 0;
+
+        svg {
+            background: white;
+            border: 1px solid $gray-lighter;
+            height: auto;
+            max-width: 100%;
+            padding: 1em;
+            width: 14em;
+        }
+    }
+}
+
+ul.recovery-codes {
+    columns: 2;
+    list-style: none;
+    margin: 1em 0;
+    max-width: 24em;
+    padding: 0;
+
+    li {
+        margin: 0.25em 0;
+
+        code {
+            font-size: 1.1em;
+            letter-spacing: 0.05em;
+        }
+    }
+}

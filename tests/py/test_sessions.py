@@ -10,6 +10,7 @@ from liberapay.i18n.base import LOCALES
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
+from liberapay.security.otp import generate_totp_code
 from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils import b64encode_s, find_files
@@ -22,6 +23,20 @@ good_data = {
     'sign-in.email': 'bob@example.com',
     'sign-in.token': 'ThisIsATokenThatIsThirtyTwoBytes',
 }
+
+
+def extract_hidden_input(html, name):
+    needle = 'name="%s"' % name
+    i = html.find(needle)
+    assert i != -1, html
+    j = html.rfind('<input ', 0, i)
+    k = html.find('>', i)
+    input_html = html[j:k]
+    value_start = input_html.find('value="')
+    assert value_start != -1, input_html
+    value_start += len('value="')
+    value_end = input_html.find('"', value_start)
+    return input_html[value_start:value_end]
 
 
 class TestLogIn(EmailHarness):
@@ -119,6 +134,46 @@ class TestLogIn(EmailHarness):
         password = 'le blé pousse dans le champ'
         alice = self.make_participant('alice', password=password)
         self.log_in_and_check(alice, password.encode('utf8'))
+
+    def test_log_in_with_totp(self):
+        alice = self.make_participant('alice', password=password)
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+        self.db.run("UPDATE user_2fa SET latest_counter = NULL")
+
+        r = self.log_in('alice', password, HTTP_ACCEPT=b'text/html')
+        assert SESSION not in r.headers.cookie
+        assert "authentication code" in r.text
+
+        data = {
+            'log-in.otp-participant': extract_hidden_input(r.text, 'log-in.otp-participant'),
+            'log-in.otp-challenge-id': extract_hidden_input(r.text, 'log-in.otp-challenge-id'),
+            'log-in.otp-challenge-token': extract_hidden_input(r.text, 'log-in.otp-challenge-token'),
+            'log-in.otp-code': generate_totp_code(secret),
+        }
+        r = self.client.POST('/sign-in', data, raise_immediately=False)
+        self.check_login(r, alice)
+
+    def test_log_in_with_recovery_code(self):
+        alice = self.make_participant('alice', password=password)
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+        recovery_codes = alice.generate_recovery_codes()
+
+        r = self.log_in('alice', password, HTTP_ACCEPT=b'text/html')
+        assert SESSION not in r.headers.cookie
+        assert "recovery code" in r.text
+
+        data = {
+            'log-in.otp-participant': extract_hidden_input(r.text, 'log-in.otp-participant'),
+            'log-in.otp-challenge-id': extract_hidden_input(r.text, 'log-in.otp-challenge-id'),
+            'log-in.otp-challenge-token': extract_hidden_input(r.text, 'log-in.otp-challenge-token'),
+            'log-in.otp-code': recovery_codes[0],
+        }
+        r = self.client.POST('/sign-in', data, raise_immediately=False)
+        self.check_login(r, alice)
+        # The recovery code has been consumed.
+        assert alice.count_recovery_codes() == 9
 
     def test_password_is_checked_during_log_in(self):
         password = 'password'
