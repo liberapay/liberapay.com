@@ -71,6 +71,7 @@ def sign_in_with_form_data(body, state):
             body.get('log-in.otp-challenge-id'),
             body.get('log-in.otp-challenge-token'),
             body.get('log-in.otp-code'),
+            body.get('log-in.webauthn-credential'),
         )
         if p:
             state['log-in.session-suffix'] = session_suffix
@@ -90,6 +91,10 @@ def sign_in_with_form_data(body, state):
                 challenge_p = Participant.from_id(challenge_participant_id, _raise=False)
             if challenge_p:
                 challenge['has_totp'] = challenge_p.has_totp
+                if challenge_p.has_webauthn:
+                    challenge['webauthn_options'] = (
+                        challenge_p.get_webauthn_authentication_options(challenge['token'])
+                    )
 
     elif body.get('log-in.id'):
         request = state['request']
@@ -407,6 +412,10 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             token=challenge.token,
             has_totp=p.has_totp,
         )
+        if p.has_webauthn:
+            state['log-in.otp-challenge']['webauthn_options'] = (
+                p.get_webauthn_authentication_options(challenge.token)
+            )
         p = None
         raise LoginRequired
 

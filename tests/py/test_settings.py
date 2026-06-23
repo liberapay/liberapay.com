@@ -1,3 +1,7 @@
+import json as stdlib_json
+from types import SimpleNamespace
+from unittest.mock import patch
+
 from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
 from liberapay.exceptions import AccountIsPasswordless
 from liberapay.security.otp import generate_totp_code
@@ -245,6 +249,55 @@ class TestTwoFactorAuthentication(Harness):
         }, auth_as=alice, skip_password_check=True)
         assert r.code == 302, r.text
         assert not alice.refetch().has_totp
+
+    def test_registering_and_using_a_passkey(self):
+        alice = self.make_participant('alice')
+
+        registration = alice.start_webauthn_registration()
+        verified_registration = SimpleNamespace(
+            credential_id=b'credential-id',
+            credential_public_key=b'public-key',
+            sign_count=7,
+            aaguid='00000000-0000-0000-0000-000000000000',
+            credential_type=SimpleNamespace(value='public-key'),
+            credential_device_type=SimpleNamespace(value='single_device'),
+            credential_backed_up=False,
+            user_verified=True,
+        )
+        with patch(
+            'liberapay.security.webauthn.verify_registration_response',
+            return_value=verified_registration,
+        ) as verify_registration:
+            assert alice.enable_webauthn(
+                registration['challenge_id'],
+                '{"id": "credential-id"}',
+                'Laptop',
+            )
+        verify_registration.assert_called_once()
+
+        credentials = alice.get_webauthn_credentials()
+        assert len(credentials) == 1
+        assert credentials[0].name == 'Laptop'
+        assert credentials[0].latest_counter == 7
+
+        challenge = alice.start_two_factor_challenge('xyz')
+        credential = stdlib_json.dumps({'id': credentials[0].credential_id})
+        with patch(
+            'liberapay.security.webauthn.verify_authentication_response',
+            return_value=SimpleNamespace(new_sign_count=8),
+        ) as verify_authentication:
+            p, session_suffix = Participant.authenticate_with_two_factor_challenge(
+                alice.id,
+                challenge.id,
+                challenge.token,
+                webauthn_credential=credential,
+            )
+        verify_authentication.assert_called_once()
+        assert p.id == alice.id
+        assert session_suffix == 'xyz'
+        assert p.authenticated
+        assert alice.refetch().has_webauthn
+        assert alice.get_webauthn_credentials()[0].latest_counter == 8
 
     def test_totp_secret_is_encrypted_at_rest(self):
         alice = self.make_participant('alice')

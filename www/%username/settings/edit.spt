@@ -11,7 +11,7 @@ body = request.body
 p = get_participant(state, restrict=True, allow_member=True)
 action = request.body.get_choice(
     'action',
-    ('enable-otp', 'disable-otp', 'set', 'unset'),
+    ('enable-otp', 'disable-otp', 'delete-webauthn', 'set', 'unset'),
     default='',
 )
 
@@ -31,6 +31,14 @@ elif action == 'disable-otp':
         raise response.redirect(p.path('settings/?otp_mismatch=1'))
     p.disable_totp()
     form_post_success(state, msg=_("Two-factor authentication has been disabled."))
+
+elif action == 'delete-webauthn':
+    if not p.is_person:
+        raise response.error(403)
+    if not p.reauthenticate(body.get('cur-password')):
+        raise response.redirect(p.path('settings/?password_mismatch=1'))
+    p.delete_webauthn(body.get_int('webauthn-id'))
+    form_post_success(state, msg=_("The passkey has been deleted."))
 
 elif 'new-password' in body or action in ('set', 'unset'):
     if not p.is_person:
