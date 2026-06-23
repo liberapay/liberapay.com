@@ -11,6 +11,7 @@ from random import randint
 from threading import Lock
 from time import sleep
 from types import SimpleNamespace
+import json as stdlib_json
 import unicodedata
 from urllib.parse import quote as urlquote, urlencode
 import uuid
@@ -87,6 +88,10 @@ from liberapay.models.tip import Tip
 from liberapay.payin.common import resolve_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
+from liberapay.security.otp import (
+    generate_totp_secret, normalize_totp_secret, verify_totp_code,
+)
+from liberapay.security import webauthn
 from liberapay.utils import (
     deserialize, erase_cookie, get_recordable_headers, serialize, set_cookie,
     tweak_avatar_url,
@@ -117,6 +122,11 @@ class Participant(Model, MixinTeam):
 
     ANON = False
     EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
+    TOTP_SECRET_ID = -1
+    TWO_FACTOR_CHALLENGE_ID_MIN = -20
+    TWO_FACTOR_CHALLENGE_ID_MAX = -11
+    WEBAUTHN_REGISTRATION_CHALLENGE_ID_MIN = -40
+    WEBAUTHN_REGISTRATION_CHALLENGE_ID_MAX = -31
 
     session = None
 
@@ -460,6 +470,452 @@ class Participant(Model, MixinTeam):
         else:
             status = 'okay'
         return status
+
+
+    # Two-Factor Authentication
+    # =========================
+
+    @staticmethod
+    def generate_totp_secret():
+        return generate_totp_secret()
+
+    def get_totp_uri(self, secret):
+        issuer = website.canonical_host
+        import pyotp
+        return pyotp.TOTP(normalize_totp_secret(secret)).provisioning_uri(
+            name=self.username,
+            issuer_name=issuer,
+        )
+
+    def get_totp_qr_svg(self, secret):
+        import qrcode
+        import qrcode.image.svg
+        uri = self.get_totp_uri(secret)
+        img = qrcode.make(uri, image_factory=qrcode.image.svg.SvgPathImage)
+        return img.to_string().decode('utf8')
+
+    @cached_property
+    def has_two_factor(self):
+        return self.db.one("""
+            SELECT EXISTS (
+                       SELECT 1
+                         FROM user_secrets
+                        WHERE participant = %(p_id)s
+                          AND id = %(totp_id)s
+                   )
+                OR EXISTS (
+                       SELECT 1
+                         FROM user_webauthn_credentials
+                        WHERE participant = %(p_id)s
+                   )
+        """, dict(p_id=self.id, totp_id=self.TOTP_SECRET_ID), default=False)
+
+    @cached_property
+    def has_totp(self):
+        return self.db.one("""
+            SELECT true
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+             LIMIT 1
+        """, (self.id, self.TOTP_SECRET_ID), default=False)
+
+    @cached_property
+    def has_webauthn(self):
+        return self.db.one("""
+            SELECT true
+              FROM user_webauthn_credentials
+             WHERE participant = %s
+             LIMIT 1
+        """, (self.id,), default=False)
+
+    @staticmethod
+    def _encode_totp_secret(encrypted_secret, latest_counter):
+        return stdlib_json.dumps(dict(
+            secret=encrypted_secret,
+            latest_counter=latest_counter,
+        ), sort_keys=True)
+
+    @staticmethod
+    def _decode_totp_secret(stored):
+        data = stdlib_json.loads(stored)
+        return data['secret'], data.get('latest_counter')
+
+    def enable_totp(self, secret, code):
+        secret = normalize_totp_secret(secret)
+        verified, counter = verify_totp_code(secret, code)
+        if not verified:
+            return False
+        encrypted_secret = website.cryptograph.encrypt_token(secret)
+        stored_secret = self._encode_totp_secret(encrypted_secret, counter)
+        with self.db.get_cursor() as c:
+            c.run("""
+                INSERT INTO user_secrets
+                            (participant, id, secret)
+                     VALUES (%s, %s, %s)
+                ON CONFLICT (participant, id) DO UPDATE
+                        SET secret = excluded.secret
+                          , mtime = current_timestamp
+            """, (self.id, self.TOTP_SECRET_ID, stored_secret))
+            self.add_event(c, 'enable_2fa', dict(type='totp'))
+        self.__dict__['has_two_factor'] = True
+        self.__dict__['has_totp'] = True
+        return True
+
+    def disable_totp(self):
+        with self.db.get_cursor() as c:
+            r = c.one("""
+                DELETE FROM user_secrets
+                 WHERE participant = %s
+                   AND id = %s
+             RETURNING 1
+            """, (self.id, self.TOTP_SECRET_ID))
+            if r:
+                self.add_event(c, 'disable_2fa', dict(type='totp'))
+        self.__dict__.pop('has_two_factor', None)
+        self.__dict__.pop('has_totp', None)
+        return bool(r)
+
+    def check_totp(self, code):
+        stored = self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+             LIMIT 1
+        """, (self.id, self.TOTP_SECRET_ID))
+        if not stored:
+            return False
+        encrypted_secret, latest_counter = self._decode_totp_secret(stored)
+        secret = website.cryptograph.decrypt_token(encrypted_secret)
+        verified, counter = verify_totp_code(secret, code, latest_counter)
+        if not verified:
+            return False
+        new_stored = self._encode_totp_secret(encrypted_secret, counter)
+        # Atomically bump the counter, and only accept the code if we actually
+        # win the race. This prevents the same code from being accepted twice
+        # within its validity window (replay protection).
+        accepted = self.db.one("""
+            UPDATE user_secrets
+               SET secret = %s
+                 , mtime = current_timestamp
+             WHERE participant = %s
+               AND id = %s
+               AND secret = %s
+         RETURNING true
+        """, (new_stored, self.id, self.TOTP_SECRET_ID, stored))
+        return bool(accepted)
+
+    def reauthenticate(self, password):
+        """Confirm the user's identity before a sensitive account change.
+
+        Returns `True` if the action should be allowed: either the account has
+        no password, or the current session is a fresh one (opened through an
+        email link or just created at sign-up), or the supplied password is
+        correct. Returns `False` if a password is required but the one provided
+        is missing or wrong.
+        """
+        if self.session_type in ('em', 'in'):
+            return True
+        try:
+            confirmed = Participant.authenticate_with_password(self.id, password)
+        except AccountIsPasswordless:
+            return True
+        return confirmed is not None
+
+    def start_two_factor_challenge(self, session_suffix):
+        token = self.generate_session_token()
+        secret = token + ':' + session_suffix
+        challenge_id = self._start_stored_challenge(
+            self.TWO_FACTOR_CHALLENGE_ID_MIN,
+            self.TWO_FACTOR_CHALLENGE_ID_MAX,
+            secret,
+        )
+        return SimpleNamespace(id=challenge_id, token=token)
+
+    def _start_stored_challenge(self, id_min, id_max, secret):
+        p_id = self.id
+        challenge = self.db.one("""
+            WITH oldest_secret AS (
+                     SELECT *
+                       FROM user_secrets
+                      WHERE participant = %(p_id)s
+                        AND id >= %(id_min)s
+                        AND id <= %(id_max)s
+                   ORDER BY mtime
+                      LIMIT 1
+                 )
+               , unused_id AS (
+                     SELECT i
+                       FROM generate_series(%(id_min)s, %(id_max)s) i
+                      WHERE NOT EXISTS (
+                                SELECT 1
+                                  FROM user_secrets s2
+                                 WHERE s2.participant = %(p_id)s
+                                   AND s2.id = i
+                            )
+                   ORDER BY i
+                      LIMIT 1
+                 )
+            INSERT INTO user_secrets AS s
+                        (participant, id, secret)
+                 SELECT %(p_id)s
+                      , coalesce(
+                            ( SELECT s2.id
+                                FROM oldest_secret s2
+                               WHERE s2.mtime < (current_timestamp - interval '10 minutes')
+                            ),
+                            (SELECT i FROM unused_id),
+                            (SELECT s2.id FROM oldest_secret s2)
+                        )
+                      , %(secret)s
+            ON CONFLICT (participant, id) DO UPDATE
+                    SET mtime = excluded.mtime
+                      , secret = excluded.secret
+                  WHERE s.mtime = (SELECT s2.mtime FROM oldest_secret s2)
+              RETURNING id
+        """, locals())
+        if challenge is None:
+            return self._start_stored_challenge(id_min, id_max, secret)
+        return challenge
+
+    @staticmethod
+    def _webauthn_rp_id():
+        return website.canonical_host.split(':', 1)[0]
+
+    @staticmethod
+    def _webauthn_origin():
+        return website.canonical_scheme + '://' + website.canonical_host
+
+    def get_webauthn_credentials(self):
+        return self.db.all("""
+            SELECT id, name, credential_id, public_key, latest_counter
+              FROM user_webauthn_credentials
+             WHERE participant = %s
+          ORDER BY id
+        """, (self.id,))
+
+    def _webauthn_credential_descriptors(self):
+        return [
+            webauthn.PublicKeyCredentialDescriptor(
+                id=webauthn.base64url_to_bytes(r.credential_id),
+            )
+            for r in self.get_webauthn_credentials()
+        ]
+
+    def start_webauthn_registration(self):
+        token = self.generate_session_token()
+        challenge = self._start_stored_challenge(
+            self.WEBAUTHN_REGISTRATION_CHALLENGE_ID_MIN,
+            self.WEBAUTHN_REGISTRATION_CHALLENGE_ID_MAX,
+            'webauthn-registration:' + token,
+        )
+        options = webauthn.generate_registration_options(
+            rp_id=self._webauthn_rp_id(),
+            rp_name='Liberapay',
+            user_id=str(self.id).encode('ascii'),
+            user_name=self.username,
+            user_display_name=self.username,
+            challenge=token.encode('ascii'),
+            authenticator_selection=webauthn.AuthenticatorSelectionCriteria(
+                resident_key=webauthn.ResidentKeyRequirement.PREFERRED,
+                user_verification=webauthn.UserVerificationRequirement.PREFERRED,
+            ),
+            exclude_credentials=self._webauthn_credential_descriptors(),
+        )
+        return dict(
+            challenge_id=challenge,
+            options=webauthn.options_to_json(options),
+        )
+
+    def enable_webauthn(self, challenge_id, credential, name=None):
+        try:
+            challenge_id = int(challenge_id)
+        except (TypeError, ValueError):
+            return False
+        r = self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+               AND id >= %s
+               AND id <= %s
+               AND mtime > (current_timestamp - interval '10 minutes')
+        """, (
+            self.id, challenge_id, self.WEBAUTHN_REGISTRATION_CHALLENGE_ID_MIN,
+            self.WEBAUTHN_REGISTRATION_CHALLENGE_ID_MAX,
+        ))
+        if not r or not r.startswith('webauthn-registration:'):
+            return False
+        token = r.split(':', 1)[1]
+        try:
+            verified = webauthn.verify_registration_response(
+                credential=credential,
+                expected_challenge=token.encode('ascii'),
+                expected_rp_id=self._webauthn_rp_id(),
+                expected_origin=self._webauthn_origin(),
+            )
+        except Exception:
+            return False
+        credential_id = webauthn.bytes_to_base64url(verified.credential_id)
+        public_key = stdlib_json.dumps(dict(
+            public_key=webauthn.bytes_to_base64url(verified.credential_public_key),
+            aaguid=verified.aaguid,
+            credential_type=verified.credential_type.value,
+            device_type=verified.credential_device_type.value,
+            backed_up=verified.credential_backed_up,
+            user_verified=verified.user_verified,
+        ), sort_keys=True)
+        name = (name or 'Passkey').strip()[:80] or 'Passkey'
+        try:
+            with self.db.get_cursor() as c:
+                c.run("""
+                    INSERT INTO user_webauthn_credentials
+                                (participant, id, name, credential_id, public_key, latest_counter)
+                         VALUES (
+                                %(p_id)s,
+                                coalesce((
+                                    SELECT max(id) + 1
+                                      FROM user_webauthn_credentials
+                                     WHERE participant = %(p_id)s
+                                ), 1),
+                                %(name)s,
+                                %(credential_id)s,
+                                %(public_key)s,
+                                %(sign_count)s
+                         )
+                    ON CONFLICT (participant, id) DO UPDATE
+                            SET name = excluded.name
+                              , credential_id = excluded.credential_id
+                              , public_key = excluded.public_key
+                              , latest_counter = excluded.latest_counter
+                              , mtime = current_timestamp;
+
+                    DELETE FROM user_secrets
+                     WHERE participant = %(p_id)s
+                       AND id = %(challenge_id)s;
+                """, dict(
+                    p_id=self.id,
+                    name=name,
+                    credential_id=credential_id,
+                    public_key=public_key,
+                    sign_count=verified.sign_count,
+                    challenge_id=challenge_id,
+                ))
+                self.add_event(c, 'enable_2fa', dict(type='webauthn'))
+        except IntegrityError:
+            # The credential is already registered (the unique index on
+            # credential_id was violated). Treat it as a graceful failure.
+            return False
+        self.__dict__['has_two_factor'] = True
+        self.__dict__['has_webauthn'] = True
+        return True
+
+    def delete_webauthn(self, credential_id):
+        with self.db.get_cursor() as c:
+            r = c.one("""
+                DELETE FROM user_webauthn_credentials
+                 WHERE participant = %s
+                   AND id = %s
+             RETURNING 1
+            """, (self.id, credential_id))
+            if r:
+                self.add_event(c, 'disable_2fa', dict(type='webauthn'))
+        self.__dict__.pop('has_two_factor', None)
+        self.__dict__.pop('has_webauthn', None)
+        return bool(r)
+
+    def get_webauthn_authentication_options(self, challenge_token):
+        options = webauthn.generate_authentication_options(
+            rp_id=self._webauthn_rp_id(),
+            challenge=challenge_token.encode('ascii'),
+            allow_credentials=self._webauthn_credential_descriptors(),
+            user_verification=webauthn.UserVerificationRequirement.PREFERRED,
+        )
+        return webauthn.options_to_json(options)
+
+    def check_webauthn(self, challenge_token, credential):
+        try:
+            credential_id = credential.get('id') if isinstance(credential, dict) else stdlib_json.loads(credential)['id']
+        except (KeyError, TypeError, ValueError):
+            return False
+        r = self.db.one("""
+            SELECT id, public_key, latest_counter
+              FROM user_webauthn_credentials
+             WHERE participant = %s
+               AND credential_id = %s
+        """, (self.id, credential_id))
+        if not r:
+            return False
+        public_key = stdlib_json.loads(r.public_key)
+        try:
+            verified = webauthn.verify_authentication_response(
+                credential=credential,
+                expected_challenge=challenge_token.encode('ascii'),
+                expected_rp_id=self._webauthn_rp_id(),
+                expected_origin=self._webauthn_origin(),
+                credential_public_key=webauthn.base64url_to_bytes(public_key['public_key']),
+                credential_current_sign_count=r.latest_counter or 0,
+            )
+        except Exception:
+            return False
+        self.db.run("""
+            UPDATE user_webauthn_credentials
+               SET latest_counter = %s
+                 , mtime = current_timestamp
+             WHERE participant = %s
+               AND id = %s
+        """, (verified.new_sign_count, self.id, r.id))
+        return True
+
+    @classmethod
+    def authenticate_with_two_factor_challenge(
+        cls, p_id, challenge_id, token, code=None, webauthn_credential=None,
+    ):
+        request = website.state.get({}).get('request')
+        if request:
+            cls.db.hit_rate_limit('log-in.2fa.ip-addr', str(request.source), TooManyLogInAttempts)
+        try:
+            p_id = int(p_id)
+            challenge_id = int(challenge_id)
+        except (TypeError, ValueError):
+            return None, ''
+        if (
+            challenge_id < cls.TWO_FACTOR_CHALLENGE_ID_MIN or
+            challenge_id > cls.TWO_FACTOR_CHALLENGE_ID_MAX
+        ):
+            return None, ''
+        r = cls.db.one("""
+            SELECT p, s.secret
+              FROM user_secrets s
+              JOIN participants p ON p.id = s.participant
+             WHERE s.participant = %s
+               AND s.id = %s
+               AND s.mtime > (current_timestamp - interval '10 minutes')
+        """, (p_id, challenge_id))
+        if not r:
+            return None, ''
+        p, stored_secret = r
+        stored_token, session_suffix = stored_secret.split(':', 1)
+        if not constant_time_compare(stored_token, token or ''):
+            return None, ''
+        cls.db.hit_rate_limit('log-in.2fa', p.id, TooManyLogInAttempts)
+        if webauthn_credential:
+            verified = p.check_webauthn(stored_token, webauthn_credential)
+        else:
+            verified = p.check_totp(code)
+        if not verified:
+            return None, ''
+        cls.db.decrement_rate_limit('log-in.2fa', p.id)
+        if request:
+            cls.db.decrement_rate_limit('log-in.2fa.ip-addr', str(request.source))
+        cls.db.run("""
+            DELETE FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+        """, (p.id, challenge_id))
+        p.authenticated = True
+        return p, session_suffix
 
 
     # Session Management

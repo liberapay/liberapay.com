@@ -55,5 +55,86 @@
     % endif
 
     <h3>{{ _("2FA") }}</h3>
-    <p>{{ _("Liberapay does not yet support two-factor authentication.") }}</p>
+    % if request.qs.parse_boolean('otp_mismatch', False)
+        <p class="alert alert-danger">{{ _("The submitted authentication code is incorrect.") }}</p>
+    % endif
+    % if participant.has_totp
+        <p>{{ _("Two-factor authentication is enabled on your account.") }}</p>
+        <form action="{{ participant.path('settings/edit') }}" method="POST" class="form-inline buttons">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+            <div class="form-group">
+                <input name="otp-code" class="form-control"
+                       inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code"
+                       placeholder="{{ _('Authentication code') }}" required />
+            </div>
+            <button class="btn btn-default" name="action" value="disable-otp">{{ _("Disable 2FA") }}</button>
+        </form>
+    % else
+        % set otp_secret = participant.generate_totp_secret()
+        <details>
+            <summary class="btn btn-default">{{ _("Set up 2FA") }}</summary>
+            <div class="two-factor-setup">
+                <p>{{ _("Scan this QR code with your two-factor authentication app:") }}</p>
+                <div class="two-factor-qr">{{ participant.get_totp_qr_svg(otp_secret)|safe }}</div>
+                <p>{{ _("If you can't scan the QR code, enter this setup key instead:") }}</p>
+                <p><code>{{ otp_secret }}</code></p>
+                <p class="help-block"><a href="{{ participant.get_totp_uri(otp_secret) }}">{{ _("Open authenticator app") }}</a></p>
+                <form action="{{ participant.path('settings/edit') }}" method="POST" class="form-inline buttons">
+                    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+                    <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+                    <input name="otp-secret" type="hidden" value="{{ otp_secret }}" />
+                    % if require_current_password
+                    <div class="form-group">
+                        <input type="password" name="cur-password" class="form-control"
+                               autocomplete="current-password" placeholder="{{ _('Current password') }}" />
+                    </div>
+                    % endif
+                    <div class="form-group">
+                        <input name="otp-code" class="form-control"
+                               inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code"
+                               placeholder="{{ _('Authentication code') }}" required />
+                    </div>
+                    <button class="btn btn-default" name="action" value="enable-otp">{{ _("Enable 2FA") }}</button>
+                </form>
+            </div>
+        </details>
+    % endif
+
+    <h4>{{ _("Passkeys") }}</h4>
+    % set passkeys = participant.get_webauthn_credentials()
+    % if passkeys
+        <ul class="list-unstyled">
+        % for passkey in passkeys
+            <li>
+                <form action="{{ participant.path('settings/edit') }}" method="POST" class="form-inline buttons">
+                    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+                    <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+                    <input name="webauthn-id" type="hidden" value="{{ passkey.id }}" />
+                    % if require_current_password
+                    <div class="form-group">
+                        <input type="password" name="cur-password" class="form-control"
+                               autocomplete="current-password" placeholder="{{ _('Current password') }}" />
+                    </div>
+                    % endif
+                    <span>{{ passkey.name }}</span>
+                    <button class="btn btn-default btn-sm" name="action" value="delete-webauthn">{{ _("Delete") }}</button>
+                </form>
+            </li>
+        % endfor
+        </ul>
+    % endif
+    <form action="{{ participant.path('settings/passkeys') }}" method="POST" class="form-inline buttons" data-webauthn-register>
+        <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+        % if require_current_password
+        <div class="form-group">
+            <input type="password" name="cur-password" class="form-control"
+                   autocomplete="current-password" placeholder="{{ _('Current password') }}" />
+        </div>
+        % endif
+        <div class="form-group">
+            <input name="name" class="form-control" placeholder="{{ _('Name') }}" />
+        </div>
+        <button class="btn btn-default" type="button" data-webauthn-register-button>{{ _("Add passkey") }}</button>
+    </form>
 % endmacro
