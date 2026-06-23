@@ -91,6 +91,7 @@ def sign_in_with_form_data(body, state):
                 challenge_p = Participant.from_id(challenge_participant_id, _raise=False)
             if challenge_p:
                 challenge['has_totp'] = challenge_p.has_totp
+                challenge['has_recovery'] = challenge_p.count_recovery_codes() > 0
                 if challenge_p.has_webauthn:
                     challenge['webauthn_options'] = (
                         challenge_p.get_webauthn_authentication_options(challenge['token'])
@@ -411,6 +412,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             id=challenge.id,
             token=challenge.token,
             has_totp=p.has_totp,
+            has_recovery=p.count_recovery_codes() > 0,
         )
         if p.has_webauthn:
             state['log-in.otp-challenge']['webauthn_options'] = (

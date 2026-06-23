@@ -137,4 +137,29 @@
         </div>
         <button class="btn btn-default" type="button" data-webauthn-register-button>{{ _("Add passkey") }}</button>
     </form>
+
+    <h4>{{ _("Recovery codes") }}</h4>
+    % if participant.has_two_factor
+        % set recovery_count = participant.count_recovery_codes()
+        % if recovery_count > 0
+            <p>{{ ngettext(
+                "You have {n} unused recovery code.",
+                "You have {n} unused recovery codes.",
+                n=recovery_count) }}</p>
+            <a class="btn btn-default" href="{{ participant.path('settings/recovery-codes') }}">{{ _("Generate new recovery codes") }}</a>
+        % else
+            <p class="alert alert-warning">{{ _(
+                "You don't have any recovery codes. Without them you will lose "
+                "access to your account if you lose your authenticator device "
+                "and passkeys. We strongly recommend generating recovery codes now."
+            ) }}</p>
+            <a class="btn btn-primary" href="{{ participant.path('settings/recovery-codes') }}">{{ _("Generate recovery codes") }}</a>
+        % endif
+    % else
+        <p class="help-block">{{ _(
+            "Recovery codes let you log in when you don't have access to your "
+            "other authentication methods. They'll become available once you've "
+            "enabled two-factor authentication or added a passkey."
+        ) }}</p>
+    % endif
 % endmacro

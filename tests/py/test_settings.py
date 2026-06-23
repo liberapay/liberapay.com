@@ -330,6 +330,68 @@ class TestTwoFactorAuthentication(Harness):
         assert alice.check_totp(code) is True
         assert alice.check_totp(code) is False
 
+    def test_recovery_codes(self):
+        alice = self.make_participant('alice')
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+
+        assert alice.count_recovery_codes() == 0
+        codes = alice.generate_recovery_codes()
+        assert len(codes) == 10
+        assert len(set(codes)) == 10
+        assert alice.count_recovery_codes() == 10
+
+        # Only the hashes are stored, never the plaintext codes.
+        stored = self.db.one(
+            "SELECT secret FROM user_secrets WHERE participant = %s AND id = %s",
+            (alice.id, Participant.RECOVERY_CODES_ID)
+        )
+        for code in codes:
+            assert code not in stored
+
+        # A code works once, then is consumed.
+        assert alice.check_recovery_code(codes[0]) is True
+        assert alice.count_recovery_codes() == 9
+        assert alice.check_recovery_code(codes[0]) is False
+        # It's accepted regardless of formatting (spaces, case, dashes).
+        assert alice.check_recovery_code(codes[1].upper().replace('-', ' ')) is True
+        assert alice.count_recovery_codes() == 8
+        # Garbage is rejected.
+        assert alice.check_recovery_code('not-a-real-code') is False
+        # Regenerating invalidates the old codes.
+        new_codes = alice.generate_recovery_codes()
+        assert alice.count_recovery_codes() == 10
+        assert alice.check_recovery_code(codes[2]) is False
+        assert alice.check_recovery_code(new_codes[0]) is True
+
+    def test_recovery_codes_page(self):
+        alice = self.make_participant('alice')
+
+        # Before 2FA is enabled, the page explains codes aren't useful yet.
+        r = self.client.GET('/alice/settings/recovery-codes', auth_as=alice)
+        assert r.code == 200
+        assert "enabled two-factor authentication" in r.text
+
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+
+        r = self.client.GET('/alice/settings/recovery-codes', auth_as=alice)
+        assert r.code == 200
+        assert "Generate recovery codes" in r.text
+
+        r = self.client.POST('/alice/settings/recovery-codes', {
+            'action': 'generate',
+        }, auth_as=alice, raise_immediately=False)
+        assert r.code == 200, r.text
+        assert alice.count_recovery_codes() == 10
+        # All ten codes are shown once.
+        stored = self.db.one(
+            "SELECT secret FROM user_secrets WHERE participant = %s AND id = %s",
+            (alice.id, Participant.RECOVERY_CODES_ID)
+        )
+        import json as _json
+        assert r.text.count('<code>') == len(_json.loads(stored))
+
     def test_enabling_2fa_requires_the_current_password(self):
         password = 'correct-horse-battery-staple'
         alice = self.make_participant('alice', password=password)

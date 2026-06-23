@@ -45,14 +45,23 @@
         <p class="alert alert-danger">{{ state['log-in.otp-error'] }}</p>
     % endif
 
-    % if challenge.get('has_totp')
-        <p>{{ _("Please enter the authentication code from your two-factor authentication app:") }}</p>
+    % if challenge.get('has_totp') or challenge.get('has_recovery')
+        % if challenge.get('has_totp')
+            <p>{{ _("Please enter the authentication code from your two-factor authentication app:") }}</p>
+        % else
+            <p>{{ _("Please enter one of your recovery codes:") }}</p>
+        % endif
         <div class="form-group">
             <input name="log-in.otp-code" class="form-control"
+                   % if challenge.get('has_totp') and not challenge.get('has_recovery')
                    inputmode="numeric" pattern="[0-9]*"
+                   % endif
                    autocomplete="one-time-code"
-                   placeholder="{{ _('Authentication code') }}" required />
+                   placeholder="{{ _('Authentication code') if challenge.get('has_totp') else _('Recovery code') }}" required />
         </div>
+        % if challenge.get('has_totp') and challenge.get('has_recovery')
+            <p class="help-block">{{ _("If you've lost access to your authentication app, you can enter one of your recovery codes instead.") }}</p>
+        % endif
         <button class="btn btn-primary">{{ _("Log in") }}</button>
     % endif
     % if challenge.get('webauthn_options')

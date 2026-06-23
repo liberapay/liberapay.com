@@ -158,6 +158,27 @@ class TestLogIn(EmailHarness):
         r = self.client.POST('/sign-in', data, raise_immediately=False)
         self.check_login(r, alice)
 
+    def test_log_in_with_recovery_code(self):
+        alice = self.make_participant('alice', password=password)
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+        recovery_codes = alice.generate_recovery_codes()
+
+        r = self.log_in('alice', password, HTTP_ACCEPT=b'text/html')
+        assert SESSION not in r.headers.cookie
+        assert "recovery code" in r.text
+
+        data = {
+            'log-in.otp-participant': extract_hidden_input(r.text, 'log-in.otp-participant'),
+            'log-in.otp-challenge-id': extract_hidden_input(r.text, 'log-in.otp-challenge-id'),
+            'log-in.otp-challenge-token': extract_hidden_input(r.text, 'log-in.otp-challenge-token'),
+            'log-in.otp-code': recovery_codes[0],
+        }
+        r = self.client.POST('/sign-in', data, raise_immediately=False)
+        self.check_login(r, alice)
+        # The recovery code has been consumed.
+        assert alice.count_recovery_codes() == 9
+
     def test_password_is_checked_during_log_in(self):
         password = 'password'
         alice = self.make_participant('alice', password=password)

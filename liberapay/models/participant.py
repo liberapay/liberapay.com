@@ -1,10 +1,10 @@
-from base64 import b64decode, b64encode
+from base64 import b32encode, b64decode, b64encode
 from collections import defaultdict
 from datetime import date, timedelta
 from decimal import Decimal
 from email.utils import formataddr
 from functools import cached_property
-from hashlib import pbkdf2_hmac, md5, sha1
+from hashlib import pbkdf2_hmac, md5, sha1, sha256
 from operator import attrgetter, itemgetter
 from os import urandom
 from random import randint
@@ -123,6 +123,7 @@ class Participant(Model, MixinTeam):
     ANON = False
     EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
     TOTP_SECRET_ID = -1
+    RECOVERY_CODES_ID = -2
     TWO_FACTOR_CHALLENGE_ID_MIN = -20
     TWO_FACTOR_CHALLENGE_ID_MAX = -11
     WEBAUTHN_REGISTRATION_CHALLENGE_ID_MIN = -40
@@ -496,6 +497,8 @@ class Participant(Model, MixinTeam):
 
     @cached_property
     def has_two_factor(self):
+        # Note: recovery codes are deliberately excluded, they're a fallback for
+        # when the real second factors are unavailable, not a factor on their own.
         return self.db.one("""
             SELECT EXISTS (
                        SELECT 1
@@ -605,6 +608,96 @@ class Participant(Model, MixinTeam):
          RETURNING true
         """, (new_stored, self.id, self.TOTP_SECRET_ID, stored))
         return bool(accepted)
+
+
+    # Recovery codes
+    # --------------
+    # Single-use fallback codes, so that losing one's authenticator device or
+    # passkeys doesn't mean losing access to the account. They're stored hashed
+    # in a single user_secrets row as a JSON array.
+
+    RECOVERY_CODES_COUNT = 10
+
+    @staticmethod
+    def _normalize_recovery_code(code):
+        return ''.join(str(code or '').split()).replace('-', '').lower()
+
+    @classmethod
+    def _hash_recovery_code(cls, code):
+        normalized = cls._normalize_recovery_code(code)
+        return sha256(normalized.encode('ascii')).hexdigest()
+
+    def generate_recovery_codes(self):
+        """Generate a fresh set of single-use recovery codes.
+
+        The new codes replace any previous ones. The plaintext codes are
+        returned so that they can be shown to the user once; only their hashes
+        are stored.
+        """
+        codes = []
+        for i in range(self.RECOVERY_CODES_COUNT):
+            raw = b32encode(urandom(10)).decode('ascii').lower()
+            codes.append('-'.join((raw[0:4], raw[4:8], raw[8:12], raw[12:16])))
+        hashes = stdlib_json.dumps(sorted(self._hash_recovery_code(c) for c in codes))
+        with self.db.get_cursor() as c:
+            c.run("""
+                INSERT INTO user_secrets
+                            (participant, id, secret)
+                     VALUES (%s, %s, %s)
+                ON CONFLICT (participant, id) DO UPDATE
+                        SET secret = excluded.secret
+                          , mtime = current_timestamp
+            """, (self.id, self.RECOVERY_CODES_ID, hashes))
+            self.add_event(c, 'generate_recovery_codes', None)
+        return codes
+
+    def count_recovery_codes(self):
+        secret = self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+        """, (self.id, self.RECOVERY_CODES_ID))
+        return len(stdlib_json.loads(secret)) if secret else 0
+
+    def check_recovery_code(self, code):
+        code_hash = self._hash_recovery_code(code)
+        if not self._normalize_recovery_code(code):
+            return False
+        with self.db.get_cursor() as c:
+            secret = c.one("""
+                SELECT secret
+                  FROM user_secrets
+                 WHERE participant = %s
+                   AND id = %s
+                   FOR UPDATE
+            """, (self.id, self.RECOVERY_CODES_ID))
+            if not secret:
+                return False
+            hashes = stdlib_json.loads(secret)
+            match = next(
+                (h for h in hashes if constant_time_compare(h, code_hash)),
+                None,
+            )
+            if match is None:
+                return False
+            hashes = [h for h in hashes if h != match]
+            if hashes:
+                c.run("""
+                    UPDATE user_secrets
+                       SET secret = %s
+                         , mtime = current_timestamp
+                     WHERE participant = %s
+                       AND id = %s
+                """, (stdlib_json.dumps(hashes), self.id, self.RECOVERY_CODES_ID))
+            else:
+                c.run("""
+                    DELETE FROM user_secrets
+                     WHERE participant = %s
+                       AND id = %s
+                """, (self.id, self.RECOVERY_CODES_ID))
+            self.add_event(c, 'used_recovery_code', None)
+        return True
 
     def reauthenticate(self, password):
         """Confirm the user's identity before a sensitive account change.
@@ -903,7 +996,7 @@ class Participant(Model, MixinTeam):
         if webauthn_credential:
             verified = p.check_webauthn(stored_token, webauthn_credential)
         else:
-            verified = p.check_totp(code)
+            verified = p.check_totp(code) or p.check_recovery_code(code)
         if not verified:
             return None, ''
         cls.db.decrement_rate_limit('log-in.2fa', p.id)
