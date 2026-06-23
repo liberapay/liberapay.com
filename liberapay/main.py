@@ -348,6 +348,8 @@ def _Querystring_serialize(self, **kw):
 aspen.http.request.Querystring.serialize = _Querystring_serialize
 del _Querystring_serialize
 
+pando.http.request.STANDARD_METHODS.add('QUERY')
+
 pando.http.request.Headers.__init__ = pando.http.mapping.CaseInsensitiveMapping.__init__
 
 if hasattr(pando.http.request.Request, 'cookies'):
