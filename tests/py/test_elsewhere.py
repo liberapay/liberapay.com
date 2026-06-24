@@ -3,6 +3,7 @@ from unittest import mock
 
 from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo
+from liberapay.elsewhere._paginators import header_links_paginator
 from liberapay.exceptions import LazyResponse
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
@@ -82,6 +83,36 @@ class TestElsewhere(EmailHarness):
         r = self.client.GET('/alice/edit/repositories', auth_as=alice)
         assert r.code == 200
         assert 'Forgejo' in r.text
+
+    def test_header_links_paginator_honors_total_header(self):
+        # Simulate a multi-page response: response.links contains a 'next' link,
+        # so total_count starts at -1 and the total_header is consulted.
+        response = mock.Mock()
+        response.request.url = 'https://codeberg.org/api/v1/repos/search?page=1'
+        response.links = {'next': {'url': 'https://codeberg.org/api/v1/repos/search?page=2'}}
+        response.headers.get.side_effect = lambda key, default: '42' if key == 'X-Total-Count' else default
+        platform = mock.Mock()
+        platform.api_url = 'https://codeberg.org/api/v1'
+        paginator = header_links_paginator(total_header='X-Total-Count')
+        parsed = [{'id': i} for i in range(10)]
+        page, total_count, links = paginator(platform, response, parsed)
+        assert total_count == 42
+        assert 'next' in links
+        assert page is parsed
+
+    def test_header_links_paginator_none_total_header_skips_header(self):
+        # When total_header=None (e.g. GitHub), the header is never read even
+        # on a multi-page response.
+        response = mock.Mock()
+        response.request.url = 'https://api.github.com/user/repos?page=1'
+        response.links = {'next': {'url': 'https://api.github.com/user/repos?page=2'}}
+        platform = mock.Mock()
+        platform.api_url = 'https://api.github.com'
+        paginator = header_links_paginator()
+        parsed = [{'id': i} for i in range(30)]
+        page, total_count, links = paginator(platform, response, parsed)
+        response.headers.get.assert_not_called()
+        assert total_count == -1
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
