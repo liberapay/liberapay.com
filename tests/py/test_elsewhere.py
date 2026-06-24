@@ -3,6 +3,7 @@ from unittest import mock
 
 from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo
+from liberapay.exceptions import LazyResponse
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
@@ -40,6 +41,41 @@ class TestElsewhere(EmailHarness):
             assert isinstance(r, UserInfo)
             assert r.user_id is not None
             assert len(r.user_id) > 0
+
+    def test_forgejo_extracts_user_info(self):
+        forgejo = website.platforms.forgejo
+        domain, user_info = get_user_info_example('forgejo')
+        u = forgejo.extract_user_info(user_info, domain)
+        assert u.domain == 'codeberg.org'
+        assert u.user_id == '12345'
+        assert u.user_name == 'example'
+        assert u.display_name == 'Example User'
+        assert u.email == 'example@codeberg.org'
+
+    def test_forgejo_extracts_repo_info(self):
+        forgejo = website.platforms.forgejo
+        repo = forgejo.extract_repo_info({
+            "id": 678,
+            "name": "myrepo",
+            "full_name": "example/myrepo",
+            "description": "A test repository.",
+            "fork": False,
+            "stars_count": 7,
+            "updated_at": "2021-06-01T12:00:00Z",
+            "owner": {"id": 12345, "login": "example"},
+        })
+        assert repo.remote_id == '678'
+        assert repo.slug == 'example/myrepo'
+        assert repo.name == 'myrepo'
+        assert repo.owner_id == '12345'
+        assert repo.is_fork is False
+        assert repo.stars_count == 7
+
+    def test_forgejo_unconfigured_domain_raises_friendly_error(self):
+        forgejo = website.platforms.forgejo
+        with self.assertRaises(LazyResponse) as cm:
+            forgejo.get_credentials('unconfigured.example')
+        assert cm.exception.code == 502
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
