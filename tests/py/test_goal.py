@@ -1,5 +1,5 @@
 from liberapay.testing import EUR, Harness
-
+from liberapay.testing.emails import EmailHarness
 
 class Tests(Harness):
 
@@ -70,3 +70,35 @@ class Tests(Harness):
         )
         assert r.code == 302
         assert team.refetch().goal == EUR('99.99')
+
+class TestPauseDonations(EmailHarness):
+    def setUp(self):
+        EmailHarness.setUp(self)
+        self.alice = self.make_participant('alice', email='alice@example.com')
+
+    def change_goal(self, goal, goal_custom="", auth_as="alice", expect_success=False):
+        r = self.client.PxST(
+            "/alice/edit/goal",
+            {'goal': goal, 'goal_custom': goal_custom},
+            auth_as=self.alice if auth_as == 'alice' else auth_as
+        )
+        if expect_success and r.code >= 400:
+            raise r
+        return r
+
+    def test_pause(self):
+        bob = self.make_participant('bob', email='bob@example.com')
+        bob.set_tip_to(self.alice, EUR('0.99'), renewal_mode=2)
+        self.change_goal("-2", expect_success=True)
+
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0] == 'bob <bob@example.com>'
+        assert "paused" in last_email['text']
+
+        self.change_goal("null", "", expect_success=True)
+
+        assert self.mailer.call_count == 2
+        last_email = self.get_last_email()
+        assert last_email['to'][0] == 'bob <bob@example.com>'
+        assert "resume" in last_email['text']
