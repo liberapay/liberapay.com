@@ -77,6 +77,12 @@ class TestElsewhere(EmailHarness):
             forgejo.get_credentials('unconfigured.example')
         assert cm.exception.code == 502
 
+    def test_forgejo_in_repositories_import_list(self):
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/edit/repositories', auth_as=alice)
+        assert r.code == 200
+        assert 'Forgejo' in r.text
+
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
@@ -385,12 +391,6 @@ class TestConfirmTakeOver(Harness):
                                     cookies=self.connect_cookie)
         assert response.code == 302
         assert response.headers[b'Location'].endswith(b'/bob/edit/elsewhere')
-
-    def test_forgejo_in_repositories_import_list(self):
-        alice = self.make_participant('alice')
-        r = self.client.GET('/alice/edit/repositories', auth_as=alice)
-        assert r.code == 200
-        assert 'Forgejo' in r.text
 
 
 class TestElsewhereDelete(Harness):
