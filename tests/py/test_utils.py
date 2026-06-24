@@ -1,9 +1,10 @@
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
-from markupsafe import escape
+from misaka import escape_html
 from pando.http.response import Response
 from pando.testing.client import DidntRaiseResponse
+from urllib.parse import quote
 
 from liberapay import utils
 from liberapay.i18n.currencies import Money, MoneyBasket
@@ -118,7 +119,7 @@ class Tests(Harness):
     def test_markdown_autolink_filtering(self):
         # Nice data
         for url in ('http://a', "https://b?x&y", 'xmpp:c'):
-            expected = '<p><a href="{0}">{0}</a></p>\n'.format(escape(url))
+            expected = f'<p><a href="{markdown.renderer.canonical_host}/redirect?url={quote(escape_html(url, escape_slash=True))}" target="_blank">{escape_html(url)}</a></p>\n'
             actual = markdown.render('<%s>' % url)
             assert actual == expected
         # Naughty data
@@ -128,11 +129,23 @@ class Tests(Harness):
         encoded_link = ''.join('&x{0:x};'.format(ord(c)) for c in link)
         html = markdown.render('<%s>' % encoded_link)
         assert link not in html
+    
+    def test_markdown_is_internal_url(self):
+        # Internal URLs
+        assert markdown._is_internal_url("https://liberapay.com/page")
+        assert markdown._is_internal_url("https://subdomain.liberapay.net/other")
+        assert markdown._is_internal_url("https://liberapay.org/help")
+        
+        # External URLs
+        assert not markdown._is_internal_url("http://example.com")
+        assert not markdown._is_internal_url("https://liberapay.fake.com")
+        assert not markdown._is_internal_url("https://google.com")
+        assert not markdown._is_internal_url("ftp://liberapay.com/file")
 
     def test_markdown_link_filtering(self):
         # Nice data
         for url in ('http://a', 'https://b', 'xmpp:c'):
-            expected = '<p><a href="{0}" title="bar&#39;%s">&#39;foo%s</a></p>\n'.format(url)
+            expected = f'<p><a href="{markdown.renderer.canonical_host}/redirect?url={quote(escape_html(url, escape_slash=True))}" title="bar&#39;%s" target="_blank">&#39;foo%s</a></p>\n'
             actual = markdown.render("['foo%%s](%s \"bar'%%s\")" % url)
             assert actual == expected
         # Naughty data
@@ -157,6 +170,13 @@ class Tests(Harness):
         expected = '<p>![foo](javascript:foo)</p>\n'
         assert markdown.render('![foo](javascript:foo)') == expected
 
+    def test_markdown_image_src_is_ignored_for_rewriting(self):
+        # Image source should not rewrite
+        md_text = "![Example](http://example.com/image.png)"
+        expected = '<p><img src="http://example.com/image.png" alt="Example" /></p>'
+        actual = markdown.render(md_text)
+        assert expected in actual
+
     def test_markdown_render_doesnt_allow_any_explicit_anchors(self):
         expected = '<p>foo</p>\n'
         assert markdown.render('<a href="http://example.com/">foo</a>') == expected
@@ -166,7 +186,7 @@ class Tests(Harness):
         assert markdown.render('<a href="javascript:foo">foo</a>') == expected
 
     def test_markdown_render_autolinks(self):
-        expected = '<p><a href="http://google.com/">http://google.com/</a></p>\n'
+        expected = f'<p><a href="{markdown.renderer.canonical_host}/redirect?url=http%3A%26%2347%3B%26%2347%3Bgoogle.com%26%2347%3B" target="_blank">http://google.com/</a></p>\n'
         actual = markdown.render('http://google.com/')
         assert expected == actual
 
@@ -174,6 +194,21 @@ class Tests(Harness):
         expected = '<p>Examples like this_one and this other_one.</p>\n'
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
+
+    def test_markdown_render_autolink_non_whitelisted_protocol(self):
+        # Invalid protocol
+        url = "javascript:alert(1)"
+        expected = "&lt;javascript:alert(1)&gt;"
+        actual = markdown.render(f"<{url}>")
+        assert expected in actual
+
+    def test_markdown_render_invalid_url(self):
+        # Invalid URL should not render as a link
+        md_text = "[Invalid](javascript:alert('XSS'))"
+        expected = "<p>[Invalid](javascript:alert(&#39;XSS&#39;))</p>"
+        actual = markdown.render(md_text)
+
+        assert expected in actual
 
     # Base64 encoding/decoding
     # ========================
