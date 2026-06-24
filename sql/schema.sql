@@ -174,6 +174,19 @@ CREATE TRIGGER update_profile_visibility
     BEFORE INSERT OR UPDATE ON participants
     FOR EACH ROW EXECUTE PROCEDURE update_profile_visibility();
 
+--  adding a new column for the income goal
+ALTER TABLE participants ADD COLUMN weekly_income_goal numeric(10, 2);
+
+-- Create a new table to store income notifications
+CREATE TABLE income_notifications (
+    id serial PRIMARY KEY,
+    user_id bigint NOT NULL REFERENCES participants(id) ON DELETE CASCADE,
+    notified_date timestamp with time zone NOT NULL DEFAULT current_timestamp,
+    UNIQUE (user_id, notified_date)  -- Ensure no duplicate notifications for the same date
+);
+
+-- Index for quick lookup by user_id
+CREATE INDEX idx_income_notifications_user_id ON income_notifications(user_id);
 
 -- settings specific to users who want to receive donations
 

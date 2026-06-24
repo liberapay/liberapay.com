@@ -3259,6 +3259,78 @@ class Participant(Model, MixinTeam):
             )
 
         return new_schedule
+    
+ 
+    # Check Income Goals 
+    def check_income_goals(self):
+        """Check if the participant's income over the past four weeks meets or exceeds their weekly income goal."""
+        four_weeks_ago = utcnow() - FOUR_WEEKS
+        received_income = self.get_received_income(self.db, four_weeks_ago, utcnow())
+
+        if received_income >= self.weekly_income_goal * 4:  # Assume the goal is weekly
+            if not self.has_recent_notification(self.db):
+                self.send_income_goal_met_notification(self.db)
+
+    def get_received_income(self, start_date, end_date, save = True):
+         with self.db.get_cursor() as cursor:
+            # Prevent race conditions
+            if save:
+                cursor.run("SELECT * FROM participants WHERE id = %s FOR UPDATE",
+                           (self.id,))
+            """Retrieve the total income received by this participant between two dates."""
+            query =  cursor.all("""
+                SELECT COALESCE(SUM(amount), 0) FROM transfers
+                WHERE recipient = {user_id}
+                AND timestamp BETWEEN {start_date} AND {end_date}
+            """).format(
+                user_id=self.id,
+                start_date=start_date,
+                end_date=end_date
+            )
+            return self.db.one(query)
+
+    def has_recent_notification(self):
+        """Check if a notification has been sent to this participant in the past week."""
+        query = self.db.one("""
+            SELECT EXISTS(
+                SELECT 1 FROM income_notifications
+                WHERE user_id = {user_id}
+                AND notified_date > CURRENT_DATE - INTERVAL '1 week'
+            )
+        """).format(user_id=self.id)
+        return self.db.one(query)
+
+    def send_income_goal_met_notification(self, save = True):
+        """Send a notification and record it in the database."""
+        notify = False
+        if notify:
+            sp_to_dict = lambda sp: {
+                'amount': sp.amount,
+                'execution_date': sp.execution_date,
+            }
+            self.notify(
+                '"Your income has met your set goal!"',
+                force_email=True,
+                added_payments=[sp_to_dict(new_sp) for new_sp in insertions],
+                cancelled_payments=[sp_to_dict(old_sp) for old_sp in deletions],
+                modified_payments=[t for t in (
+                    (sp_to_dict(old_sp), sp_to_dict(new_sp))
+                    for old_sp, new_sp in updates
+                    if old_sp.notifs_count > 0
+                ) if t[0] != t[1]],
+                new_schedule=new_schedule,
+            )
+
+
+        # Record the notification being sent in the database
+        query = self.db("""
+            INSERT INTO income_notifications (user_id, notified_date)
+            VALUES ({user_id}, CURRENT_TIMESTAMP)
+        """).format(user_id=self.id)
+        self.db.run(query)
+
+    
+
 
 
     def get_tip_to(self, tippee, currency=None):
