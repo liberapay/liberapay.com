@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from liberapay.elsewhere._paginators import _modify_query
+from liberapay.exceptions import TooManyAttempts
 from liberapay.i18n.base import to_age
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
@@ -77,6 +78,9 @@ if action == 'invite':
                 username=invitee.username, timespan_ago=invite_age
             ))
     if not invitee.member_of(team):
+        website.db.hit_rate_limit('team_invite.from_user', user.id, TooManyAttempts)
+        website.db.hit_rate_limit('team_invite.to_user', invitee.id, TooManyAttempts)
+        website.db.hit_rate_limit('team_invite.for_team', team.id, TooManyAttempts)
         team.invite(invitee, user)
         msg = _("{0} has been invited to the team.", invitee.username)
     else:

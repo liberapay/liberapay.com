@@ -371,6 +371,9 @@ RATE_LIMITS = {
     'sign-up.ip-net': (10, 30*60),  # 10 per 30 minutes per IP network
     'sign-up.country': (15, 15*60),  # 15 per 15 minutes per country
     'sign-up.ip-version': (20, 10*60),  # 20 per 10 minutes per IP version
+    'team_invite.from_user': (25, 60*60*24*7),  # 25 per week
+    'team_invite.to_user': (5, 60*60*24*7),  # 5 per week
+    'team_invite.for_team': (25, 60*60*24*7),  # 25 per week
 }
 
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
