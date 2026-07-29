@@ -910,9 +910,11 @@ class Participant(Model, MixinTeam):
         tippees = cursor.all("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode, visibility )
+                      , paid_in_advance, is_funded, renewal_mode, visibility
+                      , past_transfers_sum )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
                       , paid_in_advance, is_funded, 0, visibility
+                      , past_transfers_sum
                    FROM current_tips
                   WHERE tipper = %s
                     AND renewal_mode > 0
@@ -2657,7 +2659,9 @@ class Participant(Model, MixinTeam):
                         ( ctime, tipper, tippee, amount, period, periodic_amount
                         , paid_in_advance
                         , renewal_mode
-                        , visibility )
+                        , visibility
+                        , past_transfers_sum
+                        )
                  VALUES ( COALESCE((SELECT ctime FROM current_tip), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
                         , (SELECT convert(paid_in_advance, %(currency)s) FROM current_tip)
@@ -2670,7 +2674,9 @@ class Participant(Model, MixinTeam):
                               %(visibility)s,
                               (SELECT abs(visibility) FROM current_tip),
                               1
-                          ) )
+                          )
+                        , (SELECT convert(past_transfers_sum, %(currency)s) FROM current_tip)
+                        )
               RETURNING tips
 
         """, dict(
@@ -2713,9 +2719,11 @@ class Participant(Model, MixinTeam):
         t = self.db.one("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode, visibility )
+                      , paid_in_advance, is_funded, renewal_mode, visibility
+                      , past_transfers_sum )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
                       , paid_in_advance, is_funded, 0, visibility
+                      , past_transfers_sum
                    FROM current_tips
                   WHERE tipper = %(tipper)s
                     AND tippee = %(tippee)s
@@ -2740,9 +2748,11 @@ class Participant(Model, MixinTeam):
         return self.db.one("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode, visibility )
+                      , paid_in_advance, is_funded, renewal_mode, visibility
+                      , past_transfers_sum )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
                       , paid_in_advance, is_funded, renewal_mode, -visibility
+                      , past_transfers_sum
                    FROM current_tips
                   WHERE tipper = %(tipper)s
                     AND tippee = %(tippee)s
@@ -3651,7 +3661,7 @@ class Participant(Model, MixinTeam):
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period
                       , periodic_amount, is_funded, renewal_mode, visibility
-                      , paid_in_advance )
+                      , paid_in_advance, past_transfers_sum )
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period
                       , periodic_amount, is_funded, renewal_mode, visibility
@@ -3659,6 +3669,10 @@ class Participant(Model, MixinTeam):
                             FROM temp_tips t2
                            WHERE t2.tipper = t.tipper
                         ) AS paid_in_advance
+                      , ( SELECT nullif(sum(t2.past_transfers_sum, t.amount::currency), 0)
+                            FROM temp_tips t2
+                           WHERE t2.tipper = t.tipper
+                        ) AS past_transfers_sum
                    FROM temp_tips t
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
@@ -3671,9 +3685,11 @@ class Participant(Model, MixinTeam):
         ZERO_OUT_OLD_TIPS_RECEIVING = """
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode, visibility )
+                      , paid_in_advance, is_funded, renewal_mode, visibility
+                      , past_transfers_sum )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
                       , NULL, false, 0, -visibility
+                      , past_transfers_sum
                    FROM temp_tips
                   WHERE tippee = %(dead)s
                     AND ( coalesce_currency_amount(paid_in_advance, amount::currency) > 0 OR

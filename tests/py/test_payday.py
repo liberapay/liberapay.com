@@ -639,7 +639,9 @@ class TestPaydayForTeams(EmailHarness):
         charlie_tip = charlie.get_tip_to(team)
         dan_tip = dan.get_tip_to(team)
         assert charlie_tip.paid_in_advance == EUR('9.25')
+        assert charlie_tip.past_transfers_sum == EUR('0.75')
         assert dan_tip.paid_in_advance == EUR('7.75')
+        assert dan_tip.past_transfers_sum == EUR('2.25')
 
         print("> Step 2: a new donor appears, the contributions of the early "
               "donors automatically decrease while the new donor catches up")

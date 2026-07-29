@@ -240,20 +240,33 @@ class MixinTeam:
         """
         tips = cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
-                 , coalesce_currency_amount((
-                       SELECT sum(tr.amount, t.amount::currency)
-                         FROM transfers tr
-                        WHERE tr.tipper = t.tipper
-                          AND tr.team = %(team_id)s
-                          AND tr.context IN ('take', 'partial-take', 'leftover-take')
-                          AND tr.status = 'succeeded'
-                   ), t.amount::currency) AS past_transfers_sum
+                 , t.past_transfers_sum
               FROM current_tips t
               JOIN participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s
                AND ( t.is_funded OR t.paid_in_advance > 0 )
                AND p.is_suspended IS NOT true
         """, dict(team_id=self.id))
+        for tip in tips:
+            if tip.past_transfers_sum is None:
+                tip.past_transfers_sum = cursor.one("""
+                    UPDATE tips
+                       SET past_transfers_sum = (
+                               SELECT coalesce_currency_amount(
+                                          sum(tr.amount, %(tip_currency)s), %(tip_currency)s
+                                      )
+                                 FROM transfers tr
+                                WHERE tr.tipper = %(tipper)s
+                                  AND tr.team = %(team_id)s
+                                  AND tr.context IN ('take', 'partial-take', 'leftover-take')
+                                  AND tr.status = 'succeeded'
+                           )
+                     WHERE id = %(tip_id)s
+                 RETURNING past_transfers_sum
+                """, dict(
+                    tip_currency=tip.full_amount.currency, tipper=tip.tipper,
+                    team_id=self.id, tip_id=tip.id,
+                ))
         takes = cursor.all("""
             SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
