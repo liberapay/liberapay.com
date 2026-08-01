@@ -183,6 +183,7 @@ class Payday:
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
+                 , t.past_transfers_sum
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -338,15 +339,28 @@ class Payday:
              WHERE tippee = %(team_id)s
                AND compute_tip_funding(t) > 0
          RETURNING t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
-                 , coalesce_currency_amount((
-                       SELECT sum(tr.amount, t.amount::currency)
-                         FROM transfers tr
-                        WHERE tr.tipper = t.tipper
-                          AND tr.team = %(team_id)s
-                          AND tr.context IN ('take', 'partial-take', 'leftover-take')
-                          AND tr.status = 'succeeded'
-                   ), t.amount::currency) AS past_transfers_sum
+                 , t.past_transfers_sum
         """, args)
+        for tip in tips:
+            if tip.past_transfers_sum is None:
+                tip.past_transfers_sum = cursor.one("""
+                    UPDATE tips
+                       SET past_transfers_sum = (
+                               SELECT coalesce_currency_amount(
+                                          sum(tr.amount, %(tip_currency)s), %(tip_currency)s
+                                      )
+                                 FROM transfers tr
+                                WHERE tr.tipper = %(tipper)s
+                                  AND tr.team = %(team_id)s
+                                  AND tr.context IN ('take', 'partial-take', 'leftover-take')
+                                  AND tr.status = 'succeeded'
+                           )
+                     WHERE id = %(tip_id)s
+                 RETURNING past_transfers_sum
+                """, dict(
+                    tip_currency=tip.full_amount.currency, tipper=tip.tipper,
+                    team_id=team_id, tip_id=tip.id,
+                ))
         takes = cursor.all("""
             SELECT t.member, t.amount, t.paid_in_advance
                  , p.main_currency, p.accepted_currencies
@@ -607,6 +621,7 @@ class Payday:
                      )
                 UPDATE tips t
                    SET paid_in_advance = (t.paid_in_advance - %(amount)s)
+                     , past_transfers_sum = t.past_transfers_sum + %(amount)s
                   FROM latest_tip lt
                  WHERE t.tipper = lt.tipper
                    AND t.tippee = lt.tippee

@@ -33,9 +33,11 @@ if request.method == 'POST':
             website.db.run("""
                 INSERT INTO tips
                           ( ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, renewal_mode, visibility )
+                          , paid_in_advance, renewal_mode, visibility
+                          , past_transfers_sum )
                      SELECT ctime, tipper, tippee, amount, period, periodic_amount
                           , paid_in_advance, 2, visibility
+                          , past_transfers_sum
                        FROM current_tips
                       WHERE tipper = %s
                         AND renewal_mode = 1
@@ -55,9 +57,11 @@ if request.method == 'POST':
             website.db.run("""
                 INSERT INTO tips
                           ( ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, renewal_mode, visibility )
+                          , paid_in_advance, renewal_mode, visibility
+                          , past_transfers_sum )
                      SELECT ctime, tipper, tippee, amount, period, periodic_amount
                           , paid_in_advance, renewal_mode, %(new_visibility)s
+                          , past_transfers_sum
                        FROM current_tips
                       WHERE tipper = %(p_id)s
                         AND visibility <> %(new_visibility)s
