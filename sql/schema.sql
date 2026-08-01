@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '196'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '197'::jsonb);
 
 
 -- app configuration
@@ -280,6 +280,7 @@ CREATE TABLE tips
   -- 0 means no renewal, 1 means manual renewal, 2 means automatic renewal
 , visibility        int               NOT NULL CHECK (visibility >= -3 AND visibility <> 0 AND visibility <= 3)
   -- 1 means secret, 2 means private, 3 means public, negative numbers mean hidden
+, past_transfers_sum  currency_amount
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
 , CONSTRAINT paid_in_advance_currency_chk CHECK (paid_in_advance::currency = amount::currency)
  );

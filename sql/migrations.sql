@@ -3767,3 +3767,10 @@ ALTER TABLE payin_transfer_reversals ADD CONSTRAINT destination_amount_chk CHECK
 
 -- migration #196
 ALTER TYPE refund_reason ADD VALUE IF NOT EXISTS 'uncaptured';
+
+-- migration #197
+ALTER TABLE tips ADD COLUMN past_transfers_sum currency_amount;
+CREATE OR REPLACE VIEW current_tips AS
+        SELECT DISTINCT ON (tipper, tippee) *
+          FROM tips
+      ORDER BY tipper, tippee, mtime DESC;
