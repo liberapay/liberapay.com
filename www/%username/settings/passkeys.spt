@@ -1,0 +1,28 @@
+from liberapay.utils import get_participant
+
+[---]
+
+request.allow('POST')
+
+body = request.body
+
+p = get_participant(state, restrict=True, allow_member=True)
+if not p.is_person:
+    raise response.error(403)
+
+action = body.get_choice('action', ('registration-options', 'register'), default='')
+
+if action == 'registration-options':
+    raise response.json(p.start_webauthn_registration())
+
+elif action == 'register':
+    if not p.reauthenticate(body.get('cur-password')):
+        raise response.error(403, _("The current password is incorrect."))
+    if not p.enable_webauthn(body.get('challenge_id'), body.get('credential'), body.get('name')):
+        raise response.error(400, "invalid passkey registration")
+    raise response.json({"msg": _("A passkey has been added.")})
+
+else:
+    raise response.error(400, "unknown passkey action")
+
+[---] text/html
