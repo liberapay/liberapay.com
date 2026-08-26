@@ -5,17 +5,17 @@ Liberapay.stream_lines = function(url, data_cb, error_cb) {
         jQuery.ajax({
             url: url,
             dataType: 'text',
-            headers: {Range: 'x-lines='+first_pos+'-'},
+            headers: {Range: 'bytes='+first_pos+'-'},
         }).done(function(data, textStatus, xhr) {
             var file_is_partial = false;
             var final = true;
             var next_pos = first_pos;
             if (xhr.status == 206) {
                 var cr = xhr.getResponseHeader('Content-Range') || '';
-                if (cr.slice(0, 8) != 'x-lines ') {
+                if (cr.slice(0, 8) != 'bytes ') {
                     return error_cb("The server sent a range of unknown format.", xhr);
                 }
-                var r = /x-lines (\d+)-(-?\d+)\/(\d+|\*)/.exec(cr);
+                var r = /bytes (\d+)-(-?\d+)\/(\d+|\*)/.exec(cr);
                 if (!r) {
                     return error_cb("The server sent an invalid range.", xhr);
                 }

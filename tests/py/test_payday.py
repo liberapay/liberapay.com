@@ -71,7 +71,7 @@ class TestPayday(EmailHarness):
         assert r.code == 200
         r = self.client.GxT(
             '/admin/payday/1.txt',
-            HTTP_RANGE=b'x-lines=0-', HTTP_ACCEPT=b'text/plain',
+            HTTP_RANGE=b'bytes=0-', HTTP_ACCEPT=b'text/plain',
             auth_as=alice,
         )
         assert r.code == 206

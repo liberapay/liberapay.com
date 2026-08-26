@@ -16,16 +16,16 @@ MAXLEN = mmap.PAGESIZE * 100
 file_seek_lock = Lock()
 
 def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
-    """This implements a non-standard `x-lines` HTTP Range Request mechanism.
+    """Responds to an HTTP GET request that contains a Range header.
 
-    Why? Because streaming blocks of full lines instead of arbitrary blocks of bytes is
-    a simple way to avoid splitting a multibyte char (e.g. UTF8-encoded) in the middle.
+    Sends back blocks of full lines instead of arbitrary blocks of bytes. It's a
+    simple way to avoid splitting a UTF8-encoded character in two.
 
     The standard for HTTP range requests is https://tools.ietf.org/html/rfc7233
     """
     file_is_partial = f.name.endswith('.part')
     req_range = request.headers.get(b'Range', b'').split(b'=', 1)
-    if req_range[0] != b'x-lines':
+    if req_range[0] != b'bytes':
         raise response.error(416, "unknown range specifier %r" % req_range[0])
     req_range = req_range[-1].split(b'-', 1)
     first_pos = parse_int(req_range[0], default=0)
@@ -45,8 +45,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
     if file_is_partial or first_pos > 0 or last_pos < os.fstat(f.fileno()).st_size - 1:
         response.code = 206
         size = '*' if file_is_partial else os.fstat(f.fileno()).st_size
-        cr = 'x-lines %s-%s/%s' % (first_pos, last_pos, size)
-        # NOTE the range's unit is bytes, not lines
+        cr = 'bytes %s-%s/%s' % (first_pos, last_pos, size)
         response.headers[b'Content-Range'] = cr.encode('ascii')
     response.headers[b'Content-Type'] = b'text/plain'
     response.body = data
