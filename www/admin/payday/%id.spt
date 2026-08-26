@@ -26,7 +26,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
     file_is_partial = f.name.endswith('.part')
     req_range = request.headers.get(b'Range', b'').split(b'=', 1)
     if req_range[0] != b'x-lines':
-        raise response.error(416, "unknown range specifier")
+        raise response.error(416, "unknown range specifier %r" % req_range[0])
     req_range = req_range[-1].split(b'-', 1)
     first_pos = parse_int(req_range[0], default=0)
     # NOTE we're ignoring the rest of the requested range
