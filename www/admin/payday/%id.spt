@@ -16,20 +16,26 @@ MAXLEN = mmap.PAGESIZE * 100
 file_seek_lock = Lock()
 
 def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
-    """Responds to an HTTP GET request that contains a Range header.
+    """Serve (parts of) a text file.
 
-    Sends back blocks of full lines instead of arbitrary blocks of bytes. It's a
-    simple way to avoid splitting a UTF8-encoded character in two.
+    To avoid cutting inside of a multibyte character, this function sends back blocks
+    of full lines instead of arbitrary blocks of bytes. For this to work, the file's
+    text encoding must be ASCII-compatible and must not use the 0x0A byte in
+    multibyte characters.
 
     The standard for HTTP range requests is https://tools.ietf.org/html/rfc7233
     """
     file_is_partial = f.name.endswith('.part')
-    req_range = request.headers.get(b'Range', b'').split(b'=', 1)
-    if req_range[0] != b'bytes':
-        raise response.error(416, "unknown range specifier %r" % req_range[0])
-    req_range = req_range[-1].split(b'-', 1)
-    first_pos = parse_int(req_range[0], default=0)
-    # NOTE we're ignoring the rest of the requested range
+    req_range = request.headers.get(b'Range')
+    if req_range is None:
+        first_pos = 0
+    else:
+        req_range = req_range.split(b'=', 1)
+        if req_range[0] != b'bytes':
+            raise response.error(416, "unknown range specifier %r" % req_range[0])
+        req_range = req_range[-1].split(b'-', 1)
+        first_pos = parse_int(req_range[0], default=0)
+        # NOTE we're ignoring the rest of the requested range
     with file_seek_lock:
         f.seek(max(first_pos - 1, 0))
         if first_pos > 0:
