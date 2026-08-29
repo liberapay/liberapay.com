@@ -11,7 +11,7 @@ S3_BUCKET = website.app_conf.s3_payday_logs_bucket
 
 payday_log_path = lambda i: website.env.log_dir+'/payday-%i.txt' % i
 
-MAXLEN = mmap.PAGESIZE * 100
+MAXLEN = mmap.PAGESIZE * 1000
 
 file_seek_lock = Lock()
 
