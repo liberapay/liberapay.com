@@ -47,7 +47,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
             lines = lines[:-1]
         data = b''.join(lines)
     l = len(data)
-    last_pos = first_pos + l - 1
+    last_pos = max(first_pos + l - 1, 0)
     if file_is_partial or first_pos > 0 or last_pos < os.fstat(f.fileno()).st_size - 1:
         response.code = 206
         size = '*' if file_is_partial else os.fstat(f.fileno()).st_size

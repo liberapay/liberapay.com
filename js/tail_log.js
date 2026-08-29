@@ -15,7 +15,7 @@ Liberapay.stream_lines = function(url, data_cb, error_cb) {
                 if (cr.slice(0, 8) != 'bytes ') {
                     return error_cb("The server sent a range of unknown format.", xhr);
                 }
-                var r = /bytes (\d+)-(-?\d+)\/(\d+|\*)/.exec(cr);
+                var r = /bytes (\d+)-(\d+)\/(\d+|\*)/.exec(cr);
                 if (!r) {
                     return error_cb("The server sent an invalid range.", xhr);
                 }
