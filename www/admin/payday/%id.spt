@@ -26,7 +26,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
     The standard for HTTP range requests is https://tools.ietf.org/html/rfc7233
     """
     file_is_partial = f.name.endswith('.part')
-    req_range = request.headers.get(b'Range')
+    req_range = request.headers.get(b'Range') or request.headers.get(b'X-Range')
     if req_range is None:
         first_pos = 0
     else:

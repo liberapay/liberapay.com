@@ -5,7 +5,7 @@ Liberapay.stream_lines = function(url, data_cb, error_cb) {
         jQuery.ajax({
             url: url,
             dataType: 'text',
-            headers: {Range: 'bytes='+first_pos+'-'},
+            headers: {'X-Range': 'bytes='+first_pos+'-'},
         }).done(function(data, textStatus, xhr) {
             var file_is_partial = false;
             var final = true;
