@@ -373,7 +373,7 @@ RATE_LIMITS = {
     'sign-up.ip-version': (20, 10*60),  # 20 per 10 minutes per IP version
 }
 
-SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
+SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'QUERY'}
 
 SESSION = 'session'
 SESSION_REFRESH = timedelta(hours=12)

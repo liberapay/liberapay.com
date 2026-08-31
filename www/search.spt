@@ -3,7 +3,7 @@ from liberapay.utils import markdown
 
 [---]
 
-query = request.qs.get('q')
+query = request.body['q'] if request.method == 'QUERY' else request.qs.get('q')
 scope = request.qs.get('scope')
 
 title = _("Search")
