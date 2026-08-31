@@ -36,6 +36,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
         req_range = req_range[-1].split(b'-', 1)
         first_pos = parse_int(req_range[0], default=0)
         # NOTE we're ignoring the rest of the requested range
+    file_size = os.fstat(f.fileno()).st_size
     with file_seek_lock:
         f.seek(max(first_pos - 1, 0))
         if first_pos > 0:
@@ -43,14 +44,15 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
             if lf != b'\n':
                 raise response.error(416, "byte %s is not a line feed" % first_pos)
         lines = f.readlines(maxlen)
-        if file_is_partial and lines and lines[-1][-1:] != b'\n':
-            lines = lines[:-1]
+        if lines and lines[-1][-1:] != b'\n':
+            if file_is_partial or first_pos + sum(map(len, lines)) < file_size:
+                lines = lines[:-1]
         data = b''.join(lines)
     l = len(data)
     last_pos = max(first_pos + l - 1, 0)
-    if file_is_partial or first_pos > 0 or last_pos < os.fstat(f.fileno()).st_size - 1:
+    if file_is_partial or first_pos > 0 or last_pos < file_size - 1:
         response.code = 206
-        size = '*' if file_is_partial else os.fstat(f.fileno()).st_size
+        size = '*' if file_is_partial else file_size
         cr = 'bytes %s-%s/%s' % (first_pos, last_pos, size)
         response.headers[b'Content-Range'] = cr.encode('ascii')
     response.headers[b'Content-Type'] = b'text/plain'
