@@ -21,6 +21,55 @@
 % endif
 </div>
 
+% elif state.get('log-in.otp-challenge')
+
+% set challenge = state['log-in.otp-challenge']
+<form action="" method="POST" data-webauthn-login-form>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="form.repost" value="{{ request.body.get('form.repost', 'false') if request.method == 'POST' else 'false' }}" />
+    % if request.method == 'POST'
+        % for k, values in request.body.items()
+            % if k not in ('csrf_token', 'form.repost', 'log-in.password', 'log-in.otp-code', 'log-in.otp-participant', 'log-in.otp-challenge-id', 'log-in.otp-challenge-token', 'log-in.webauthn-credential')
+                % for v in values:
+                    <input type="hidden" name="{{ k }}" value="{{ v }}" />
+                % endfor
+            % endif
+        % endfor
+    % endif
+    <input type="hidden" name="log-in.otp-participant" value="{{ challenge.participant }}" />
+    <input type="hidden" name="log-in.otp-challenge-id" value="{{ challenge.id }}" />
+    <input type="hidden" name="log-in.otp-challenge-token" value="{{ challenge.token }}" />
+    <input type="hidden" name="log-in.webauthn-credential" value="" />
+
+    % if state.get('log-in.otp-error')
+        <p class="alert alert-danger">{{ state['log-in.otp-error'] }}</p>
+    % endif
+
+    % if challenge.get('has_totp') or challenge.get('has_recovery')
+        % if challenge.get('has_totp')
+            <p>{{ _("Please enter the authentication code from your two-factor authentication app:") }}</p>
+        % else
+            <p>{{ _("Please enter one of your recovery codes:") }}</p>
+        % endif
+        <div class="form-group">
+            <input name="log-in.otp-code" class="form-control"
+                   % if challenge.get('has_totp') and not challenge.get('has_recovery')
+                   inputmode="numeric" pattern="[0-9]*"
+                   % endif
+                   autocomplete="one-time-code"
+                   placeholder="{{ _('Authentication code') if challenge.get('has_totp') else _('Recovery code') }}" required />
+        </div>
+        % if challenge.get('has_totp') and challenge.get('has_recovery')
+            <p class="help-block">{{ _("If you've lost access to your authentication app, you can enter one of your recovery codes instead.") }}</p>
+        % endif
+        <button class="btn btn-primary">{{ _("Log in") }}</button>
+    % endif
+    % if challenge.get('webauthn_options')
+        <button class="btn btn-default" type="button" data-webauthn-login>{{ _("Use a passkey") }}</button>
+        <textarea hidden data-webauthn-options>{{ challenge.webauthn_options }}</textarea>
+    % endif
+</form>
+
 % elif state.get('log-in.carry-on')
 
 % set email = state['log-in.carry-on']
