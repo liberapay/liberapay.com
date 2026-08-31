@@ -362,6 +362,8 @@ RATE_LIMITS = {
     'log-in.password': (3, 60*60),  # 3 per hour
     'log-in.password.ip-addr': (3, 60*60),  # 3 per hour per IP address
     'log-in.session.ip-addr': (5, 60*60),  # 5 per hour per IP address
+    'log-in.2fa': (5, 60*60),  # 5 per hour
+    'log-in.2fa.ip-addr': (10, 60*60),  # 10 per hour per IP address
     'make_team': (5, 60*60*24*7),  # 5 per week
     'payin.from-user': (15, 60*60*24*7),  # 15 per week
     'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
