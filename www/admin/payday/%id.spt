@@ -46,17 +46,15 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
         lines = f.readlines(maxlen)
         if lines and lines[-1][-1:] != b'\n':
             if file_is_partial or first_pos + sum(map(len, lines)) < file_size:
-                lines = lines[:-1]
-        data = b''.join(lines)
-    l = len(data)
-    last_pos = max(first_pos + l - 1, 0)
+                lines.pop()
+    last_pos = max(first_pos + sum(map(len, lines)) - 1, 0)
     if file_is_partial or first_pos > 0 or last_pos < file_size - 1:
         response.code = 206
         size = '*' if file_is_partial else file_size
         cr = 'bytes %s-%s/%s' % (first_pos, last_pos, size)
         response.headers[b'Content-Range'] = cr.encode('ascii')
     response.headers[b'Content-Type'] = b'text/plain'
-    response.body = data
+    response.body = lines
     return response
 
 payday_logs = {}
@@ -83,7 +81,7 @@ def serve_payday_log(payday_id, request, response):
             s3_key = 'paydays/payday-%i.txt' % payday_id
             website.s3.download_file(S3_BUCKET, s3_key, log_path)
         try:
-            f = payday_logs[payday_id] = open(log_path, 'rb')
+            f = payday_logs[payday_id] = open(log_path, 'rb', buffering=0)
         except IOError as e:
             if e.errno == 2:
                 raise response.error(404)
