@@ -807,7 +807,12 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     for l in locales.values():
         l.catalog.add("PayPal", "PayPal")
 
-    # Patch the locales to look less formal
+    # Patch locales to disambiguate currencies
+    l = locales['en']
+    assert l.currency_symbols['USD'] == '$'
+    l.currency_symbols['USD'] = 'US$'
+
+    # Patch locales to look less formal
     friendlier_french_currency_format = parse_pattern('#,##0.00\u202f\xa4')
     for l in locales.values():
         if l.language == 'fr':
