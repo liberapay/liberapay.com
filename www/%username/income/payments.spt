@@ -177,9 +177,9 @@ for pi in payins:
 
 % if not before
     <p class="buttons pull-right">
-        <a class="btn btn-default" href="{{ participant.path('income/payments.csv') }}">{{
+        <a class="btn btn-default" href="{{ participant.url('income/payments.csv') }}">{{
             icon('download') }} {{ _("Export as CSV") }}</a>
-        <a class="btn btn-default" href="{{ participant.path('income/payments.json') }}">{{
+        <a class="btn btn-default" href="{{ participant.url('income/payments.json') }}">{{
             icon('download') }} {{ _("Export as JSON") }}</a>
     </p>
 % endif

@@ -120,7 +120,7 @@ if user_is_admin:
         donations['ntippees'][money_amount.currency],
         money_amount=money_amount
     ) }}
-        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
+        (<a href="{{ participant.url('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
@@ -137,7 +137,7 @@ if user_is_admin:
         reimbursements['nrecipients'][money_amount.currency],
         money_amount=money_amount
     ) }}
-        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
+        (<a href="{{ participant.url('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
