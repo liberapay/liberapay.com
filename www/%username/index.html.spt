@@ -211,7 +211,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if n_public_patrons|default(0)
     <h3>{{ _("Patrons") }}
         &nbsp;
-        <small><a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
+        <small><a href="{{ participant.url('patrons/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
     </h3>
 
     <p>{{ ngettext(
@@ -253,7 +253,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if n_public_donees
     <h3>{{ _("Donees") }}
         &nbsp;
-        <small><a href="{{ participant.path('giving/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
+        <small><a href="{{ participant.url('giving/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
     </h3>
 
     <p>{{ ngettext(
@@ -306,7 +306,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if participant.accepts_tips
     % if show_income
         <button class="btn btn-default" type="button"
-                data-charts="{{ participant.path('charts.json') }}"
+                data-charts="{{ participant.url('charts.json') }}"
                 data-charts-container="#charts-container">{{
             _("View income history")
         }}</button>
