@@ -6,12 +6,15 @@ db = website.db
 
 title = _("Stats")
 zero = Money.ZEROS[currency]
-nusers = db.one("""
-    SELECT count(*)
+accounts = db.one("""
+    SELECT count(*) FILTER (WHERE kind = 'individual') AS nindividuals
+         , count(*) FILTER (WHERE kind = 'organization') AS norganizations
+         , count(*) FILTER (WHERE kind = 'group') AS nteams
       FROM participants
      WHERE status = 'active'
-       AND kind IN ('individual', 'organization');
+       AND kind IN ('individual', 'organization', 'group');
 """, max_age=60)
+nusers = accounts.nindividuals + accounts.norganizations
 tips_stats = db.one("""
     SELECT count(*), basket_sum(amount)
       FROM current_tips
