@@ -12,7 +12,8 @@ accounts = db.one("""
          , count(*) FILTER (WHERE kind = 'group') AS nteams
       FROM participants
      WHERE status = 'active'
-       AND kind IN ('individual', 'organization', 'group');
+       AND kind IN ('individual', 'organization', 'group')
+       AND is_suspended IS NOT true;
 """, max_age=60)
 nusers = accounts.nindividuals + accounts.norganizations
 tips_stats = db.one("""

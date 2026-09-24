@@ -85,6 +85,17 @@ class TestPages(Harness):
         assert "has 3 users." in r.text
         assert "There is also 1 team." in r.text
 
+    def test_stats_page_does_not_count_suspended_accounts(self):
+        self.make_participant('alice')
+        self.make_participant('spammer', marked_as='spam')
+        self.make_participant('fraudster', kind='organization', marked_as='fraud')
+        self.make_participant('spam-team', kind='group', marked_as='spam')
+        r = self.client.GET('/about/stats')
+        assert "has 1 user." in r.text
+        assert "1 of these users is an individual." in r.text
+        assert "0 of these users are organizations." in r.text
+        assert "There are also 0 teams." in r.text
+
     def test_paydays_json_gives_paydays(self):
         Payday.start()
         self.make_participant("alice")
