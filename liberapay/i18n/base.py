@@ -14,7 +14,7 @@ from babel.dates import (
 from babel.messages.pofile import Catalog
 from babel.numbers import parse_pattern
 from markupsafe import Markup
-import opencc
+from opencc_purepy import OpenCC
 from pando.utils import utcnow
 
 from ..constants import TIME_ZONES, TIME_ZONE_AREAS
@@ -426,15 +426,19 @@ def make_sorted_dict(keys, d, d2={}, clean=_return_):
 
 # Some languages have multiple written forms in widespread use. In particular,
 # Chinese has two main character sets (Traditional and Simplified), and we use
-# the OpenCC library to convert from one to the other.
+# the opencc-purepy library to convert from one to the other.
+opencc = OpenCC()
 CONVERTERS = {
     'zh-hans': {
-        'zh-hant': opencc.OpenCC('s2t.json').convert,
+        'zh-hant': opencc.s2t,
     },
     'zh-hant': {
-        'zh-hans': opencc.OpenCC('t2s.json').convert,
+        'zh-hans': opencc.t2s,
     },
 }
+# Build the dictionary indexes now, because the lazy initialization isn't thread-safe.
+opencc.s2t(''), opencc.t2s('')
+del opencc
 CONVERTERS['zh'] = {
     'zh-hans': CONVERTERS['zh-hant']['zh-hans'],
     'zh-hant': CONVERTERS['zh-hans']['zh-hant'],
