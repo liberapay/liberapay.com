@@ -885,6 +885,20 @@ class TestSessions(Harness):
         assert r.code == 307
         assert r.headers[b'Location'] == b'/alice/settings/constant-session'
 
+    def test_constant_session_page_is_linked(self):
+        alice = self.make_participant('alice')
+        alice.update_recipient_settings(patron_visibilities=7)
+        team = self.make_participant('team', kind='group')
+        team.add_member(alice)
+        team.update_recipient_settings(patron_visibilities=7)
+        link = 'href="/alice/settings/constant-session"'
+        r = self.client.GET('/alice/settings/', auth_as=alice)
+        assert link in r.text
+        r = self.client.GET('/alice/patrons/', auth_as=alice)
+        assert link in r.text
+        r = self.client.GET('/team/patrons/', auth_as=alice)
+        assert link in r.text
+
     def test_invalid_session_cookies(self):
         r = self.client.GET('/about/me/', HTTP_COOKIE='session=::', raise_immediately=False)
         assert r.code == 403, r.text
