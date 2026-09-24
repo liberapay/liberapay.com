@@ -2,6 +2,7 @@ from datetime import timedelta
 import json
 from unittest.mock import MagicMock, patch
 
+from liberapay.constants import SESSION_TOKEN_PREFIX
 from liberapay.exceptions import (
     BadEmailAddress, CannotRemovePrimaryEmail,
     EmailAddressIsBlacklisted, EmailAlreadyTaken,
@@ -159,9 +160,9 @@ class TestEmail(EmailHarness):
         )
         assert r.code == 302, r.text
         assert len(self.alice.get_emails()) == 2
-        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':', 2)[1:]
         assert int(new_session_id) == initial_session.id
-        assert new_session_secret != initial_session.secret
+        assert new_session_secret != SESSION_TOKEN_PREFIX + initial_session.secret
 
     def test_adding_second_email_sends_verification_notice(self):
         self.add_and_verify_email('alice1@example.com')
