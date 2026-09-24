@@ -1,6 +1,7 @@
 from email.utils import parsedate
 from hashlib import blake2b
 from http.cookies import SimpleCookie
+import re
 from time import gmtime
 
 from babel.messages.catalog import Message
@@ -898,6 +899,11 @@ class TestSessions(Harness):
         assert link in r.text
         r = self.client.GET('/team/patrons/', auth_as=alice)
         assert link in r.text
+
+    def test_constant_session_page_is_highlighted_in_nav(self):
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/settings/constant-session', auth_as=alice)
+        assert re.search(r'class=" active">\s*<a href="/alice/settings/constant-session">', r.text)
 
     def test_invalid_session_cookies(self):
         r = self.client.GET('/about/me/', HTTP_COOKIE='session=::', raise_immediately=False)
