@@ -70,6 +70,21 @@ class TestPages(Harness):
         assert b" technical failures." in r.body
         assert b" unable to process your request " in r.body
 
+    def test_stats_page_shows_accounts_breakdown(self):
+        self.make_participant('alice')
+        self.make_participant('bob')
+        self.make_participant('acme', kind='organization')
+        self.make_participant('closed', status='closed')
+        r = self.client.GET('/about/stats')
+        assert "has 3 users." in r.text
+        assert "2 of these users are individuals." in r.text
+        assert "1 of these users is an organization." in r.text
+        assert "There are also 0 teams." in r.text
+        self.make_participant('team', kind='group')
+        r = self.client.GET('/about/stats')
+        assert "has 3 users." in r.text
+        assert "There is also 1 team." in r.text
+
     def test_paydays_json_gives_paydays(self):
         Payday.start()
         self.make_participant("alice")

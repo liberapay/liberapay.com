@@ -59,6 +59,29 @@ last_payday = db.one("SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1")
         "Liberapay was launched {timespan_ago} and has {n} users.",
         n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME)
     ) }}</p>
+    <ul>
+        <li>
+            {{ ngettext(
+                "{n} of these users is an individual.",
+                "{n} of these users are individuals.",
+                accounts.nindividuals
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "{n} of these users is an organization.",
+                "{n} of these users are organizations.",
+                accounts.norganizations
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "There is also {n} team.",
+                "There are also {n} teams.",
+                accounts.nteams
+            ) }}
+        </li>
+    </ul>
 
     % if last_payday
     <p>
