@@ -49,12 +49,12 @@ title = _("Constant session")
             "You can automate downloading private information from your account "
             "by including the following HTTP header in your requests:"
         ) }}</p>
-        <pre>Cookie: session={{ participant.id }}:{{ s.id }}:{{ s.secret }}</pre>
+        <pre>Cookie: session={{ participant.id }}:{{ s.id }}:{{ constants.SESSION_TOKEN_PREFIX }}{{ s.secret }}</pre>
         <p>{{ _(
             "For example, you can download the list of your currently active patrons "
             "by executing the following command:"
         ) }}</p>
-        <pre>curl -b 'session={{ participant.id }}:{{ s.id }}:{{ s.secret }}' '{{ participant.url('patrons/export.csv?scope=active') }}'</pre>
+        <pre>curl -b 'session={{ participant.id }}:{{ s.id }}:{{ constants.SESSION_TOKEN_PREFIX }}{{ s.secret }}' '{{ participant.url('patrons/export.csv?scope=active') }}'</pre>
         <p class="text-info">{{ icon('info-sign') }} {{ _(
             "To minimize the risks to you, these credentials can only be used to fetch "
             "data, not to modify anything in your account, and they will automatically "

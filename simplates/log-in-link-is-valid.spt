@@ -11,7 +11,11 @@ if cancel:
          WHERE participant = %s
            AND id = %s
            AND secret = %s
-    """, (p_id, request.qs.get_int('log-in.key'), request.qs['log-in.token']))
+    """, (
+        p_id,
+        request.qs.get_int('log-in.key'),
+        request.qs['log-in.token'].removeprefix(constants.SESSION_TOKEN_PREFIX),
+    ))
 else:
     confirmation_token = b64encode_s(blake2b(
         request.qs['log-in.token'].encode('ascii'),
