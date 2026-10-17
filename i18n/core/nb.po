@@ -1,13 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Norwegian "
-"<https://hosted.weblate.org/projects/liberapay/core/nb/>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/liberapay/core/nb/>\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+"PO-Revision-Date: 2026-10-04 02:51+0000\n"
+"Last-Translator: Jon Erling Hustadnes <jonerling.hustadnes@gmail.com>\n"
+"Language: nb\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -284,15 +286,14 @@ msgstr "Vi har oppdaget at passordet ditt har kommet på avveie: det finnes i é
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Du bør {link_start}endre passordet ditt{link_end} nå."
 
-#, fuzzy
 msgid "Your payment is disputed"
 msgstr "Betalingen din er bestridt"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being reversed by your bank."
 msgstr "En belastning på {money_amount} startet {date} for å finansiere din donasjon til {recipients} blir reversert av banken din."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} is being reversed by your bank."
 msgstr "En belastning på {money_amount} initiert {date} blir reversert av banken din."
 
@@ -350,11 +351,11 @@ msgstr "For å hjelpe banken å finne ut hva som skjedde, kan du sende dem en ko
 msgid "Your payment has failed"
 msgstr "Din betaling mislyktes"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has failed."
 msgstr "En betaling på {money_amount} som ble igangsatt i dag for å finansiere din donasjon til {recipients} mislyktes."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has failed."
 msgstr "En betaling på {money_amount} igangsatt {date} for å finansiere din donasjon til {recipients} mislyktes."
 
@@ -388,19 +389,19 @@ msgstr "Prøv igjen"
 msgid "A refund of {money_amount} has been initiated"
 msgstr "Tilbakebetaling av {money_amount} har blitt igangsatt"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being refunded to you."
 msgstr "En belastning på {money_amount} startet {date} for å finansiere din donasjon til {recipients} blir refundert til deg."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A charge of {money_amount} initiated on {date} to fund your donation to {recipients} is being partly refunded to you."
 msgstr "En belastning på {money_amount} iverksatt {date} for å finansiere din donasjon til {recipients} blir delvis refundert til deg."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being refunded to you."
 msgstr "En betaling på {money_amount} initiert den {date} blir refundert til deg."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} is being partly refunded to you."
 msgstr "En betaling på {money_amount} initiert den {date} blir delvis refundert til deg."
 
@@ -413,7 +414,6 @@ msgstr "Grunn: Betalingen har blitt ansett for å være svindel."
 msgid "Reason: the refund was requested by you."
 msgstr "Grunn: Tilbakebetalingen ble forespurt av deg."
 
-#, fuzzy
 msgid "You can contact us if you need information on the reason."
 msgstr "Du kan kontakte oss hvis du trenger informasjon om årsaken."
 
@@ -443,7 +443,6 @@ msgstr "En direkte debetbetaling på {money_amount} fra din bankkonto ({partial_
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasjonen blir utført basert på {link_start}mandatet{mandate_id}{link_end} du signerte {acceptance_date}, noe som lar Liberapay (SEPA-kreditor {creditor_identifier}) å sende instruks til din bank om debitering av din konto og din bank om å debitere din konto i henhold til disse instruksjonene."
 
-#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
 msgstr "Hvis du ikke autoriserte denne betalingen, vennligst gi oss beskjed. Vi vil fortelle deg om refusjon kan initieres av oss eller om du må be om det fra banken din."
 
@@ -458,11 +457,11 @@ msgstr "Behandling av denne typen betaling tar gjennomsnittlig {timedelta}."
 msgid "Your payment has succeeded"
 msgstr "Betaling utført"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated today to fund your donation to {recipients} has succeeded."
 msgstr "En betaling på {money_amount} som ble igangsatt i dag for å finansiere din donasjon til {recipients} har vært vellykket."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A payment of {money_amount} initiated on {date} to fund your donation to {recipients} has succeeded."
 msgstr "En betaling på {money_amount} som ble igangsatt {date} for å finansiere din donasjon til {recipients} har vært vellykket."
 
@@ -503,23 +502,19 @@ msgstr "Hvis du ikke vil motta donasjoner via Liberapay kan du avvise dem i inns
 msgid "Reject donations"
 msgstr "Avslå donasjoner"
 
-#, fuzzy
 msgid "Payment processor contractual changes"
-msgstr "Endringer i betalingsbehandlerkontrakter"
+msgstr "Kontraktsmessige endringer i betalingsprosessorer"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{provider} is updating {link_start}its terms of service{link_end}. The changes will take effect on {effect_date}. No action is needed from you, but by continuing to use {provider}'s services on or after that date, you're agreeing to these updated terms."
 msgstr "{provider} oppdaterer {link_start}sine tjenestevilkår{link_end}. Endringene trer i kraft {effect_date}. Du trenger ikke å gjøre noe, men ved å fortsette å bruke {provider} sine tjenester på eller etter denne datoen, godtar du disse oppdaterte vilkårene."
 
-#, fuzzy
 msgid "Review the changes"
 msgstr "Gjennomgå endringene"
 
-#, fuzzy
 msgid "Review the new terms"
 msgstr "Gjennomgå de nye vilkårene"
 
-#, fuzzy
 msgid "Manage your payment processors"
 msgstr "Administrer betalingsbehandlerne dine"
 
@@ -713,7 +708,7 @@ msgstr "Et lag du er med i har fått nytt navn"
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
 msgstr "{2} har byttet navn på {0}-laget til {1}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
 msgstr[0] "Fornyelse av Liberapay-donasjon: fremtidig debitering på {money_amount}"
@@ -733,7 +728,7 @@ msgid_plural "This message is a reminder that a total of {amount} is going to be
 msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgstr[1] "Denne meldingen er en påminnelse om at {amount} vil bli trukket fra ditt forvalgte betalingsinstrument i løpet av {n} dager for å fornye dine donasjoner."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
 msgstr "Hvis du ønsker å endre dine donasjoner kan du klikke på følgende lenke: {link_start}håndter mine donasjoner{link_end}."
 
@@ -765,23 +760,20 @@ msgstr "Din Liberapay-konto endres"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Noen prøver å tilknytte e-postadressen {0} til Liberapay-kontoen, hvis nåværende adresse er {1}. Hvis du ikke har igangsatt dette, bør du klikke på lenken nedenfor og fjerne denne uregelmessige adressen fra kontoen din."
 
-#, fuzzy
 msgid "The requested page couldn't be found."
 msgstr "Den forespurte siden ble ikke funnet."
 
-#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
 msgstr "Det ser ut til at du har funnet en feil! Beklager ulempen. Vi vil fikse denne feilen så snart som mulig."
 
-#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
 msgstr "Det oppstod en uspesifisert feil. Dette skal ikke skje. Beklager."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
 msgstr "Detaljene om denne feilen er registrert. Hvis du bestemmer deg for å {link_start}kontakte oss{link_end}, vennligst inkluder følgende feilidentifikasjonskode i meldingen din: {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
 msgstr "Hvis du bestemmer deg for å {link_start}kontakte oss{link_end} på om dette problemet, vennligst inkluder følgende feilsøkingsinformasjon i meldingen din:"
 
@@ -851,7 +843,6 @@ msgstr "Kreditt-/debet-kort"
 msgid "Direct Debit"
 msgstr "Direktebetaling"
 
-#, fuzzy
 msgid "Do not publish the amounts of money I send."
 msgstr "Ikke offentliggjør mengden penger jeg sender."
 
@@ -918,7 +909,7 @@ msgstr "Stillehavet"
 msgid "example@mastodon.social"
 msgstr "eksempel@mastodon.social"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr "Er {0} virkelig en {1}-tjener? Den oppfører seg ikke slik for øyeblikket."
 
@@ -948,7 +939,7 @@ msgstr "Brukernavnet \"{0}\" er for langt."
 msgid "The username '{0}' contains invalid characters."
 msgstr "Brukernavnet \"{0}\" inneholder ulovlige tegn."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
 msgstr "Brukernavnet '{0}' er rent numerisk. Dette er ikke tillatt."
 
@@ -1005,7 +996,7 @@ msgstr "{0} er ikke et gyldig domenenavn."
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
 msgstr "Vårt forsøk på å fortolke domenet {domain_name} mislyktes (feilmelding: «{error_message}»)."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
 msgstr "Vårt forsøk på å koble til e-posttjeneren på {domain_name} mislyktes (feilmelding: «{error_message}»)."
 
@@ -1013,7 +1004,7 @@ msgstr "Vårt forsøk på å koble til e-posttjeneren på {domain_name} mislykte
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name} er ikke et gyldig e-postdomene."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
 msgstr "E-postadressen {email_address} ser ikke ut til å eksistere. E-postserveren {domain} på IP-adressen {ip_address} avviste den med feilmeldingen \"{error_message}\"."
 
@@ -1021,7 +1012,7 @@ msgstr "E-postadressen {email_address} ser ikke ut til å eksistere. E-postserve
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "E-postadressen {email_address} er svartelistet fordi et forsøk på å sende en melding til den mislyktes {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "E-postadressen {email_address} er svartelistet, som følge av en klage mottatt {timespan_ago}. Send en e-post fra den adressen til support@liberapay.com hvis du ønsker å fjerne den fra svartelisten."
 
@@ -1037,7 +1028,7 @@ msgstr "E-postdomenet {domain} er svartelistet som følge av en klage mottatt {t
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
 msgstr "E-postdomenet «{domain}» ble svartelistet {date} fordi det brukte engangsadresser. Kontakt oss hvis dette ikke lenger stemmer og du ønsker å fjerne dette domenet fra svartelisten."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
 msgstr "E-postdomenet {domain} er svartelistet. Kontakt oss hvis du ønsker at det skal fjernes fra svartelisten."
 
@@ -1098,15 +1089,15 @@ msgstr "Brukeren {0} tar ikke imot donasjoner."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} godtar ikke donasjoner i {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
 msgstr "{username} tar ikke lenger imot hemmelige donasjoner."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
 msgstr "{username} tar ikke lenger imot private donasjoner."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
 msgstr "{username} tar ikke lenger imot offentlige donasjoner."
 
@@ -1121,7 +1112,7 @@ msgstr "Det later til at du prøver å slette noe som ikke finnes."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" er ikke et gyldig tall."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\" er et nummer i feil format. Kanskje du mente {list_of_suggestions}?"
 
@@ -1140,7 +1131,6 @@ msgstr "\"{0}\" er ikke et gyldig navn på et fellesskap."
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du kan ikke gjøre dette, fordi kontoen din er suspendert inntil videre."
 
-#, fuzzy
 msgid "Your account lacks a valid email address, please add one."
 msgstr "Kontoen din mangler en gyldig e-postadresse, vennligst legg til en."
 
@@ -1151,11 +1141,10 @@ msgstr "Denne betalingen kan ikke behandles fordi mottagers konto for øyeblikke
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donasjon til {recipient} kan ikke behandles akkurat nå fordi mottagers konto ikke er klar til å motta penger."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
 msgstr "{username} tar ikke imot donasjoner fra {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
 msgstr "Behandlingen av betalingen din har mislyktes fordi programvaren vår ikke klarte å finne ut hvilket land pengene skulle komme fra. Det er ikke meningen at dette skal skje."
 
@@ -1175,7 +1164,7 @@ msgstr "Forsøket på sende en e-post til {email_address} mislyktes. Sjekk adres
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "Denne betalingsmetoden er ikke tilgjengelig. Beklager bryderiet."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "Betalingsformidleren {name} støtte på en feil. Prøv igjen og kontakt support@liberapay.com hvis problemet vedvarer."
 
@@ -1250,7 +1239,7 @@ msgstr "«{0}» er ikke en gyldig konto-ID."
 msgid "No account has the username “{username}”."
 msgstr "Det finnes ingen konto med brukernavnet «{username}»."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
 msgstr "Fant ingen konto med {email_address} som primær e-postadresse."
 
@@ -1300,7 +1289,6 @@ msgstr "Du sender forespørsler for fort, prøv igjen senere."
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
 
-#, fuzzy
 msgid "This profile is marked as spam or fraud."
 msgstr "Denne profilen er merket som spam eller svindel."
 
@@ -1361,26 +1349,21 @@ msgstr "Passord"
 msgid "This new password is not safe"
 msgstr "Ditt nye passord er ikke sikkert"
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a commonly used password."
 msgstr "Det nye passordet du sendte inn er usikkert fordi det samsvarer med et vanlig brukt passord."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
 msgstr "Det nye passordet du sendte inn er usikkert fordi det samsvarer med et passord som har blitt kompromittert i én eller flere offentlige datalekkasjer."
 
-#, fuzzy
 msgid "The new password you submitted is unsafe because it's too easy to guess."
 msgstr "Det nye passordet du sendte inn er usikkert fordi det er for lett å gjette."
 
-#, fuzzy
 msgid "Please input a different password:"
 msgstr "Vennligst skriv inn et annet passord:"
 
 msgid "New password"
 msgstr "Nytt passord"
 
-#, fuzzy
 msgid "Submit"
 msgstr "Send inn"
 
@@ -1404,7 +1387,6 @@ msgstr "Hvis du bruker en eksotisk nettleser og ingenting skjer, {link_start}kli
 msgid "Retry"
 msgstr "Prøv igjen"
 
-#, fuzzy
 msgid "Other amount"
 msgstr "Annet beløp"
 
@@ -1484,11 +1466,11 @@ msgstr "Juridisk"
 msgid "Switch to another language"
 msgstr "Bytt til et annet språk"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} not yet translated)"
 msgstr "({x_percent} ikke oversatt ennå)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} machine translated)"
 msgstr "({x_percent} maskinoversatt)"
 
@@ -1551,7 +1533,7 @@ msgstr "Skriv ut"
 
 #, fuzzy
 msgid "Liberapay logo"
-msgstr "Liberapays logo"
+msgstr "Liberapay logo"
 
 #, python-brace-format
 msgid "{0} has {n} patron."
@@ -1585,15 +1567,13 @@ msgstr "Doner"
 msgid "Switch to a different account"
 msgstr "Bytt til en annen konto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A single-use authentication link has been emailed to {email_address}."
 msgstr "En engangsautentiseringslenke er sendt til {email_address}."
 
-#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
 msgstr "Sjekk innboksen din, og kanskje også spam-mappen."
 
-#, fuzzy
 msgid "Open the authentication link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Åpne autentiseringslenken i en ny fane, gå tilbake til denne siden og klikk på knappen nedenfor for å fortsette med det du ønsket å gjøre."
 
@@ -1621,18 +1601,16 @@ msgstr "Passord (valgfritt)"
 
 #, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "La det forrige feltet stå tomt hvis kontoen din ikke har et passord, eller du har {bold}mistet passordet{bold_end}. En innloggingslenke vil bli sendt til deg per e-post."
+msgstr "Hvis du har {bold}mistet passordet ditt{bold_end}, eller om kontoen ikke har ett passord i hele tatt, la passord-feltet være tomt. Vi vil sende en lenke for innlogging via e-post."
 
 msgid "Save"
 msgstr "Lagre"
 
-#, fuzzy
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
 msgstr "Hvis du trenger å endre passordet til Liberapay-kontoen din, kan du gjøre det nedenfor. For å være sikker bør passordet til kontoen din genereres tilfeldig og ikke brukes noe annet sted. Vi anbefaler på det sterkeste bruk av en passordbehandler."
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
-msgstr "Ved å angi et passord kan du logge inn direkte, i stedet for å vente på en engangskobling sendt via e-post. Vi anbefaler imidlertid bare å angi et passord hvis du bruker en passordadministrator, fordi passordet for å være sikkert bør genereres tilfeldig og ikke brukes andre steder."
+msgstr "Ved å angi et passord kan du logge inn direkte, i stedet for å vente på en engangs-lenke sendt via e-post. Vi anbefaler imidlertid bare å angi et passord hvis du bruker en passord-behandler, for å være sikkert bør passordet genereres tilfeldig og ikke brukes andre steder."
 
 msgid "Current password"
 msgstr "Nåværende passord"
@@ -1649,11 +1627,9 @@ msgstr "Maksimal lengde er {0}."
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
 msgstr "Hvis du har {bold}mistet ditt nåværende passord{bold_end}, må du logge inn via e-post for å kunne erstatte det:"
 
-#, fuzzy
 msgid "2FA"
 msgstr "2FA"
 
-#, fuzzy
 msgid "Liberapay does not yet support two-factor authentication."
 msgstr "Liberapay støtter ennå ikke tofaktorautentisering."
 
@@ -1754,13 +1730,11 @@ msgstr "Vis {submenu_label}-undermenyen"
 msgid "Introduction"
 msgstr "Introduksjon"
 
-#, fuzzy
 msgid "Use Cases"
 msgstr "Brukstilfeller"
 
-#, fuzzy
 msgid "Global"
-msgstr "Verdensomspennende"
+msgstr "Global"
 
 msgid "Teams"
 msgstr "Lag"
@@ -1771,9 +1745,8 @@ msgstr "Statistikk"
 msgid "Privacy"
 msgstr "Personvern"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "Kilder"
+msgstr "Følg oss"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -1787,11 +1760,9 @@ msgstr "Logoer"
 msgid "Overview"
 msgstr "Oversikt"
 
-#, fuzzy
 msgid "Recipients"
 msgstr "Mottakere"
 
-#, fuzzy
 msgid "Hopefuls"
 msgstr "Håpefulle"
 
@@ -1810,7 +1781,6 @@ msgstr "Navn"
 msgid "Currencies"
 msgstr "Valutaer"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Land"
 
@@ -1855,23 +1825,20 @@ msgstr "{username} har ikke satt opp noen betalingsmetode enda, så din donasjon
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donasjoner til {username} behandles gjennom PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "a credit or debit card ({list_of_card_brands})"
 msgstr "et kreditt- eller debetkort ({list_of_card_brands})"
 
-#, fuzzy
 msgid "a euro bank account (SEPA Direct Debit)"
 msgstr "en eurobankkonto (SEPA AvtaleGiro)"
 
-#, fuzzy
 msgid "a PayPal account"
 msgstr "en PayPal-konto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: {list_of_payment_methods}."
 msgstr "Donasjoner til {username} kan betales ved hjelp av: {list_of_payment_methods}."
 
-#, fuzzy
 msgid "Payment Card"
 msgstr "Betalingskort"
 
@@ -1896,7 +1863,6 @@ msgstr "Adresse inne i byen"
 msgid "Income"
 msgstr "Inntekt"
 
-#, fuzzy
 msgid "undisclosed"
 msgstr "ikke offentliggjort"
 
@@ -1922,7 +1888,6 @@ msgstr "Oppdrag utført!"
 msgid "View income shares"
 msgstr "Vis inntektsfordeling"
 
-#, fuzzy
 msgid "View payments"
 msgstr "Se betalinger"
 
