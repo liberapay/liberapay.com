@@ -1,13 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Swedish "
-"<https://hosted.weblate.org/projects/liberapay/core/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/liberapay/core/sv/>\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+"PO-Revision-Date: 2026-09-12 06:51+0000\n"
+"Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
+"Language: sv\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -177,7 +179,7 @@ msgstr[0] "Donationer för din roll i gruppen {team_name}: {money_amount} från 
 msgstr[1] "Donationer för din roll i gruppen {team_name}: {money_amount} från {n} donatorer."
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr "Donationer genom lag: inga (du är inte medlem i något lag)."
+msgstr "Donationer genom grupper: inga (du är inte medlem i någon grupp)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
 msgstr "NB: Donationer genom Liberapay betalas nu i förskott istället för att överföras veckovis. Numrena ovanför motsvarar vad du hade mottagit denna vecka med det gamla systemet."
@@ -667,7 +669,7 @@ msgid "Confirm the payment"
 msgstr "Bekräfta betalningen"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr "Du kan göra det lättare för dina kunder att stödja dig genom Liberapay"
+msgstr "Du kan göra det lättare för dina bidragsgivare att stödja dig genom Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_start}better than PayPal{link_end} in several ways, for both you and your donors."
@@ -689,7 +691,7 @@ msgstr "Du har blivit inbjuden till en grupp på Liberapay"
 
 #, python-brace-format
 msgid "{0} has invited you to join the {1} team."
-msgstr "{0} har bjudit in dig till att gå med i {1} gruppen."
+msgstr "{0} har bjudit in dig till att gå med i gruppen {1}."
 
 msgid "See the team's profile"
 msgstr "Se gruppens profil"
@@ -705,7 +707,7 @@ msgstr "En grupp du är medlem i har döpts om"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr "Teamet \"{0}\" har döpts om till \"{1}\" av {2}."
+msgstr "Gruppen \"{0}\" har döpts om till \"{1}\" av {2}."
 
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
@@ -759,25 +761,22 @@ msgstr "Ditt Liberapay konto ändras"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Någon försöker associera e-postadressen {0} med det Liberapay-konto vars nuvarande adress är {1}. Om du inte påbörjade denna process så bör du klicka på länken nedan och ta bort den felaktiga adressen från ditt konto."
 
-#, fuzzy
 msgid "The requested page couldn't be found."
 msgstr "Den begärda sidan kunde inte hittas."
 
-#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience. We'll fix this error as soon as possible."
 msgstr "Det verkar som om du har hittat ett fel! Vi ber om ursäkt för besväret. Vi kommer att åtgärda felet så snart som möjligt."
 
-#, fuzzy
 msgid "An unspecified error occured. This isn't supposed to happen. Sorry."
 msgstr "Ett ospecificerat fel har uppstått. Detta ska inte hända. Vi ber om ursäkt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to {link_start}contact us{link_end}, please include the following error identification code in your message: {0}."
 msgstr "Detaljerna om detta fel har registrerats. Om du bestämmer dig för att {link_start}kontakta oss{link_end}, vänligen inkludera följande felidentifieringskod i ditt meddelande: {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you decide to {link_start}contact us{link_end} about this issue, please include the following debugging information in your message:"
-msgstr "Om du beslutar att {link_start}kontakta oss{link_end} angående detta problem, vänligen inkludera följande felsökningsinformation i ditt meddelande:"
+msgstr "Om du beslutar dig för att {link_start}kontakta oss{link_end} angående detta problem, vänligen inkludera följande felsökningsinformation i ditt meddelande:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Varje vecka så länge jag mottager donationer"
@@ -879,41 +878,32 @@ msgstr "Maximal"
 msgid "Universal"
 msgstr "Universell"
 
-#, fuzzy
 msgid "Africa"
 msgstr "Afrika"
 
-#, fuzzy
 msgid "America"
 msgstr "Amerika"
 
-#, fuzzy
 msgid "Antarctica"
 msgstr "Antarktis"
 
-#, fuzzy
 msgid "Arctic"
 msgstr "Arktis"
 
-#, fuzzy
 msgid "Asia"
 msgstr "Asien"
 
-#, fuzzy
 msgid "Atlantic"
 msgstr "Atlanten"
 
-#, fuzzy
 msgid "Australia"
 msgstr "Australien"
 
-#, fuzzy
 msgid "Europe"
 msgstr "Europa"
 
-#, fuzzy
 msgid "Indian"
-msgstr "indisk"
+msgstr "Indisk"
 
 #, fuzzy
 msgid "Pacific"
@@ -1214,7 +1204,7 @@ msgstr "{platform}-användaren du letar efter har inte gått med hos Liberapay, 
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr "Liberapay-donation till {username} (lag {team_name})"
+msgstr "Liberapay-donation till {username} (grupp {team_name})"
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
@@ -1583,7 +1573,6 @@ msgstr "Byt till ett annat konto"
 msgid "A single-use authentication link has been emailed to {email_address}."
 msgstr "En engångsautentiseringslänk har skickats till {email_address}."
 
-#, fuzzy
 msgid "Check your inbox, and perhaps your spam folder."
 msgstr "Kontrollera din inkorg och eventuellt din skräppostmapp."
 
@@ -1636,9 +1625,9 @@ msgstr "Avaktivera lösenord"
 msgid "Maximum length is {0}."
 msgstr "Maximala längden är {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your current password{bold_end}, you have to log in via email to be able to replace it:"
-msgstr "Om du har {bold} tappat bort ditt nuvarande lösenord {bold_end} måste du logga in via e-post för att kunna ersätta det:"
+msgstr "Om du har {bold}tappat bort ditt nuvarande lösenord{bold_end} måste du logga in via e-post för att kunna ersätta det:"
 
 msgid "2FA"
 msgstr "2FA"
@@ -1751,7 +1740,7 @@ msgid "Global"
 msgstr "Globalt"
 
 msgid "Teams"
-msgstr "Teams"
+msgstr "Grupper"
 
 msgid "Stats"
 msgstr "Statistik"
@@ -1978,7 +1967,7 @@ msgid "Update my nominal take"
 msgstr "Updatera min nominella andel"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
-msgstr "Oanvänd inkomst kommer förbrukas under de kommande veckorna, de ackumuleras inte på lag-kontot. Ett lag kan inte äga pengar då det inte är en juridisk enhet."
+msgstr "Oanvänd inkomst kommer förbrukas under de kommande veckorna, de ackumuleras inte på gruppkontot. En grupp kan inte äga pengar eftersom den inte är en juridisk enhet."
 
 msgid "Leftover"
 msgstr "Överblivet"
@@ -2126,13 +2115,11 @@ msgstr "Legitimationen har återkallats."
 msgid "Constant session"
 msgstr "Kontinuerlig session"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Du kan automatisera hämtningen av privat information från ditt konto genom att inkludera följande HTTP-header i dina förfrågningar:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Du kan t.ex. hämta en lista över dina aktiva låntagare genom att utföra följande kommando:"
+msgstr "Du kan t.ex. hämta en lista över dina aktiva bidragsgivare genom att utföra följande kommando:"
 
 #, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
@@ -3050,7 +3037,7 @@ msgstr "Visa äldre betalningar"
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
-msgstr "Du är inte medlem i {0} gruppen."
+msgstr "Du är inte medlem i gruppen {0}."
 
 #, python-brace-format
 msgid "Your take is now {0} (you can't go higher this week)."
@@ -3090,8 +3077,8 @@ msgstr "{0} äger följande konton på andra platformar:"
 #, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} är en medlem i {n} grupp:"
-msgstr[1] "{username} är en medlem i {n} grupper:"
+msgstr[0] "{username} är medlem i {n} grupp:"
+msgstr[1] "{username} är medlem i {n} grupper:"
 
 msgid "Communities"
 msgstr "Nätverk"
@@ -3355,15 +3342,15 @@ msgstr "hemlig donation"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
-msgstr "offentlig donation från {donor_name} för din roll i teamet {team_name}"
+msgstr "offentlig donation från {donor_name} för din roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "private donation from {donor_name} for your role in the {team_name} team"
-msgstr "privat donation från {donor_name} för din roll i teamet {team_name}"
+msgstr "privat donation från {donor_name} för din roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "secret donation for your role in the {team_name} team"
-msgstr "hemlig donation för din roll i {team_name} -teamet"
+msgstr "hemlig donation för din roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name}"
@@ -3379,15 +3366,15 @@ msgstr "hemlig donation till {recipient_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr "offentlig donation till {recipient_name} för deras roll i teamet {team_name}"
+msgstr "offentlig donation till {recipient_name} för deras roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr "privat donation till {recipient_name} för deras roll i teamet {team_name}"
+msgstr "privat donation till {recipient_name} för deras roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr "hemlig donation till {recipient_name} för deras roll i teamet {team_name}"
+msgstr "hemlig donation till {recipient_name} för deras roll i gruppen {team_name}"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3404,7 +3391,7 @@ msgid "You are not invited to join this team."
 msgstr "Du har inte blivit inbjuden till att gå med i denna grupp."
 
 msgid "You have been removed from this team."
-msgstr "Du har tagits bort från det här laget."
+msgstr "Du har tagits bort från den här gruppen."
 
 msgid "You have already accepted this invitation."
 msgstr "Du har redan accepterat denna inbjudan."
@@ -3419,7 +3406,7 @@ msgid "User not found."
 msgstr "Användare inte funnen."
 
 msgid "A team can't join a team"
-msgstr "En grupp kan inte gå med i en annan grupp"
+msgstr "En grupp kan inte gå med i en grupp"
 
 msgid "You can't invite an inactive user to join a team."
 msgstr "Du kan inte bjuda in en inaktiv användare till att gå med i en grupp."
@@ -3430,7 +3417,7 @@ msgstr "{username} har redan blivit inbjuden till denna grupp {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
-msgstr "{username} har redan vägrat att gå med i denna grupp {timespan_ago}."
+msgstr "{username} har redan avvisat att gå med i denna grupp {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3542,7 +3529,7 @@ msgstr "Du är inte medlem i någon grupp."
 
 #, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr "{username} är inte medlem i något lag."
+msgstr "{username} är inte medlem i någon grupp."
 
 msgid "The payment account has been successfully disconnected."
 msgstr "Bortkopplingen av betalkontot lyckades."
@@ -3690,7 +3677,7 @@ msgstr "Mottagare"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
-msgstr "{recipient}, medlem i {team_name} gruppen"
+msgstr "{recipient}, medlem i gruppen {team_name}"
 
 msgid "Payer"
 msgstr "Betalare"
@@ -3803,27 +3790,21 @@ msgstr "{x_percent} av donationer"
 msgid "{x_percent} of total income"
 msgstr "{x_percent} av total inkomst"
 
-#, fuzzy
 msgid "Income reports"
 msgstr "Inkomstrapporter"
 
-#, fuzzy
 msgid "There were a lot of transactions during the reporting period you requested. Please select a shorter period."
 msgstr "Det har skett många transaktioner under den rapporteringsperiod du angav. Välj en kortare period."
 
-#, fuzzy
 msgid "Liberapay can generate income reports for accounting purposes."
 msgstr "Liberapay kan generera inkomstrapporter för bokföringsändamål."
 
-#, fuzzy
 msgid "First day of the reporting period"
 msgstr "Rapporteringsperiodens första dag"
 
-#, fuzzy
 msgid "Last day of the reporting period"
 msgstr "Rapporteringsperiodens sista dag"
 
-#, fuzzy
 msgid "Time zone"
 msgstr "Tidszon"
 
@@ -3839,27 +3820,21 @@ msgstr "{year}S{semester}"
 msgid "liberapay_income_report_{period}"
 msgstr "liberapay_income_report_{period}"
 
-#, fuzzy
 msgid "Income report"
 msgstr "Inkomstrapport"
 
-#, fuzzy
 msgid "Income recipient"
 msgstr "Inkomstmottagare"
 
-#, fuzzy
 msgid "Information on who received the funds: name, postal address, etc."
 msgstr "Information om vem som mottagit medlen: namn, postadress etc."
 
-#, fuzzy
 msgid "Income amount"
 msgstr "Inkomstbelopp"
 
-#, fuzzy
 msgid "No income."
 msgstr "Ingen inkomst."
 
-#, fuzzy
 msgid "Income type"
 msgstr "Inkomsttyp"
 
@@ -3871,19 +3846,15 @@ msgstr "Alla betalningar var donationer. Inga varor eller tjänster skulle tillh
 msgid "No taxes were collected by the Liberapay platform."
 msgstr "Inga skatter har tagits ut av Liberapay-plattformen."
 
-#, fuzzy
 msgid "Reporting period"
 msgstr "Rapporteringsperiod"
 
-#, fuzzy
 msgid "Account number"
 msgstr "Kontonummer"
 
-#, fuzzy
 msgid "Account creation time"
 msgstr "Tidpunkt för skapande av konto"
 
-#, fuzzy
 msgid "Transaction record"
 msgstr "Transaktionsregister"
 
@@ -3891,15 +3862,12 @@ msgstr "Transaktionsregister"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgid "public donation"
 msgstr "offentliga donationer"
 
-#, fuzzy
 msgid "private donation"
 msgstr "privat donation"
 
-#, fuzzy
 msgid "donation reversal"
 msgstr "återkallande av donation"
 
@@ -3949,7 +3917,6 @@ msgstr "Glöm det här bankkontonumret efter en betalning."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Eftersom betalarens postadress ibland krävs för att en betalning ska kunna behandlas, rekommenderar vi att du anger din postadress nedan. Den kommer att lagras krypterat i vår databas och skickas till betalningsförmedlaren ({processor_name})."
 
-#, fuzzy
 msgid "Fund your donation"
 msgid_plural "Fund your donations"
 msgstr[0] "Finansiera din donation"
@@ -3958,13 +3925,13 @@ msgstr[1] "Finansiera dina donationer"
 msgid "Setting up the payment instrument failed."
 msgstr "Konfigurationen av betalningsmetoden misslyckades."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} payment instrument is attached to this account."
 msgid_plural "{n} payment instruments are attached to this account."
 msgstr[0] "{n} betalningsinstrument är kopplat till detta konto."
 msgstr[1] "{n} betalningsinstrument är kopplade till detta konto."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} valid payment instrument is attached to this account."
 msgid_plural "{n} valid payment instruments are attached to this account."
 msgstr[0] "{n} giltigt betalningsinstrument är kopplat till detta konto."
@@ -4036,11 +4003,9 @@ msgstr "Använd det här instrumentet som standard för betalningar i {currency}
 msgid "Set as default for {currency}"
 msgstr "Ställ in som standard för {currency}"
 
-#, fuzzy
 msgid "No payment instruments are attached to this account."
 msgstr "Inga betalningsinstrument är kopplade till detta konto."
 
-#, fuzzy
 msgid "No valid payment instruments are attached to this account."
 msgstr "Det finns inga giltiga betalningsinstrument kopplade till detta konto."
 
@@ -4214,7 +4179,7 @@ msgstr "avbruten"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
-msgstr "anonym donation för din roll i {0} gruppen"
+msgstr "anonym donation för din roll i gruppen {0}"
 
 msgid "in arrears"
 msgstr "i efterskott"
@@ -4241,7 +4206,7 @@ msgstr "sista gåvan till {0}"
 
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
-msgstr "donation till {0} för deras roll i {1} gruppen"
+msgstr "donation till {0} för deras roll i gruppen {1}"
 
 msgid "refund of anonymous donation"
 msgstr "återbetalning av anonym donation"
@@ -4342,7 +4307,6 @@ msgstr "De angivna inloggningsuppgifterna är stämmer inte."
 msgid "You can try again:"
 msgstr "Du kan försöka igen:"
 
-#, fuzzy
 msgid "If you're trying to reach the owner of a Liberapay account, be advised that we generally don't relay messages and can't reveal the identity or contact details of our users."
 msgstr "Om du försöker kontakta ägaren till ett Liberapay-konto, var vänlig notera att vi generellt sett inte vidarebefordrar meddelanden och inte kan avslöja våra användares identitet eller kontaktuppgifter."
 
@@ -4353,11 +4317,9 @@ msgstr "För att kontakta en Liberapay-administratör privat:"
 msgid "Send an email to Liberapay"
 msgstr "Skicka e-post till Liberapay"
 
-#, fuzzy
 msgid "We're very busy, so you shouldn't expect a fast response. Some messages may not be answered at all, especially if they're disrespectful, rambling or misdirected."
 msgstr "Vi har mycket att göra, så du bör inte förvänta dig ett snabbt svar. Vissa meddelanden kanske inte besvaras alls, särskilt om de är respektlösa, osammanhängande eller felaktigt adresserade."
 
-#, fuzzy
 msgid "If your message isn't written in English or French, it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Om ditt meddelande inte är skrivet på engelska eller franska kommer det att översättas automatiskt av en maskin. Vårt svar kommer att översättas till ditt språk på samma sätt."
 
@@ -4507,7 +4469,6 @@ msgstr "Är donationer genom Liberapay avdragsgilla?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Antagligen inte, men det beror på skattereglerna i ditt land."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Är ett Liberapay-konto en plånbok?"
 
@@ -4850,18 +4811,18 @@ msgid "You're not allowed to do this because your account has been flagged. Plea
 msgstr "Du har, på grund av att ditt konto blivit flaggat, inte tillåtelse att göra detta. Vänligen kontakta support@liberapay.com om du vill veta varför och för att begära att flaggan på ditt konto tas bort."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. The donors choose how much they want to give, the team members specify how they want to share the money, and Liberapay attempts to distribute the funds accordingly."
-msgstr "Ett Liberapay-team koordinerar gåvor från flera givare till flera mottagare. Givarna väljer hur mycket de vill ge, teammedlemmarna specificerar hur de vill dela på pengarna och Liberapay försöker att dela ut medlen i enlighet med detta."
+msgstr "En Liberapay-grupp koordinerar gåvor från flera givare till flera mottagare. Givarna väljer hur mycket de vill ge, gruppmedlemmarna specificerar hur de vill dela på pengarna och Liberapay försöker att dela ut medlen i enlighet med detta."
 
 msgid "A team account isn't meant to be used by the members of a single legal entity, it is designed for a group of independent individuals or organizations who work together on a common project. However, it's also okay to create a team account for a project that only has one contributor, as this allows marking a donation as being intended to support that project specifically rather than the person behind it."
-msgstr "Ett team-konto är inte avsett att användas av medlemmar av en och samma juridiska person, utan är utformat för en grupp oberoende individer eller organisationer som arbetar tillsammans i ett gemensamt projekt. Det är dock tillåtet att skapa ett team-konto för ett projekt som bara har en bidragsgivare, eftersom detta gör det möjligt att märka en gåva som avsedd att stödja ett specifikt projekt snarare än personen bakom det."
+msgstr "Ett gruppkonto är inte avsett att användas av medlemmar av en och samma juridiska person, utan är utformat för en grupp oberoende individer eller organisationer som arbetar tillsammans i ett gemensamt projekt. Det är dock tillåtet att skapa ett gruppkonto för ett projekt som bara har en bidragsgivare, eftersom detta gör det möjligt att märka en gåva som avsedd att stödja ett specifikt projekt snarare än personen bakom det."
 
 #, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
-msgstr "Ett team-konto {bold}lagrar inte pengar{end_bold} för senare användning. Varje gåva distribueras omedelbart, antingen till flera olika medlemmar (om möjligt), eller till en av medlemmarna när betalningsförmedlaren inte stödjer uppdelning av pengarna. På grund av dessa begränsningar i betalningsförmedlingen kan summorna som de olika medlemmarna får temporärt vara i obalans, särskilt om teamet har färre givare än medlemmar."
+msgstr "Ett gruppkonto {bold}lagrar inte pengar{end_bold} för senare användning. Varje gåva distribueras omedelbart, antingen till flera olika medlemmar (om möjligt), eller till en av medlemmarna när betalningsförmedlaren inte stödjer uppdelning av pengarna. På grund av dessa begränsningar i betalningsförmedlingen kan summorna som de olika medlemmarna får tillfälligt vara i obalans, särskilt om gruppen har färre givare än medlemmar."
 
 #, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Om Liberapays lagkonton inte passar dina behov kanske du istället vill använda plattformen {link_start}Open Collective{link_end}, som gör det möjligt för ett lag att vara \"värd\" för en registrerad ideell organisation. Denna \"skattemässiga värd\" är den juridiska ägaren till kollektivets medel, övervakar hur de används och tar vanligtvis en procentandel av donationerna för att finansiera sig själv. (Vi planerar att införa ett liknande system i Liberapay, men vi vet inte när det kommer att ske.)"
+msgstr "Om Liberapays gruppkonton inte passar dina behov kanske du istället vill använda plattformen {link_start}Open Collective{link_end}, som gör det möjligt för en grupp att vara \"värd\" för en registrerad ideell organisation. Denna \"skattemässiga värd\" är den juridiska ägaren till kollektivets medel, övervakar hur de används och tar vanligtvis en procentandel av donationerna för att finansiera sig själv. (Vi planerar att införa ett liknande system i Liberapay, men vi vet inte när det kommer att ske.)"
 
 msgid "Creating a team"
 msgstr "Att skapa en grupp"
@@ -4884,7 +4845,7 @@ msgid "Create"
 msgstr "Skapa"
 
 msgid "Becoming a team member"
-msgstr "Att bli en gruppmedlem"
+msgstr "Att bli medlem i en grupp"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
 msgstr "När du har bidragit till ett gruppprojekt, be dess medlemmar att bjuda in dig. Glöm inte att berätta vad ditt användarnamn är."
@@ -4893,7 +4854,7 @@ msgid "Sharing the money"
 msgstr "Delning av pengarna"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
-msgstr "Teamen har inte en hierarki, alla deras medlemmar är jämnlikar och sätter sin egna andel."
+msgstr "Grupper har inte en hierarki, alla deras medlemmar är jämnlikar och sätter sin egna andel."
 
 #, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
@@ -4940,12 +4901,11 @@ msgid "Kicking a member out of a team is not implemented yet. Please contact sup
 msgstr "Att sparka en medlem ur en grupp är inte implementerat ännu. Vänligen kontakta supporten för att bevisa att medlemmen måste sparkas ut och att det finns enighet om det bland de andra medlemmarna."
 
 msgid "Closing a team account"
-msgstr "Stänga en grupp konto"
+msgstr "Stänga ett gruppkonto"
 
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "En gruppkonto stängs automatiskt när den sista medlemmen lämnar."
 
-#, fuzzy
 msgid "Liberapay is meant to be used to fund the development and maintenance of common resources. So far it only allows doing this through recurrent donations, which makes it suitable for a limited number of use cases."
 msgstr "Liberapay är avsett att användas för att finansiera utveckling och underhåll av gemensamma resurser. Hittills tillåter det endast detta genom återkommande donationer, vilket gör det lämpligt för ett begränsat antal användningsområden."
 
@@ -5148,17 +5108,17 @@ msgstr "Har du någon i åtanke?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Vi kan hjälpa dig att hitta åtaganden om du ansluter dina konton:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The individual with the most patrons on Liberapay is:"
 msgid_plural "The {n} individuals with the most patrons on Liberapay are:"
-msgstr[0] "Den person som har flest beskyddare på Liberapay är:"
-msgstr[1] "{n}-personer med flest beskyddare på Liberapay är:"
+msgstr[0] "Den person som har flest bidragsgivare på Liberapay är:"
+msgstr[1] "De {n} personer med flest bidragsgivare på Liberapay är:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organization with the most patrons on Liberapay is:"
 msgid_plural "The {n} organizations with the most patrons on Liberapay are:"
-msgstr[0] "Organisationen med flest beskyddare på Liberapay är:"
-msgstr[1] "{n}-organisationerna med flest användare på Liberapay är:"
+msgstr[0] "Organisationen med flest bidragsgivare på Liberapay är:"
+msgstr[1] "De {n} organisationerna med flest bidragsgivare på Liberapay är:"
 
 #, fuzzy, python-brace-format
 msgid "The team with the most patrons on Liberapay is:"
@@ -5166,11 +5126,11 @@ msgid_plural "The {n} teams with the most patrons on Liberapay are:"
 msgstr[0] "Den gruppen som har flest beskyddare på Liberapay är:"
 msgstr[1] "{n}-grupper med flest användare på Liberapay är:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account with the most patrons is:"
 msgid_plural "The {n} Liberapay accounts with the most patrons are:"
-msgstr[0] "Liberapay-kontot med flest sponsorer är:"
-msgstr[1] "{n}s Liberapay-konton med flest sponsorer är:"
+msgstr[0] "Liberapay-kontot med flest bidragsgivare är:"
+msgstr[1] "De {n} Liberapay-kontona med flest bidragsgivare är:"
 
 #, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
@@ -5187,8 +5147,8 @@ msgstr[1] "De {n} organisationerna som får mest pengar genom Liberapay är:"
 #, python-brace-format
 msgid "The team receiving the most money through Liberapay is:"
 msgid_plural "The {n} teams receiving the most money through Liberapay are:"
-msgstr[0] "Teamet som får mest pengar genom Liberapay är:"
-msgstr[1] "De {n} team som får mest pengar genom Liberapay är:"
+msgstr[0] "Den grupp som får mest pengar genom Liberapay är:"
+msgstr[1] "De {n} grupper som får mest pengar genom Liberapay är:"
 
 #, python-brace-format
 msgid "The Liberapay account receiving the most money is:"
@@ -5196,9 +5156,8 @@ msgid_plural "The {n} Liberapay accounts receiving the most money are:"
 msgstr[0] "Liberapay-kontot som får mest pengar är:"
 msgstr[1] "De {n} Liberapay-kontona som får mest pengar är:"
 
-#, fuzzy
 msgid "number of patrons"
-msgstr "antal kunder"
+msgstr "antal bidragsgivare"
 
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
@@ -5225,8 +5184,8 @@ msgstr "Länka dina källkodsarkiv till din profil"
 #, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
-msgstr[0] "Top gruppen på Liberapay är:"
-msgstr[1] "Top {n} grupperna på Liberapay är:"
+msgstr[0] "Toppgruppen på Liberapay är:"
+msgstr[1] "De {n} toppgrupperna på Liberapay är:"
 
 msgid "Create a team"
 msgstr "Skapa en grupp"
@@ -5506,17 +5465,17 @@ msgid ""
 "\n"
 "Please {link_start}make sure your membership of the team is public{link_end}."
 msgstr ""
-"Vi kunde inte avgöra om du är medlem av teamet {team_name} på {platform_name}.\n"
+"Vi kunde inte avgöra om du är medlem av gruppen {team_name} på {platform_name}.\n"
 "\n"
 "Vänligen {link_start}se till att ditt medlemskap i teamet är offentligt{link_end}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
-msgstr "Är du verkligen administratör över {0} gruppen?"
+msgstr "Är du verkligen administratör för gruppen {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr "Ditt försök att göra anspråk på detta konto misslyckads då du redan är inloggad på {0} som någon som inte är administratör över {1} gruppen. Vänligen logga ut och {2}försök igen{3}."
+msgstr "Ditt försök att göra anspråk på detta konto misslyckades då du redan är inloggad på {0} som någon som inte är administratör över gruppen {1}. Vänligen logga ut och {2}försök igen{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
@@ -5532,7 +5491,7 @@ msgstr "{0} är en privat grupp"
 
 #, python-brace-format
 msgid "{0} is a big team"
-msgstr "{0} är en stort grupp"
+msgstr "{0} är en stor grupp"
 
 #, python-brace-format
 msgid "{0} is a team with {n} public member"
@@ -5573,11 +5532,11 @@ msgid "Pledge to {user_name}"
 msgstr "Gör ett donationsåtagande till {user_name}"
 
 msgid "You can support individual team members:"
-msgstr "Du kan stödja individuella team-medlemmar:"
+msgstr "Du kan stödja individuella gruppmedlemmar:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr "Är du medlem av teamet {team_name}?"
+msgstr "Är du medlem av gruppen {team_name}?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
@@ -5629,7 +5588,7 @@ msgstr "Vänligen ange namnet på {0} kontot du vill ansluta:"
 
 #, python-brace-format
 msgid "Name of the team's account on {platform}"
-msgstr "Namn för teamets konto på {platform}"
+msgstr "Namn för gruppens konto på {platform}"
 
 #, python-brace-format
 msgid "Name of the organization's account on {platform}"
