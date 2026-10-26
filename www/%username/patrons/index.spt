@@ -122,6 +122,12 @@ subhead = _("Patrons")
 <p><a href="{{ participant.path('patrons/export.csv?scope=all') }}">{{ icon('download') }} {{
     _("Download the record of all patrons in the last ten years")
 }}</a></p>
+<p>{{ _(
+    "To automate these downloads, you can {link_start}generate long-lived "
+    "read-only credentials{link_end}.",
+    link_start=('<a href="%s">'|safe) % user.path('settings/constant-session'),
+    link_end='</a>'|safe,
+) }}</p>
 
 % if participant.is_person
     <h3 id="teams">{{ _("Teams") }}</h3>
