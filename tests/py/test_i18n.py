@@ -102,6 +102,18 @@ class Tests(Harness):
         )
         assert state['locale'] is self.website.locales['zh-hant-tw']
 
+    def test_chinese_statements_are_converted(self):
+        alice = self.make_participant('alice')
+        alice.upsert_statement('zh-hans', "头发很长")
+        statement = alice.get_statement('zh-hant')
+        assert statement == "頭髮很長"
+        assert statement.lang == 'zh-hant'
+        bob = self.make_participant('bob')
+        bob.upsert_statement('zh-hant', "頭髮很長")
+        statement = bob.get_statement(['zh-hans', 'en'])
+        assert statement == "头发很长"
+        assert statement.lang == 'zh-hans'
+
     def test_american_english(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'en-us', want='state')
         locale = state['locale']
