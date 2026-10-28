@@ -55,7 +55,7 @@ elif event_object_type == 'charge.dispute':
     payin_id = charge.metadata['payin_id']
     payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
     route = website.db.one("SELECT r FROM exchange_routes r WHERE id = %s", (payin.route,))
-    if route.status != 'canceled':
+    if route.status != 'canceled' and not dispute.status.startswith('warning_'):
         route.invalidate()
     payin = settle_charge(website.db, payin, charge)
     if dispute.status == 'lost':
@@ -96,7 +96,7 @@ elif event_object_type == 'charge.dispute':
                 recipient_names=payin.recipient_names,
                 dispute_reason=dispute.reason,
                 dispute_can_be_withdrawn=(
-                    dispute.status == 'needs_response' and
+                    dispute.status.endswith('needs_response') and
                     due_by > utcnow().timestamp()
                 ),
                 mandate_url=route.get_mandate_url(),
