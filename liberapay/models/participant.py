@@ -36,6 +36,7 @@ from liberapay.constants import (
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_TIMEOUT, SESSION_TIMEOUT_LONG,
+    SESSION_TOKEN_PREFIX,
     STRIPE_TRANSFER_COUNTRIES, USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -487,6 +488,7 @@ class Participant(Model, MixinTeam):
             if session_id == '!':
                 return None, 'expired'
             return None, 'invalid'
+        secret = secret.removeprefix(SESSION_TOKEN_PREFIX)
         try:
             p_id = int(p_id)
             session_id = int(session_id)

@@ -9,6 +9,7 @@ from pando.utils import utcnow
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    SESSION_TOKEN_PREFIX,
 )
 from liberapay.exceptions import (
     AccountIsPasswordless, EmailAlreadyTaken, LoginRequired,
@@ -155,7 +156,7 @@ def sign_in_with_form_data(body, state):
         if username:
             username = username.strip()
             Participant.check_username(username)
-        session_token = body.get('sign-in.token', '')
+        session_token = body.get('sign-in.token', '').removeprefix(SESSION_TOKEN_PREFIX)
         if session_token:
             Participant.check_session_token(session_token)
         # Check for an existing account
