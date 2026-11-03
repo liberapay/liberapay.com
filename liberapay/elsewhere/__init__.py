@@ -3,6 +3,7 @@
 
 def _import():
     from .bitbucket import Bitbucket  # noqa
+    from .forgejo import Forgejo  # noqa
     from .github import GitHub  # noqa
     from .gitlab import GitLab  # noqa
     from .linuxfr import LinuxFr  # noqa
