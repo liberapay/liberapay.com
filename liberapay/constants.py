@@ -379,6 +379,8 @@ SESSION = 'session'
 SESSION_REFRESH = timedelta(hours=12)
 SESSION_TIMEOUT = timedelta(hours=6)
 SESSION_TIMEOUT_LONG = timedelta(days=400)
+# https://datatracker.ietf.org/doc/html/rfc8959
+SESSION_TOKEN_PREFIX = 'secret-token:lp_'
 
 
 def make_standard_tip(label, weekly, currency):

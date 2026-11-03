@@ -36,6 +36,7 @@ from liberapay.constants import (
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_TIMEOUT, SESSION_TIMEOUT_LONG,
+    SESSION_TOKEN_PREFIX,
     STRIPE_TRANSFER_COUNTRIES, USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -487,6 +488,8 @@ class Participant(Model, MixinTeam):
             if session_id == '!':
                 return None, 'expired'
             return None, 'invalid'
+        prefixed = secret.startswith(SESSION_TOKEN_PREFIX)
+        secret = secret.removeprefix(SESSION_TOKEN_PREFIX)
         try:
             p_id = int(p_id)
             session_id = int(session_id)
@@ -515,6 +518,11 @@ class Participant(Model, MixinTeam):
             return None, 'invalid'
         p, stored_secret, mtime, latest_use = r
         if not constant_time_compare(stored_secret, secret):
+            erase_cookie(cookies, SESSION)
+            return None, 'invalid'
+        if not prefixed and len(stored_secret.split('.', 1)[0]) > 32:
+            # Only the tokens generated before the prefix was introduced are
+            # accepted without it.
             erase_cookie(cookies, SESSION)
             return None, 'invalid'
         if rate_limit:
@@ -552,8 +560,11 @@ class Participant(Model, MixinTeam):
         return p, 'valid'
 
     @staticmethod
-    def generate_session_token():
-        return b64encode(urandom(24), b'-_').decode('ascii')
+    def generate_session_token(prefixed=False):
+        # 36 characters. Old tokens have 32, and `authenticate_with_session`
+        # relies on that difference to decide whether the prefix is required.
+        token = b64encode(urandom(27), b'-_').decode('ascii')
+        return SESSION_TOKEN_PREFIX + token if prefixed else token
 
     @staticmethod
     def check_session_token(token):
@@ -601,7 +612,7 @@ class Participant(Model, MixinTeam):
                     "indicative of a problem if it happens often."
                 )
                 return self.regenerate_session(session, cookies, suffix)
-            creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
+            creds = f'{self.id}:{self.session.id}:{SESSION_TOKEN_PREFIX}{self.session.secret}'
             set_cookie(cookies, SESSION, creds, expires=self.session.mtime + TEN_YEARS)
 
     def start_session(self, suffix='', token=None, id_min=1, id_max=20,
@@ -690,7 +701,7 @@ class Participant(Model, MixinTeam):
     def sign_in(self, cookies, session=None, **session_kw):
         assert self.authenticated
         self.session = session or self.start_session(**session_kw)
-        creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
+        creds = f'{self.id}:{self.session.id}:{SESSION_TOKEN_PREFIX}{self.session.secret}'
         set_cookie(cookies, SESSION, creds, self.session.mtime + TEN_YEARS)
 
     def sign_out(self, cookies):
@@ -1930,7 +1941,7 @@ class Participant(Model, MixinTeam):
                     if session:
                         extra_query.append(('log-in.id', self.id))
                         extra_query.append(('log-in.key', session.id))
-                        extra_query.append(('log-in.token', session.secret))
+                        extra_query.append(('log-in.token', SESSION_TOKEN_PREFIX + session.secret))
                         if log_in != 'required':
                             extra_query.append(('log-in.required', 'no'))
                 elif log_in == 'required':
@@ -1946,7 +1957,7 @@ class Participant(Model, MixinTeam):
                 extra_query.append(('email.id', email_row.id))
                 extra_query.append(('email.nonce', email_row.nonce))
             if extra_query:
-                query += ('&' if query else '?') + urlencode(extra_query)
+                query += ('&' if query else '?') + urlencode(extra_query, safe=':')
             del extra_query
         elif log_in == 'required':
             raise ValueError(

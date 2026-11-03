@@ -1,5 +1,5 @@
 % macro sign_up_form(select_currency=True)
-<input type="hidden" name="sign-in.token" value="{{ generate_session_token() }}" />
+<input type="hidden" name="sign-in.token" value="{{ generate_session_token(prefixed=True) }}" />
 
 % include "templates/form-repost.html"
 

@@ -15,7 +15,7 @@ from pando.utils import utcnow
 from psycopg2 import IntegrityError, InternalError
 import stripe
 
-from liberapay.constants import SESSION
+from liberapay.constants import SESSION, SESSION_TOKEN_PREFIX
 from liberapay.elsewhere._base import UserInfo
 from liberapay.exceptions import MissingPaymentAccount
 from liberapay.i18n.currencies import Money
@@ -90,7 +90,7 @@ class ClientWithAuth(Client):
             sess = auth_as.session
             if not sess:
                 sess = auth_as.session = auth_as.start_session()
-            cookies[SESSION] = '%i:%i:%s' % (auth_as.id, sess.id, sess.secret)
+            cookies[SESSION] = f'{auth_as.id}:{sess.id}:{SESSION_TOKEN_PREFIX}{sess.secret}'
 
         environ = super().build_wsgi_environ(method, *a, **kw)
         if method not in ('POST', 'PUT'):

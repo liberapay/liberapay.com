@@ -4,7 +4,7 @@ from pando import json
 import stripe
 
 from liberapay.billing.payday import Payday
-from liberapay.constants import SESSION
+from liberapay.constants import SESSION, SESSION_TOKEN_PREFIX
 from liberapay.testing import EUR, Harness
 from liberapay.utils import b64encode_s
 from liberapay.wireup import NoDB
@@ -91,7 +91,7 @@ class TestPages(Harness):
     def test_sign_out_expires_session(self):
         alice = self.make_participant('alice')
         sess = alice.session = alice.start_session()
-        cookies = {SESSION: '%i:%i:%s' % (alice.id, sess.id, sess.secret)}
+        cookies = {SESSION: f'{alice.id}:{sess.id}:{SESSION_TOKEN_PREFIX}{sess.secret}'}
         response = self.client.GET('/alice/giving', cookies=cookies)
         assert response.code == 200
         response = self.client.PxST('/sign-out.html', cookies=cookies)
