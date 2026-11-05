@@ -18,7 +18,7 @@ install -m 644 -o root -g root -t /etc/systemd/system .platform/files/webapp@.so
 systemctl daemon-reload
 
 # Install cloudflared, directly from GitHub
-target_cfd_version="2023.10.0"
+target_cfd_version="2026.10.7"
 function get_installed_cfd_version() {
     if [ -x /usr/local/bin/cloudflared ]; then
         /usr/local/bin/cloudflared version | \
@@ -34,7 +34,7 @@ if [ "$installed_cfd_version" != "$target_cfd_version" ]; then
     fi
     wget "https://github.com/cloudflare/cloudflared/releases/download/$target_cfd_version/cloudflared-linux-amd64"
     hash=$(sha256sum cloudflared-linux-amd64 | cut -d' ' -f1)
-    expected_hash=33e6876bd55c2db13a931cf812feb9cb17c071ab45d3b50c588642b022693cdc
+    expected_hash=1f99fb518b83dec2ba8d870a7cc991d82a77e6196295a3d2754ba17ab9f91872
     if [ $hash != $expected_hash ]; then
         echo "cloudflared binary downloaded from GitHub doesn't match expected hash: $hash != $expected_hash"
         exit 1
