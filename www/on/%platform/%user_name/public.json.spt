@@ -10,7 +10,7 @@ if not account:
 participant = account.participant
 
 if participant.status != 'stub':
-    raise response.redirect(participant.path('public.json'))
+    raise response.redirect(participant.url('public.json'))
 
 out = {
     "avatar": participant.avatar_url,
