@@ -9,10 +9,16 @@ from ..i18n.currencies import Money, MoneyBasket
 from .types import Object
 
 
-CBORDecoder = cbor2.decoder.CBORDecoder
-CBORTag = cbor2.encoder.CBORTag
+try:
+    cbor_encoder = cbor2.encoder
+    cbor_decoder = cbor2.decoder
+except AttributeError:
+    from cbor2 import _decoder as cbor_decoder, _encoder as cbor_encoder
 
-default_encoders = cbor2.encoder.default_encoders.copy()
+CBORDecoder = cbor_decoder.CBORDecoder
+CBORTag = cbor2.CBORTag
+
+default_encoders = cbor_encoder.default_encoders.copy()
 semantic_decoders = {}
 
 
@@ -117,11 +123,11 @@ default_encoders[Object] = encode_Object
 # Wrapper functions
 # =================
 
-default_encoder = cbor2.encoder.CBOREncoder(BytesIO())
+default_encoder = cbor_encoder.CBOREncoder(BytesIO())
 default_encoder._encoders = default_encoders
-canonical_encoder = cbor2.encoder.CBOREncoder(BytesIO())
+canonical_encoder = cbor_encoder.CBOREncoder(BytesIO())
 canonical_encoder._encoders = default_encoders.copy()
-canonical_encoder._encoders.update(cbor2.encoder.canonical_encoders)
+canonical_encoder._encoders.update(cbor_encoder.canonical_encoders)
 
 
 def dumps(obj, canonical=False):

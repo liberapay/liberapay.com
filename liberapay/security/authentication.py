@@ -65,7 +65,39 @@ def sign_in_with_form_data(body, state):
     p = None
     _, website = state['_'], state['website']
 
-    if body.get('log-in.id'):
+    if body.get('log-in.otp-challenge-id'):
+        p, session_suffix = Participant.authenticate_with_two_factor_challenge(
+            body.get('log-in.otp-participant'),
+            body.get('log-in.otp-challenge-id'),
+            body.get('log-in.otp-challenge-token'),
+            body.get('log-in.otp-code'),
+            body.get('log-in.webauthn-credential'),
+        )
+        if p:
+            state['log-in.session-suffix'] = session_suffix
+            state['log-in.otp-verified'] = True
+        else:
+            state['log-in.otp-error'] = _("The submitted authentication code is incorrect.")
+            challenge = state['log-in.otp-challenge'] = dict(
+                participant=body.get('log-in.otp-participant'),
+                id=body.get('log-in.otp-challenge-id'),
+                token=body.get('log-in.otp-challenge-token'),
+            )
+            try:
+                challenge_participant_id = int(challenge['participant'])
+            except (TypeError, ValueError):
+                challenge_p = None
+            else:
+                challenge_p = Participant.from_id(challenge_participant_id, _raise=False)
+            if challenge_p:
+                challenge['has_totp'] = challenge_p.has_totp
+                challenge['has_recovery'] = challenge_p.count_recovery_codes() > 0
+                if challenge_p.has_webauthn:
+                    challenge['webauthn_options'] = (
+                        challenge_p.get_webauthn_authentication_options(challenge['token'])
+                    )
+
+    elif body.get('log-in.id'):
         request = state['request']
         src_addr, src_country = request.source, request.source_country
         input_id = body['log-in.id'].strip()
@@ -287,8 +319,13 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
                 p = sign_in_with_form_data(body, state)
                 if p:
                     if not p.session:
-                        session_suffix = '.pw'  # stands for "password"
+                        session_suffix = state.get('log-in.session-suffix') or '.pw'
+                    else:
+                        redirect = False
                 else:
+                    # The sign-in attempt failed (e.g. wrong password or wrong
+                    # authentication code); re-render the log-in form instead of
+                    # redirecting.
                     redirect = False
     elif request.method == 'GET':
         if request.qs.get('log-in.id') or request.qs.get('email.id'):
@@ -366,6 +403,23 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
                         _("Your email address is now verified.")
                     ))
             del email_participant
+
+    # Require a second factor before issuing a new browser session.
+    if p and p.has_two_factor and not state.get('log-in.otp-verified'):
+        challenge = p.start_two_factor_challenge(session_suffix)
+        state['log-in.otp-challenge'] = dict(
+            participant=p.id,
+            id=challenge.id,
+            token=challenge.token,
+            has_totp=p.has_totp,
+            has_recovery=p.count_recovery_codes() > 0,
+        )
+        if p.has_webauthn:
+            state['log-in.otp-challenge']['webauthn_options'] = (
+                p.get_webauthn_authentication_options(challenge.token)
+            )
+        p = None
+        raise LoginRequired
 
     # Set up the new session
     if p:
