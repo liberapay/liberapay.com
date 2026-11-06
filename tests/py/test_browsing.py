@@ -30,6 +30,7 @@ class BrowseTestHarness(Harness):
                      .replace('/%username/news/%action', '/%username/news/subscribe') \
                      .replace('/for/%name/', '/for/wonderland/') \
                      .replace('/for/wonderland/%action', '/for/wonderland/leave') \
+                     .replace('/alternatives/%platform', '/alternatives') \
                      .replace('/%platform', '/github') \
                      .replace('/%user_name/', '/liberapay/') \
                      .replace('/%redirect_to', '/giving') \
