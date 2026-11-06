@@ -1,5 +1,10 @@
+import json as stdlib_json
+from types import SimpleNamespace
+from unittest.mock import patch
+
 from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
 from liberapay.exceptions import AccountIsPasswordless
+from liberapay.security.otp import generate_totp_code
 from liberapay.testing import EUR, Harness
 from liberapay.models.participant import Participant
 
@@ -199,6 +204,160 @@ class TestPassword(Harness):
         assert not alice.has_password
         with self.assertRaises(AccountIsPasswordless):
             alice.authenticate_with_password(alice.id, password)
+
+
+class TestTwoFactorAuthentication(Harness):
+
+    def test_enabling_and_disabling_totp(self):
+        alice = self.make_participant('alice')
+
+        r = self.client.GET('/alice/settings/', auth_as=alice)
+        assert "Set up 2FA" in r.text
+        assert '<svg ' in r.text
+        assert "Open authenticator app" in r.text
+
+        secret = alice.generate_totp_secret()
+        code = generate_totp_code(secret)
+
+        r = self.client.PxST('/alice/settings/edit', {
+            'action': 'enable-otp',
+            'otp-secret': secret,
+            'otp-code': code,
+            'back_to': alice.path('settings/'),
+        }, auth_as=alice, skip_password_check=True)
+        assert r.code == 302, r.text
+        assert alice.refetch().has_totp
+
+        r = self.client.PxST('/alice/settings/edit', {
+            'action': 'disable-otp',
+            'otp-code': '000000',
+            'back_to': alice.path('settings/'),
+        }, auth_as=alice, skip_password_check=True)
+        assert r.code == 302, r.text
+        assert r.headers[b"Location"] == b'/alice/settings/?otp_mismatch=1'
+        assert alice.refetch().has_totp
+
+        self.db.run("""
+            UPDATE user_secrets
+               SET secret = jsonb_set(secret::jsonb, '{latest_counter}', 'null'::jsonb)::text
+             WHERE id = %s
+        """, (Participant.TOTP_SECRET_ID,))
+        r = self.client.PxST('/alice/settings/edit', {
+            'action': 'disable-otp',
+            'otp-code': code,
+            'back_to': alice.path('settings/'),
+        }, auth_as=alice, skip_password_check=True)
+        assert r.code == 302, r.text
+        assert not alice.refetch().has_totp
+
+    def test_registering_and_using_a_passkey(self):
+        alice = self.make_participant('alice')
+
+        registration = alice.start_webauthn_registration()
+        verified_registration = SimpleNamespace(
+            credential_id=b'credential-id',
+            credential_public_key=b'public-key',
+            sign_count=7,
+            aaguid='00000000-0000-0000-0000-000000000000',
+            credential_type=SimpleNamespace(value='public-key'),
+            credential_device_type=SimpleNamespace(value='single_device'),
+            credential_backed_up=False,
+            user_verified=True,
+        )
+        with patch(
+            'liberapay.security.webauthn.verify_registration_response',
+            return_value=verified_registration,
+        ) as verify_registration:
+            assert alice.enable_webauthn(
+                registration['challenge_id'],
+                '{"id": "credential-id"}',
+                'Laptop',
+            )
+        verify_registration.assert_called_once()
+
+        credentials = alice.get_webauthn_credentials()
+        assert len(credentials) == 1
+        assert credentials[0].name == 'Laptop'
+        assert credentials[0].latest_counter == 7
+
+        challenge = alice.start_two_factor_challenge('xyz')
+        credential = stdlib_json.dumps({'id': credentials[0].credential_id})
+        with patch(
+            'liberapay.security.webauthn.verify_authentication_response',
+            return_value=SimpleNamespace(new_sign_count=8),
+        ) as verify_authentication:
+            p, session_suffix = Participant.authenticate_with_two_factor_challenge(
+                alice.id,
+                challenge.id,
+                challenge.token,
+                webauthn_credential=credential,
+            )
+        verify_authentication.assert_called_once()
+        assert p.id == alice.id
+        assert session_suffix == 'xyz'
+        assert p.authenticated
+        assert alice.refetch().has_webauthn
+        assert alice.get_webauthn_credentials()[0].latest_counter == 8
+
+    def test_totp_secret_is_encrypted_at_rest(self):
+        alice = self.make_participant('alice')
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+        stored = self.db.one(
+            "SELECT secret FROM user_secrets WHERE participant = %s AND id = %s",
+            (alice.id, Participant.TOTP_SECRET_ID)
+        )
+        assert secret not in stored
+        assert 'fernet:' in stored
+        # The secret can still be used to verify codes.
+        self.db.run("""
+            UPDATE user_secrets
+               SET secret = jsonb_set(secret::jsonb, '{latest_counter}', 'null'::jsonb)::text
+             WHERE id = %s
+        """, (Participant.TOTP_SECRET_ID,))
+        assert alice.check_totp(generate_totp_code(secret))
+
+    def test_a_totp_code_cannot_be_used_twice(self):
+        alice = self.make_participant('alice')
+        secret = alice.generate_totp_secret()
+        assert alice.enable_totp(secret, generate_totp_code(secret))
+        self.db.run("""
+            UPDATE user_secrets
+               SET secret = jsonb_set(secret::jsonb, '{latest_counter}', 'null'::jsonb)::text
+             WHERE id = %s
+        """, (Participant.TOTP_SECRET_ID,))
+        code = generate_totp_code(secret)
+        assert alice.check_totp(code) is True
+        assert alice.check_totp(code) is False
+
+    def test_enabling_2fa_requires_the_current_password(self):
+        password = 'correct-horse-battery-staple'
+        alice = self.make_participant('alice', password=password)
+        secret = alice.generate_totp_secret()
+        code = generate_totp_code(secret)
+
+        # Wrong password is rejected.
+        r = self.client.PxST('/alice/settings/edit', {
+            'action': 'enable-otp',
+            'otp-secret': secret,
+            'otp-code': code,
+            'cur-password': 'wrong',
+            'back_to': alice.path('settings/'),
+        }, auth_as=alice)
+        assert r.code == 302
+        assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
+        assert not alice.refetch().has_totp
+
+        # Correct password is accepted.
+        r = self.client.PxST('/alice/settings/edit', {
+            'action': 'enable-otp',
+            'otp-secret': secret,
+            'otp-code': code,
+            'cur-password': password,
+            'back_to': alice.path('settings/'),
+        }, auth_as=alice)
+        assert r.code == 302, r.text
+        assert alice.refetch().has_totp
 
 
 class TestRecipientSettings(Harness):
