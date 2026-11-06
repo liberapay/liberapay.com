@@ -9,11 +9,33 @@ request.allow('POST')
 body = request.body
 
 p = get_participant(state, restrict=True, allow_member=True)
+action = request.body.get_choice(
+    'action',
+    ('enable-otp', 'disable-otp', 'set', 'unset'),
+    default='',
+)
 
-if 'new-password' in body or 'action' in body:
+if action == 'enable-otp':
     if not p.is_person:
         raise response.error(403)
-    action = request.body.get_choice('action', ('set', 'unset'), default='set')
+    if not p.reauthenticate(body.get('cur-password')):
+        raise response.redirect(p.path('settings/?password_mismatch=1'))
+    if not p.enable_totp(body.get('otp-secret'), body.get('otp-code')):
+        raise response.redirect(p.path('settings/?otp_mismatch=1'))
+    form_post_success(state, msg=_("Two-factor authentication has been enabled."))
+
+elif action == 'disable-otp':
+    if not p.is_person:
+        raise response.error(403)
+    if not p.check_totp(body.get('otp-code')):
+        raise response.redirect(p.path('settings/?otp_mismatch=1'))
+    p.disable_totp()
+    form_post_success(state, msg=_("Two-factor authentication has been disabled."))
+
+elif 'new-password' in body or action in ('set', 'unset'):
+    if not p.is_person:
+        raise response.error(403)
+    action = action or 'set'
 
     # Check the old password, if necessary
     if p.session_type == 'em':

@@ -21,6 +21,38 @@
 % endif
 </div>
 
+% elif state.get('log-in.otp-challenge')
+
+% set challenge = state['log-in.otp-challenge']
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="form.repost" value="{{ request.body.get('form.repost', 'false') if request.method == 'POST' else 'false' }}" />
+    % if request.method == 'POST'
+        % for k, values in request.body.items()
+            % if k not in ('csrf_token', 'form.repost', 'log-in.password', 'log-in.otp-code', 'log-in.otp-participant', 'log-in.otp-challenge-id', 'log-in.otp-challenge-token')
+                % for v in values:
+                    <input type="hidden" name="{{ k }}" value="{{ v }}" />
+                % endfor
+            % endif
+        % endfor
+    % endif
+    <input type="hidden" name="log-in.otp-participant" value="{{ challenge.participant }}" />
+    <input type="hidden" name="log-in.otp-challenge-id" value="{{ challenge.id }}" />
+    <input type="hidden" name="log-in.otp-challenge-token" value="{{ challenge.token }}" />
+
+    % if state.get('log-in.otp-error')
+        <p class="alert alert-danger">{{ state['log-in.otp-error'] }}</p>
+    % endif
+
+    <p>{{ _("Please enter the authentication code from your two-factor authentication app:") }}</p>
+    <div class="form-group">
+        <input name="log-in.otp-code" class="form-control"
+               inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code"
+               placeholder="{{ _('Authentication code') }}" required />
+    </div>
+    <button class="btn btn-primary">{{ _("Log in") }}</button>
+</form>
+
 % elif state.get('log-in.carry-on')
 
 % set email = state['log-in.carry-on']
