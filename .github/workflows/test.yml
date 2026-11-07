@@ -12,18 +12,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install PostgreSQL 16
+      - name: Install PostgreSQL 18
         run: |
-          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo sh -c "gpg --dearmor >/etc/apt/keyrings/pgdg.gpg"
+          sudo sh -c 'echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           sudo apt-get update
-          sudo apt-get install -y postgresql-16
+          sudo apt-get install -y postgresql-18
+      - name: Configure PostgreSQL
+        run: |
+          cat >>/etc/postgresql/18/main/postgresql.conf <<EOF
+          fsync = off
+          max_wal_senders = 0
+          synchronous_commit = off
+          wal_level = minimal
+          EOF
+        shell: sudo bash -e {0}
       - name: Start PostgreSQL
         run: |
-          sudo systemctl cat postgresql@.service
-          sudo systemctl start postgresql@16-main.service
-          sudo systemctl status postgresql@16-main.service
-          ls -la /var/run/postgresql/
+          if ! sudo systemctl start postgresql@18-main.service; then
+            sudo systemctl cat postgresql@.service
+            ls -la /etc/postgresql/
+            ls -la /run/postgresql/
+            sudo systemctl status postgresql@18-main.service
+          fi
       - name: Set libpq environment variables
         run: echo PGPORT=5432 >>$GITHUB_ENV
       - name: Create the database user

@@ -20,7 +20,7 @@ from liberapay.exceptions import (
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.models.tip import Tip
-from liberapay.testing import EUR, USD, Harness
+from liberapay.testing import EUR, KRW, USD, Harness
 
 
 class TestTakeOver(Harness):
@@ -310,13 +310,13 @@ class Tests(Harness):
 
         with self.assertRaises(BadAmount) as cm:
             alice.set_tip_to(bob, USD('1000.00'))
-        expected = "'$1,000.00' is not a valid weekly donation amount (min=$0.01, max=$100.00)"
+        expected = "'US$1,000.00' is not a valid weekly donation amount (min=US$0.01, max=US$100.00)"
         actual = cm.exception.render_in_english()
         assert actual == expected
 
         with self.assertRaises(BadAmount) as cm:
-            alice.set_tip_to(bob, USD('0.01'), 'yearly')
-        expected = "'$0.01' is not a valid yearly donation amount (min=$0.52, max=$5,200.00)"
+            alice.set_tip_to(bob, KRW('1'), 'yearly')
+        expected = "'₩1' is not a valid yearly donation amount (min=₩676, max=₩6,760,000)"
         actual = cm.exception.render_in_english()
         assert actual == expected
 

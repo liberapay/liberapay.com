@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from functools import cached_property
+from string import ascii_uppercase
 from sys import intern
 from unicodedata import combining, normalize
 import warnings
@@ -323,7 +324,13 @@ class Locale(babel.core.Locale):
         # this locale (if that symbol exists).
         string = string.strip()
         currency_symbol = self.currency_symbols.get(currency)
+        currency_symbols = []
         if currency_symbol:
+            currency_symbols.append(currency_symbol)
+            currency_symbol_alone = currency_symbol.strip(ascii_uppercase)
+            if currency_symbol_alone != currency_symbol and currency_symbol_alone:
+                currency_symbols.append(currency_symbol_alone)
+        for currency_symbol in currency_symbols:
             symbol_length = len(currency_symbol)
             if string.startswith(currency_symbol):
                 string = string[symbol_length:]
