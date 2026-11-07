@@ -12,38 +12,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install PostgreSQL 16
+      - name: Install PostgreSQL 18
         run: |
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo sh -c "gpg --dearmor >/etc/apt/keyrings/pgdg.gpg"
           sudo sh -c 'echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           sudo apt-get update
-          sudo apt-get install -y postgresql-16
-          sudo install -d -m755 -o postgres -g postgres /etc/postgresql/16/main
-          sudo install -d -m755 -o postgres -g postgres /run/postgresql
-          sudo install -d -m755 -o postgres -g postgres /var/lib/postgresql/16/main
+          sudo apt-get install -y postgresql-18
       - name: Configure PostgreSQL
         run: |
-          sudo -u postgres tee /etc/postgresql/16/main/pg_hba.conf <<EOF
-          local  all  all                trust
-          host   all  all  127.0.0.1/32  trust
-          EOF
-          sudo -u postgres tee /etc/postgresql/16/main/postgresql.conf <<EOF
-          data_directory = '/var/lib/postgresql/16/main'
-          external_pid_file = '/run/postgresql/16-main.pid'
+          cat >>/etc/postgresql/18/main/postgresql.conf <<EOF
           fsync = off
           max_wal_senders = 0
           synchronous_commit = off
           wal_level = minimal
           EOF
-      - name: Initialize PostgreSQL
-        run: sudo -u postgres /usr/lib/postgresql/16/bin/pg_ctl init -D /var/lib/postgresql/16/main
+        shell: sudo bash -e {0}
       - name: Start PostgreSQL
         run: |
-          if ! sudo systemctl start postgresql@16-main.service; then
+          if ! sudo systemctl start postgresql@18-main.service; then
             sudo systemctl cat postgresql@.service
             ls -la /etc/postgresql/
             ls -la /run/postgresql/
-            sudo systemctl status postgresql@16-main.service
+            sudo systemctl status postgresql@18-main.service
           fi
       - name: Set libpq environment variables
         run: echo PGPORT=5432 >>$GITHUB_ENV
