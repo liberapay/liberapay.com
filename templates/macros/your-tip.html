@@ -1,14 +1,18 @@
 % from "templates/macros/icons.html" import icon with context
 % from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
-% macro tip_form(tippee, tip=None, disabled='')
+% macro tip_form(tippee, tip=None, disabled='', form_error=None, form_currency=None,
+                 period=None, periodic_amount=None, renewal_mode=None, visibility=None)
     % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tippee_p = tippee.participant if tippee_is_stub else tippee
     % set pledging = tippee_p.payment_providers == 0 or not tippee_p.accepts_tips
     % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
-    % set tip = tip or user.get_tip_to(tippee_p, currency)
+    % set tip = tip or user.get_tip_to(tippee_p, form_currency or currency)
     % set tip_currency = tip.amount.currency
     % set new_currency, accepted_currencies = user.get_currencies_for(tippee, tip)
+    % if form_currency in accepted_currencies
+        % set new_currency = form_currency
+    % endif
     % if not tippee_is_stub
         % set patron_countries = tippee.recipient_settings.patron_countries
         % set source_country = request.source_country
@@ -59,8 +63,12 @@
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="currency" value="{{ new_currency }}" />
+        % if form_error
+            <p class="alert alert-danger">{{ form_error }}</p>
+        % endif
         <div class="form-group">
-            {{ tip_select(tip, new_currency, tippee, disabled) }}
+            {{ tip_select(tip, new_currency, tippee, disabled, period, periodic_amount,
+                          renewal_mode, visibility) }}
         </div>
     </form>
     % if len(accepted_currencies) > 1
@@ -103,7 +111,7 @@
                    class="amount form-control"
                    data-required-if-checked="#custom-amount-radio"
                    value="{{ locale.format_money(periodic_amount, format='amount_only')
-                             if periodic_amount else '' }}"
+                             if periodic_amount is not none else '' }}"
                    {{ disabled }} />
         </div>
         % set period = request.qs.get('period') or period or 'weekly'
@@ -123,12 +131,17 @@
     </div>
 % endmacro
 
-% macro tip_select(tip, new_currency, tippee, disabled='')
+% macro tip_select(tip, new_currency, tippee, disabled='', period=None, periodic_amount=None,
+                   renewal_mode=None, visibility=None)
     % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tippee_p = tippee.participant if tippee_is_stub else tippee
     % set pledging = tippee_p.payment_providers == 0 or not tippee_p.accepts_tips
     % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
     % set tip_is_standard = []
+    % set has_custom_amount = periodic_amount is not none
+    % if renewal_mode is none
+        % set renewal_mode = tip.renewal_mode
+    % endif
     <ul class="list-group radio-group">
     % set tip_amount_in_new_currency = tip.amount.convert(new_currency)
     % for std_tip in constants.STANDARD_TIPS[new_currency]
@@ -140,7 +153,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="selected_amount" value="{{ std_tip.weekly.amount }}"
-                   {{ 'checked' if amount_is_a_match }} />
+                   {{ 'checked' if amount_is_a_match and not has_custom_amount }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(std_tip.label) }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -153,20 +166,22 @@
         </label>
         </li>
     % endfor
-        % set period = request.qs.get('period') or tip.period
+        % set period = period or request.qs.get('period') or tip.period
         % set querystring_amount = (
             request.qs.get_money_amount('amount', new_currency, default=None)
             if new_currency == request.qs.get('currency') else
             None
         )
         % set periodic_amount = (
-            None if tip_is_standard else
-            tip.periodic_amount.convert(new_currency) or querystring_amount
+            periodic_amount if has_custom_amount else (
+                None if tip_is_standard else
+                tip.periodic_amount.convert(new_currency) or querystring_amount
+            )
         )
         <li class="list-group-item">
         <label>
             <input type="radio" id="custom-amount-radio" name="selected_amount" value="custom" required
-                   {{ 'checked' if periodic_amount else '' }} />
+                   {{ 'checked' if periodic_amount is not none else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
                 {{ tip_input(new_currency, period, periodic_amount, disabled) }}
@@ -182,7 +197,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="renewal_mode" value="2" required
-                   {{ 'checked' if tip.renewal_mode == 2 else '' }} />
+                   {{ 'checked' if renewal_mode == 2 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Automatic renewal") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -194,7 +209,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="renewal_mode" value="1" required
-                   {{ 'checked' if tip.renewal_mode == 1 else '' }} />
+                   {{ 'checked' if renewal_mode == 1 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Manual renewal") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -208,7 +223,8 @@
         tippee_name,
         tippee_p.recipient_settings.patron_visibilities,
         tippee_p.payment_providers,
-        tip
+        tip,
+        visibility
     ) }}
     <br>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
@@ -233,7 +249,10 @@
     % endif
 % endmacro
 
-% macro tip_visibility_choice(tippee_name, patron_visibilities, payment_providers, tip)
+% macro tip_visibility_choice(tippee_name, patron_visibilities, payment_providers, tip, visibility=None)
+    % if visibility is none
+        % set visibility = tip.visibility
+    % endif
     % set paypal_only = payment_providers == 2
     % if paypal_only
         % if not patron_visibilities
@@ -267,7 +286,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="visibility" value="1" required
-                   {{ 'checked' if tip.visibility == 1 else '' }} />
+                   {{ 'checked' if visibility == 1 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Secret donation") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -282,7 +301,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="visibility" value="2" required
-                   {{ 'checked' if tip.visibility == 2 else '' }} />
+                   {{ 'checked' if visibility == 2 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Private donation") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -297,7 +316,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="visibility" value="3" required
-                   {{ 'checked' if tip.visibility == 3 else '' }} />
+                   {{ 'checked' if visibility == 3 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Public donation") }}</h5>
                 <p class="list-group-item-text">{{ _(
