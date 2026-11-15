@@ -5,7 +5,7 @@ from time import gmtime
 
 from babel.messages.catalog import Message
 
-from liberapay.constants import SESSION
+from liberapay.constants import SESSION, SESSION_TOKEN_PREFIX
 from liberapay.i18n.base import LOCALES
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
@@ -309,8 +309,8 @@ class TestLogIn(EmailHarness):
         assert session.secret not in r.body.decode('utf8')
 
         # Open the log-in URL
-        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
-            alice.id, session.id, session.secret
+        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s%s' % (
+            alice.id, session.id, SESSION_TOKEN_PREFIX, session.secret
         )
         r = self.client.GxT('/alice/' + qs)
         assert r.code == 200
@@ -609,6 +609,17 @@ class TestSignIn(EmailHarness):
         assert r2.code == 302, r2.text
         assert r2.headers.cookie[SESSION].value == r.headers.cookie[SESSION].value
 
+    def test_sign_in_with_prefixed_token(self):
+        token = Participant.generate_session_token()
+        r = self.sign_in(dict(token=SESSION_TOKEN_PREFIX + token))
+        assert r.code == 302, r.text
+        cookie = r.headers.cookie[SESSION].value
+        assert cookie.endswith(f'{token}.in')
+        # Submitting the same form again logs into the same account
+        r = self.sign_in(dict(token=SESSION_TOKEN_PREFIX + token))
+        assert r.code == 302, r.text
+        assert r.headers.cookie[SESSION].value == cookie
+
     def test_sign_in_form_repost(self):
         extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
         r = self.sign_in(url='/for/new', extra=extra)
@@ -878,6 +889,17 @@ class TestSessions(Harness):
                AND id >= 800
         """, (alice.id,))
         assert not constant_session
+
+    def test_session_token_prefix(self):
+        alice = self.make_participant('alice')
+        session = alice.start_session(suffix='.pw')
+        for secret in (session.secret, SESSION_TOKEN_PREFIX + session.secret):
+            r = self.client.GET(
+                '/about/me/',
+                HTTP_COOKIE=f'session={alice.id}:{session.id}:{secret}',
+                raise_immediately=False,
+            )
+            assert r.code == 302, r.text
 
     def test_invalid_session_cookies(self):
         r = self.client.GET('/about/me/', HTTP_COOKIE='session=::', raise_immediately=False)
