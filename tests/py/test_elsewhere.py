@@ -3,6 +3,8 @@ from unittest import mock
 
 from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo
+from liberapay.elsewhere._paginators import header_links_paginator
+from liberapay.exceptions import LazyResponse
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
@@ -40,6 +42,77 @@ class TestElsewhere(EmailHarness):
             assert isinstance(r, UserInfo)
             assert r.user_id is not None
             assert len(r.user_id) > 0
+
+    def test_forgejo_extracts_user_info(self):
+        forgejo = website.platforms.forgejo
+        domain, user_info = get_user_info_example('forgejo')
+        u = forgejo.extract_user_info(user_info, domain)
+        assert u.domain == 'codeberg.org'
+        assert u.user_id == '12345'
+        assert u.user_name == 'example'
+        assert u.display_name == 'Example User'
+        assert u.email == 'example@codeberg.org'
+
+    def test_forgejo_extracts_repo_info(self):
+        forgejo = website.platforms.forgejo
+        repo = forgejo.extract_repo_info({
+            "id": 678,
+            "name": "myrepo",
+            "full_name": "example/myrepo",
+            "description": "A test repository.",
+            "fork": False,
+            "stars_count": 7,
+            "updated_at": "2021-06-01T12:00:00Z",
+            "owner": {"id": 12345, "login": "example"},
+        })
+        assert repo.remote_id == '678'
+        assert repo.slug == 'example/myrepo'
+        assert repo.name == 'myrepo'
+        assert repo.owner_id == '12345'
+        assert repo.is_fork is False
+        assert repo.stars_count == 7
+
+    def test_forgejo_unconfigured_domain_raises_friendly_error(self):
+        forgejo = website.platforms.forgejo
+        with self.assertRaises(LazyResponse) as cm:
+            forgejo.get_credentials('unconfigured.example')
+        assert cm.exception.code == 502
+
+    def test_forgejo_in_repositories_import_list(self):
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/edit/repositories', auth_as=alice)
+        assert r.code == 200
+        assert 'Forgejo' in r.text
+
+    def test_header_links_paginator_honors_total_header(self):
+        # Simulate a multi-page response: response.links contains a 'next' link,
+        # so total_count starts at -1 and the total_header is consulted.
+        response = mock.Mock()
+        response.request.url = 'https://codeberg.org/api/v1/repos/search?page=1'
+        response.links = {'next': {'url': 'https://codeberg.org/api/v1/repos/search?page=2'}}
+        response.headers.get.side_effect = lambda key, default: '42' if key == 'X-Total-Count' else default
+        platform = mock.Mock()
+        platform.api_url = 'https://codeberg.org/api/v1'
+        paginator = header_links_paginator(total_header='X-Total-Count')
+        parsed = [{'id': i} for i in range(10)]
+        page, total_count, links = paginator(platform, response, parsed)
+        assert total_count == 42
+        assert 'next' in links
+        assert page is parsed
+
+    def test_header_links_paginator_none_total_header_skips_header(self):
+        # When total_header=None (e.g. GitHub), the header is never read even
+        # on a multi-page response.
+        response = mock.Mock()
+        response.request.url = 'https://api.github.com/user/repos?page=1'
+        response.links = {'next': {'url': 'https://api.github.com/user/repos?page=2'}}
+        platform = mock.Mock()
+        platform.api_url = 'https://api.github.com'
+        paginator = header_links_paginator()
+        parsed = [{'id': i} for i in range(30)]
+        page, total_count, links = paginator(platform, response, parsed)
+        response.headers.get.assert_not_called()
+        assert total_count == -1
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')

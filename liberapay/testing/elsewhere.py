@@ -40,6 +40,17 @@ bitbucket = lambda: {
     "type": "user"
 }
 
+forgejo = lambda: ('codeberg.org', {
+    "id": 12345,
+    "login": "example",
+    "full_name": "Example User",
+    "email": "example@codeberg.org",
+    "avatar_url": "https://codeberg.org/avatars/example.png",
+    "description": "An example Forgejo user.",
+    "html_url": "https://codeberg.org/example",
+    "created": "2020-01-01T00:00:00Z",
+})
+
 github = lambda: {
     "avatar_url": "https://avatars2.githubusercontent.com/u/134455?v=4",
     "bio": None,

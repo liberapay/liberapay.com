@@ -270,7 +270,7 @@ class AppConf:
         d = d if isinstance(d, dict) else dict(d)
 
         fields = {
-            k: v for k, v in self.__annotations__.items() if not k.startswith('_')
+            k: v for k, v in type(self).__annotations__.items() if not k.startswith('_')
         }
         unexpected = list(set(d) - set(fields))
         if unexpected:
@@ -281,10 +281,16 @@ class AppConf:
         for k, t in fields.items():
             if k in d:
                 v = d[k]
-                if isinstance(v, t):
+                try:
+                    if isinstance(v, t):
+                        setattr(self, k, v)
+                    else:
+                        mistyped.append((k, v, t))
+                except TypeError:
+                    # t is a generic alias like list[str] or str | None that
+                    # isinstance() can't handle in all Python versions; fall
+                    # back to accepting the value.
                     setattr(self, k, v)
-                else:
-                    mistyped.append((k, v, t))
             else:
                 missing.append(k)
         if missing:
@@ -301,7 +307,7 @@ class AppConf:
         i = len(prefix)
         return {
             k[i:]: getattr(self, k)
-            for k in self.__annotations__
+            for k in type(self).__annotations__
             if k.startswith(prefix) and hasattr(self, k) and not k.startswith('_')
         }
 
