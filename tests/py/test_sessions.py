@@ -1,11 +1,12 @@
 from email.utils import parsedate
 from hashlib import blake2b
 from http.cookies import SimpleCookie
+import re
 from time import gmtime
 
 from babel.messages.catalog import Message
 
-from liberapay.constants import SESSION
+from liberapay.constants import BASE64URL_CHARS, SESSION, SESSION_TOKEN_PREFIX
 from liberapay.i18n.base import LOCALES
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
@@ -44,7 +45,7 @@ class TestLogIn(EmailHarness):
              WHERE participant = %s
                AND id = 1
         """, (p.id,))
-        expected = '%i:%i:%s' % (p.id, session.id, session.secret)
+        expected = f'{p.id}:{session.id}:{SESSION_TOKEN_PREFIX}{session.secret}'
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
         expires = sess_cookie['expires']
@@ -165,15 +166,16 @@ class TestLogIn(EmailHarness):
         Participant.dequeue_emails()
         last_email = self.get_last_email()
         assert last_email and last_email['subject'] == 'Log in to Liberapay'
-        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s&email.id=%s&email.nonce=%s' % (
-            alice.id, session.id, session.secret, email_row.id, email_row.nonce
+        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s%s&email.id=%s&email.nonce=%s' % (
+            alice.id, session.id, SESSION_TOKEN_PREFIX, session.secret,
+            email_row.id, email_row.nonce,
         )
         assert qs in last_email['text']
 
         # Attempt to use the URL in a new browser session (no anti-CSRF cookie yet)
         r = self.client.GxT('/alice/?foo=bar&' + qs, csrf_token=None)
         assert r.code == 200
-        refresh_qs = '?foo=bar&' + qs + '&cookie_sent=true'
+        refresh_qs = '?foo=bar&' + qs.replace(':', '%3A') + '&cookie_sent=true'
         assert r.headers[b'Refresh'] == b"0;url=" + refresh_qs.encode()
         assert CSRF_TOKEN in r.headers.cookie
 
@@ -185,7 +187,7 @@ class TestLogIn(EmailHarness):
         # Log in
         csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
         confirmation_token = b64encode_s(blake2b(
-            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+            (SESSION_TOKEN_PREFIX + session.secret).encode(), key=csrf_token.encode(), digest_size=48,
         ).digest())
         r = self.client.GxT('/alice/' + refresh_qs, csrf_token=csrf_token)
         assert r.code == 200
@@ -258,15 +260,16 @@ class TestLogIn(EmailHarness):
         email_row = alice.get_email(email)
         assert email_row.verified is None
         assert email_row.nonce
-        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s&email.id=%s&email.nonce=%s' % (
-            alice.id, session.id, session.secret, email_row.id, email_row.nonce
+        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s%s&email.id=%s&email.nonce=%s' % (
+            alice.id, session.id, SESSION_TOKEN_PREFIX, session.secret,
+            email_row.id, email_row.nonce,
         )
         assert qs in last_email['text']
 
         # Try to log in without a confirmation code
         csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
         confirmation_token = b64encode_s(blake2b(
-            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+            (SESSION_TOKEN_PREFIX + session.secret).encode(), key=csrf_token.encode(), digest_size=48,
         ).digest())
         r = self.client.GxT('/alice/?' + qs, csrf_token=csrf_token)
         assert r.code == 200
@@ -309,8 +312,8 @@ class TestLogIn(EmailHarness):
         assert session.secret not in r.body.decode('utf8')
 
         # Open the log-in URL
-        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
-            alice.id, session.id, session.secret
+        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s%s' % (
+            alice.id, session.id, SESSION_TOKEN_PREFIX, session.secret
         )
         r = self.client.GxT('/alice/' + qs)
         assert r.code == 200
@@ -347,7 +350,7 @@ class TestLogIn(EmailHarness):
         bob = self.make_participant('bob')
         email_session = alice.start_session('.em')
         url = '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
-            alice.id, email_session.id + 1, email_session.secret
+            alice.id, email_session.id + 1, SESSION_TOKEN_PREFIX + email_session.secret
         )
         r = self.client.GxT(url)
         assert r.code == 400
@@ -363,7 +366,7 @@ class TestLogIn(EmailHarness):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         email_session = alice.start_session('.em')
-        url = f'/about/me/?log-in.id={alice.id}&log-in.token={email_session.secret}'
+        url = f'/about/me/?log-in.id={alice.id}&log-in.token={SESSION_TOKEN_PREFIX}{email_session.secret}'
         r = self.client.GxT(url)
         assert r.code == 400
         assert SESSION not in r.headers.cookie
@@ -379,7 +382,7 @@ class TestLogIn(EmailHarness):
         bob = self.make_participant('bob')
         email_session = alice.start_session('.em')
         url = '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
-            alice.id, email_session.id, email_session.secret + '!'
+            alice.id, email_session.id, SESSION_TOKEN_PREFIX + email_session.secret + '!'
         )
         r = self.client.GxT(url)
         assert r.code == 400
@@ -430,11 +433,11 @@ class TestLogIn(EmailHarness):
 
         # Log in, in another tab
         qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
-            alice.id, session.id, session.secret
+            alice.id, session.id, SESSION_TOKEN_PREFIX + session.secret
         )
         csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
         confirmation_token = b64encode_s(blake2b(
-            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+            (SESSION_TOKEN_PREFIX + session.secret).encode(), key=csrf_token.encode(), digest_size=48,
         ).digest())
         r = self.client.GxT(
             '/alice/' + qs + '&log-in.confirmation=' + confirmation_token,
@@ -471,11 +474,11 @@ class TestLogIn(EmailHarness):
 
         # Log in, in another tab
         qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
-            alice.id, session.id, session.secret
+            alice.id, session.id, SESSION_TOKEN_PREFIX + session.secret
         )
         csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
         confirmation_token = b64encode_s(blake2b(
-            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+            (SESSION_TOKEN_PREFIX + session.secret).encode(), key=csrf_token.encode(), digest_size=48,
         ).digest())
         r = self.client.GxT(
             '/alice/' + qs + '&log-in.confirmation=' + confirmation_token,
@@ -501,7 +504,7 @@ class TestLogIn(EmailHarness):
         session = alice.start_session()
         r = self.client.GxT(
             '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
-                alice.id, session.id, session.secret
+                alice.id, session.id, SESSION_TOKEN_PREFIX + session.secret
             )
         )
         assert r.code == 400
@@ -609,6 +612,27 @@ class TestSignIn(EmailHarness):
         assert r2.code == 302, r2.text
         assert r2.headers.cookie[SESSION].value == r.headers.cookie[SESSION].value
 
+    def test_sign_in_with_prefixed_token(self):
+        r = self.client.GET('/sign-up')
+        token = re.search(r'name="sign-in\.token" value="([^"]+)"', r.text).group(1)
+        assert token.startswith(SESSION_TOKEN_PREFIX)
+        assert len(token.removeprefix(SESSION_TOKEN_PREFIX)) == 36
+        r = self.sign_in(dict(token=token))
+        assert r.code == 302, r.text
+        bob = Participant.from_username('bob')
+        cookie = r.headers.cookie[SESSION].value
+        assert cookie == f'{bob.id}:1:{token}.in'
+        stored_secret = self.db.one("SELECT secret FROM user_secrets WHERE participant = %s", (bob.id,))
+        assert stored_secret == token.removeprefix(SESSION_TOKEN_PREFIX) + '.in'
+        # Submitting the same form again logs into the same account
+        r = self.sign_in(dict(token=token))
+        assert r.code == 302, r.text
+        assert r.headers.cookie[SESSION].value == cookie
+        # A client that drops the prefix still ends up in the same account
+        r = self.sign_in(dict(token=token.removeprefix(SESSION_TOKEN_PREFIX)))
+        assert r.code == 302, r.text
+        assert r.headers.cookie[SESSION].value == cookie
+
     def test_sign_in_form_repost(self):
         extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
         r = self.sign_in(url='/for/new', extra=extra)
@@ -700,6 +724,126 @@ class TestSignIn(EmailHarness):
             assert 'read-only' in r.text
 
 
+class TestSessionTokenPrefix(Harness):
+
+    OLD_TOKEN = 'ThisIsATokenThatIsThirtyTwoBytes'
+
+    def get_with_cookie(self, p_id, session_id, secret):
+        return self.client.GET(
+            '/about/me/',
+            HTTP_COOKIE=f'session={p_id}:{session_id}:{secret}',
+            raise_immediately=False,
+        )
+
+    def insert_old_session(self, p, session_id, suffix):
+        return self.db.one("""
+            INSERT INTO user_secrets
+                        (participant, id, secret)
+                 VALUES (%s, %s, %s)
+              RETURNING id, secret, mtime
+        """, (p.id, session_id, self.OLD_TOKEN + suffix))
+
+    def get_stored_secret(self, p, session_id):
+        return self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+        """, (p.id, session_id))
+
+    def test_generated_tokens_are_longer_than_old_ones(self):
+        for i in range(100):
+            token = Participant.generate_session_token()
+            assert len(token) == 36
+            assert set(token) <= BASE64URL_CHARS
+            token = Participant.generate_session_token(prefixed=True)
+            assert token.startswith(SESSION_TOKEN_PREFIX)
+            assert len(token.removeprefix(SESSION_TOKEN_PREFIX)) == 36
+
+    def test_new_tokens_require_the_prefix(self):
+        alice = self.make_participant('alice')
+        for suffix in ('', '.in', '.pw', '.ro'):
+            session = alice.start_session(suffix=suffix)
+            r = self.get_with_cookie(alice.id, session.id, session.secret)
+            assert r.code == 403, r.text
+            assert r.headers.cookie[SESSION].value == ''
+            r = self.get_with_cookie(alice.id, session.id, SESSION_TOKEN_PREFIX + session.secret)
+            assert r.code == 302, r.text
+
+    def test_old_tokens_work_with_or_without_the_prefix(self):
+        alice = self.make_participant('alice')
+        for session_id, suffix in enumerate(('', '.in', '.pw', '.ro'), 1):
+            session = self.insert_old_session(alice, session_id, suffix)
+            for secret in (session.secret, SESSION_TOKEN_PREFIX + session.secret):
+                r = self.get_with_cookie(alice.id, session.id, secret)
+                assert r.code == 302, r.text
+                assert SESSION not in r.headers.cookie
+            assert self.get_stored_secret(alice, session.id) == session.secret
+
+    def test_old_token_is_replaced_by_a_prefixed_one(self):
+        alice = self.make_participant('alice')
+        session = self.insert_old_session(alice, 1, '.pw')
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '7 hours'")
+        r = self.get_with_cookie(alice.id, session.id, session.secret)
+        assert r.code == 302, r.text
+        p_id, session_id, token = r.headers.cookie[SESSION].value.split(':', 2)
+        assert (int(p_id), int(session_id)) == (alice.id, session.id)
+        assert token.startswith(SESSION_TOKEN_PREFIX)
+        new_secret = token.removeprefix(SESSION_TOKEN_PREFIX)
+        assert len(new_secret) == 36 + len('.ro')
+        assert new_secret.endswith('.ro')
+        assert self.get_stored_secret(alice, session.id) == new_secret
+        r = self.get_with_cookie(alice.id, session.id, token)
+        assert r.code == 302, r.text
+        r = self.get_with_cookie(alice.id, session.id, new_secret)
+        assert r.code == 403, r.text
+
+    def test_old_constant_session_keeps_working(self):
+        alice = self.make_participant('alice')
+        session = self.insert_old_session(alice, 800, '.ro')
+        for secret in (session.secret, SESSION_TOKEN_PREFIX + session.secret):
+            r = self.get_with_cookie(alice.id, session.id, secret)
+            assert r.code == 302, r.text
+        r = self.client.GET('/alice/access/constant-session', auth_as=alice)
+        assert r.code == 200, r.text
+        creds = f'session={alice.id}:800:{SESSION_TOKEN_PREFIX}{session.secret}'
+        assert f'Cookie: {creds}' in r.text
+        assert f"curl -b '{creds}'" in r.text
+
+    def test_new_email_log_in_link_requires_the_prefix(self):
+        alice = self.make_participant('alice')
+        session = alice.start_session(suffix='.em', id_min=1001, id_max=1010)
+        url = f'/about/me/?log-in.id={alice.id}&log-in.key={session.id}&log-in.token=%s'
+        r = self.client.GxT(url % session.secret)
+        assert r.code == 400, r.text
+        r = self.client.GxT(url % (SESSION_TOKEN_PREFIX + session.secret))
+        assert r.code == 200, r.text
+        assert 'log-in.cancel=yes' in r.text
+
+    def test_old_email_log_in_link_keeps_working(self):
+        alice = self.make_participant('alice')
+        session = self.insert_old_session(alice, 1001, '.em')
+        url = f'/about/me/?log-in.id={alice.id}&log-in.key={session.id}&log-in.token=%s'
+        for secret in (session.secret, SESSION_TOKEN_PREFIX + session.secret):
+            r = self.client.GxT(url % secret)
+            assert r.code == 200, r.text
+            assert 'log-in.cancel=yes' in r.text
+
+    def test_malformed_prefixed_tokens(self):
+        alice = self.make_participant('alice')
+        session = alice.start_session(suffix='.pw')
+        for secret in (
+            SESSION_TOKEN_PREFIX,
+            SESSION_TOKEN_PREFIX * 2 + session.secret,
+            SESSION_TOKEN_PREFIX + session.secret[:-4],
+            SESSION_TOKEN_PREFIX + session.secret + '.pw',
+            'secret-token:' + session.secret,
+            'lp_' + session.secret,
+        ):
+            r = self.get_with_cookie(alice.id, session.id, secret)
+            assert r.code == 403, (secret, r.text)
+
+
 class TestSessions(Harness):
 
     def test_session_cookie_is_secure_if_it_should_be(self):
@@ -720,9 +864,10 @@ class TestSessions(Harness):
         self.db.run("UPDATE user_secrets SET mtime = mtime - interval '7 hours'")
         r = self.client.GET('/alice/edit/username', auth_as=alice)
         assert r.code == 200, r.text
-        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':', 2)[1:]
         assert int(new_session_id) == initial_session.id
-        assert new_session_secret != initial_session.secret
+        assert new_session_secret.startswith(SESSION_TOKEN_PREFIX)
+        assert new_session_secret != SESSION_TOKEN_PREFIX + initial_session.secret
         assert new_session_secret.endswith('.ro')
 
     def test_read_only_session_eventually_expires(self):
@@ -754,9 +899,10 @@ class TestSessions(Harness):
         """, (alice.id,))
         r = self.client.GET('/', auth_as=alice)
         assert r.code == 200, r.text
-        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':', 2)[1:]
         assert int(new_session_id) == initial_session.id
-        assert new_session_secret != initial_session.secret
+        assert new_session_secret.startswith(SESSION_TOKEN_PREFIX)
+        assert new_session_secret != SESSION_TOKEN_PREFIX + initial_session.secret
         assert new_session_secret.endswith('.ro')
 
     def test_read_only_sessions_are_not_admin_sessions(self):
@@ -812,15 +958,22 @@ class TestSessions(Harness):
         assert constant_session
         r = self.client.GET('/alice/access/constant-session', auth_as=alice)
         assert r.code == 200, r.text
-        assert constant_session.secret in r.text
+        assert SESSION_TOKEN_PREFIX + constant_session.secret in r.text
         # Test using the constant session
+        r = self.client.GxT(
+            '/about/me/',
+            cookies={
+                'session': f'{alice.id}:{constant_session.id}:{SESSION_TOKEN_PREFIX}{constant_session.secret}',
+            },
+        )
+        assert r.code == 302, r.text
         r = self.client.GxT(
             '/about/me/',
             cookies={
                 'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
             },
         )
-        assert r.code == 302, r.text
+        assert r.code == 403, r.text
         # Test regenerating the constant session
         r = self.client.PxST(
             '/alice/access/constant-session',
@@ -847,7 +1000,7 @@ class TestSessions(Harness):
         r = self.client.GxT(
             '/about/me/',
             cookies={
-                'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
+                'session': f'{alice.id}:{constant_session.id}:{SESSION_TOKEN_PREFIX}{constant_session.secret}',
             },
         )
         assert r.code == 302, r.text
@@ -860,7 +1013,7 @@ class TestSessions(Harness):
         r = self.client.GxT(
             '/about/me/',
             cookies={
-                'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
+                'session': f'{alice.id}:{constant_session.id}:{SESSION_TOKEN_PREFIX}{constant_session.secret}',
             },
         )
         assert r.code == 403, r.text
@@ -901,7 +1054,7 @@ class TestSessions(Harness):
         incorrect_secret = str(ord(session.secret[0]) ^ 1) + session.secret[1:]
         r = self.client.GET(
             '/about/me/',
-            HTTP_COOKIE=f'session={alice.id}:{session.id}:{incorrect_secret}',
+            HTTP_COOKIE=f'session={alice.id}:{session.id}:{SESSION_TOKEN_PREFIX}{incorrect_secret}',
             raise_immediately=False,
         )
         assert r.code == 403, r.text
