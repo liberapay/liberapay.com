@@ -376,7 +376,7 @@ RATE_LIMITS = {
     'team_invite.for_team': (25, 60*60*24*7),  # 25 per week
 }
 
-SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
+SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'QUERY'}
 
 SESSION = 'session'
 SESSION_REFRESH = timedelta(hours=12)
