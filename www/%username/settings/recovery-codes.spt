@@ -1,0 +1,84 @@
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True)
+if not participant.is_person:
+    raise response.error(403)
+
+title = participant.username
+subhead = _("Recovery codes")
+
+new_codes = None
+error = None
+if request.method == 'POST':
+    if not participant.has_two_factor:
+        raise response.error(403)
+    elif not participant.reauthenticate(request.body.get('cur-password')):
+        error = _("The current password is incorrect.")
+        response.code = 400
+    else:
+        new_codes = participant.generate_recovery_codes()
+
+require_current_password = participant.has_password and user.session_type not in ('em', 'in')
+recovery_count = participant.count_recovery_codes()
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+
+    <p>{{ _(
+        "Recovery codes are single-use passwords that let you log in to your "
+        "account when you don't have access to your authenticator app or your "
+        "passkeys. Keep them somewhere safe, for example in your password "
+        "manager. Each code can only be used once."
+    ) }}</p>
+
+    % if error
+        <p class="alert alert-danger">{{ error }}</p>
+    % endif
+
+    % if new_codes
+        <p class="alert alert-success">{{ _(
+            "Here are your new recovery codes. This is the only time they will "
+            "be shown, so save them now. Any previous recovery codes are no "
+            "longer valid."
+        ) }}</p>
+        <ul class="recovery-codes">
+        % for code in new_codes
+            <li><code>{{ code }}</code></li>
+        % endfor
+        </ul>
+        <a class="btn btn-default" href="{{ participant.path('settings/') }}">{{ _("Done") }}</a>
+    % elif not participant.has_two_factor
+        <p class="alert alert-warning">{{ _(
+            "Recovery codes are only useful once you've enabled two-factor "
+            "authentication or added a passkey."
+        ) }}</p>
+        <a class="btn btn-default" href="{{ participant.path('settings/') }}">{{ _("Go back") }}</a>
+    % else
+        % if recovery_count > 0
+            <p>{{ ngettext(
+                "You have {n} unused recovery code.",
+                "You have {n} unused recovery codes.",
+                n=recovery_count) }}</p>
+        % endif
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            % if require_current_password
+            <div class="form-group">
+                <input type="password" name="cur-password" class="form-control"
+                       autocomplete="current-password" placeholder="{{ _('Current password') }}" />
+            </div>
+            % endif
+            <button class="btn btn-primary" name="action" value="generate">{{
+                _("Generate new recovery codes") if recovery_count > 0 else _("Generate recovery codes")
+            }}</button>
+            % if recovery_count > 0
+            <p class="help-block">{{ _("Generating new codes will immediately invalidate your existing recovery codes.") }}</p>
+            % endif
+        </form>
+    % endif
+
+% endblock
