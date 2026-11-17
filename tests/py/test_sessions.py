@@ -1,6 +1,7 @@
 from email.utils import parsedate
 from hashlib import blake2b
 from http.cookies import SimpleCookie
+import re
 from time import gmtime
 
 from babel.messages.catalog import Message
@@ -786,7 +787,7 @@ class TestSessions(Harness):
 
     def test_constant_sessions(self):
         alice = self.make_participant('alice')
-        r = self.client.GET('/alice/access/constant-session', auth_as=alice)
+        r = self.client.GET('/alice/settings/constant-session', auth_as=alice)
         assert r.code == 200, r.text
         constant_sessions = self.db.all("""
             SELECT *
@@ -798,7 +799,7 @@ class TestSessions(Harness):
         del constant_sessions
         # Test creating the constant session
         r = self.client.PxST(
-            '/alice/access/constant-session',
+            '/alice/settings/constant-session',
             {'action': 'start'},
             auth_as=alice,
         )
@@ -810,7 +811,7 @@ class TestSessions(Harness):
                AND id >= 800
         """, (alice.id,))
         assert constant_session
-        r = self.client.GET('/alice/access/constant-session', auth_as=alice)
+        r = self.client.GET('/alice/settings/constant-session', auth_as=alice)
         assert r.code == 200, r.text
         assert constant_session.secret in r.text
         # Test using the constant session
@@ -823,7 +824,7 @@ class TestSessions(Harness):
         assert r.code == 302, r.text
         # Test regenerating the constant session
         r = self.client.PxST(
-            '/alice/access/constant-session',
+            '/alice/settings/constant-session',
             {'action': 'start'},
             auth_as=alice,
         )
@@ -866,7 +867,7 @@ class TestSessions(Harness):
         assert r.code == 403, r.text
         # Test revoking the constant session
         r = self.client.PxST(
-            '/alice/access/constant-session',
+            '/alice/settings/constant-session',
             {'action': 'end'},
             auth_as=alice,
         )
@@ -878,6 +879,31 @@ class TestSessions(Harness):
                AND id >= 800
         """, (alice.id,))
         assert not constant_session
+
+    def test_old_constant_session_url_redirects(self):
+        alice = self.make_participant('alice')
+        r = self.client.GxT('/alice/access/constant-session', auth_as=alice)
+        assert r.code == 307
+        assert r.headers[b'Location'] == b'/alice/settings/constant-session'
+
+    def test_constant_session_page_is_linked(self):
+        alice = self.make_participant('alice')
+        alice.update_recipient_settings(patron_visibilities=7)
+        team = self.make_participant('team', kind='group')
+        team.add_member(alice)
+        team.update_recipient_settings(patron_visibilities=7)
+        link = 'href="/alice/settings/constant-session"'
+        r = self.client.GET('/alice/settings/', auth_as=alice)
+        assert link in r.text
+        r = self.client.GET('/alice/patrons/', auth_as=alice)
+        assert link in r.text
+        r = self.client.GET('/team/patrons/', auth_as=alice)
+        assert link in r.text
+
+    def test_constant_session_page_is_highlighted_in_nav(self):
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/settings/constant-session', auth_as=alice)
+        assert re.search(r'class=" active">\s*<a href="/alice/settings/constant-session">', r.text)
 
     def test_invalid_session_cookies(self):
         r = self.client.GET('/about/me/', HTTP_COOKIE='session=::', raise_immediately=False)

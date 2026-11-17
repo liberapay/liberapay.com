@@ -127,7 +127,11 @@
         }),
         ('/ledger/', _("Ledger")),
         ('/identity', _("Identity")),
-        ('/settings/', _("Account")),
+        ('/settings/', _("Account"), {
+            'subnav': nav([
+                ('/constant-session', _("Constant session")),
+            ], base=participant.path('settings'))
+        }),
         ('/emails/', _("Emails")),
         ('/notifications/', _("Notifications")),
         ('/widgets/', _("Widgets")),

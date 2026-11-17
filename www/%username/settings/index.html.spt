@@ -36,6 +36,13 @@ if 'password_mismatch' in request.qs:
         % from "templates/macros/auth.html" import authentication_settings with context
         {{ authentication_settings(participant) }}
 
+        <h3>{{ _("Constant session") }}</h3>
+        <p>{{ _(
+            "To simplify automating downloads of private information from your "
+            "account, you can generate long-lived read-only credentials."
+        ) }}</p>
+        <a class="btn btn-default" href="{{ participant.path('settings/constant-session') }}">{{ _("Manage credentials") }}</a>
+
         <div>
             <h3>{{ _("Close") }}</h3>
             <a class="btn btn-default" href="{{ participant.path('settings/close') }}">{{ _("Close Account") }}</a>
