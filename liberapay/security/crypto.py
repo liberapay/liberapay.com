@@ -119,6 +119,27 @@ class Cryptograph:
             raise ValueError('unknown encryption scheme %r' % scheme)
         return cbor.loads(decrypted)
 
+    def encrypt_token(self, plaintext):
+        """Encrypt a short secret string for storage in a `text` column.
+
+        This reuses the same Fernet keys as `encrypt_dict`, so it doesn't
+        require provisioning any additional secret. The returned value is an
+        ASCII string prefixed with the scheme name so that it can be told
+        apart from an unencrypted value.
+        """
+        token = self.fernet.encrypt(plaintext.encode('utf8'))
+        return 'fernet:' + token.decode('ascii')
+
+    def decrypt_token(self, stored):
+        """Decrypt a value produced by `encrypt_token`.
+
+        `InvalidToken` is raised if decryption fails.
+        """
+        scheme, _, token = stored.partition(':')
+        if scheme != 'fernet':
+            raise ValueError('unknown encryption scheme %r' % scheme)
+        return self.fernet.decrypt(token.encode('ascii')).decode('utf8')
+
     @staticmethod
     def randomize_dict(dic, allow_single_key=False):
         """Randomize the order of a dictionary's items.
