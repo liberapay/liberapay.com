@@ -6,12 +6,16 @@ db = website.db
 
 title = _("Stats")
 zero = Money.ZEROS[currency]
-nusers = db.one("""
-    SELECT count(*)
+accounts = db.one("""
+    SELECT count(*) FILTER (WHERE kind = 'individual') AS nindividuals
+         , count(*) FILTER (WHERE kind = 'organization') AS norganizations
+         , count(*) FILTER (WHERE kind = 'group') AS nteams
       FROM participants
      WHERE status = 'active'
-       AND kind IN ('individual', 'organization');
+       AND kind IN ('individual', 'organization', 'group')
+       AND is_suspended IS NOT true;
 """, max_age=60)
+nusers = accounts.nindividuals + accounts.norganizations
 tips_stats = db.one("""
     SELECT count(*), basket_sum(amount)
       FROM current_tips
@@ -56,6 +60,29 @@ last_payday = db.one("SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1")
         "Liberapay was launched {timespan_ago} and has {n} users.",
         n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME)
     ) }}</p>
+    <ul>
+        <li>
+            {{ ngettext(
+                "{n} of these users is an individual.",
+                "{n} of these users are individuals.",
+                accounts.nindividuals
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "{n} of these users is an organization.",
+                "{n} of these users are organizations.",
+                accounts.norganizations
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "There is also {n} team.",
+                "There are also {n} teams.",
+                accounts.nteams
+            ) }}
+        </li>
+    </ul>
 
     % if last_payday
     <p>
@@ -65,23 +92,31 @@ last_payday = db.one("SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1")
             n=last_payday.nactive,
             timespan_ago=to_age(last_payday.ts_start),
             money_amount=last_payday.transfer_volume.fuzzy_sum(currency),
-        ) }}<br />
-        {{ ngettext(
-            "{n} participant gave money.",
-            "{n} participants gave money.",
-            last_payday.ntippers
-        ) }}<br />
-        {{ ngettext(
-            "{n} participant received money.",
-            "{n} participants received money.",
-            last_payday.ntippees
-        ) }}<br />
-        {{ ngettext(
-            "{n} participant was both a donor and a recipient.",
-            "{n} participants were both donors and recipients.",
-            last_payday.ntippers + last_payday.ntippees - last_payday.nactive
         ) }}
     </p>
+    <ul>
+        <li>
+            {{ ngettext(
+                "{n} participant gave money.",
+                "{n} participants gave money.",
+                last_payday.ntippers
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "{n} participant received money.",
+                "{n} participants received money.",
+                last_payday.ntippees
+            ) }}
+        </li>
+        <li>
+            {{ ngettext(
+                "{n} participant was both a donor and a recipient.",
+                "{n} participants were both donors and recipients.",
+                last_payday.ntippers + last_payday.ntippees - last_payday.nactive
+            ) }}
+        </li>
+    </ul>
     % endif
 
     <p>{{ ngettext(
