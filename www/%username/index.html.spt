@@ -211,7 +211,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if n_public_patrons|default(0)
     <h3>{{ _("Patrons") }}
         &nbsp;
-        <a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download-csv', _("Export as CSV")) }}</a>
+        <a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download-csv', _("Export public patrons' list as CSV")) }}</a>
     </h3>
 
     <p>{{ ngettext(
@@ -253,7 +253,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if n_public_donees
     <h3>{{ _("Donees") }}
         &nbsp;
-        <a href="{{ participant.path('giving/public.csv') }}">{{ icon('download-csv', _("Export as CSV")) }}</a>
+        <a href="{{ participant.path('giving/public.csv') }}">{{ icon('download-csv', _("Export donees' list as CSV")) }}</a>
     </h3>
 
     <p>{{ ngettext(
