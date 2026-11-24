@@ -56,6 +56,28 @@ def _init_session():
     return session
 
 
+def _request(method, url, **kwargs):
+    # PayPal requests are retried when they fail to return JSON data,
+    # regardless of the method and the response status code, as
+    # requested in the review of PR 2732.
+    for attempt in range(3):
+        try:
+            response = _init_session().request(method, url, **kwargs)
+        except requests.RequestException:
+            if attempt == 2:
+                raise
+            sleep(0.5 * (attempt + 1))
+            continue
+        try:
+            response.json()
+        except ValueError:
+            if attempt == 2:
+                return response
+            sleep(0.5 * (attempt + 1))
+            continue
+        return response
+
+
 # Version 2
 # =========
 
@@ -164,7 +186,7 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
     headers = {
         'PayPal-Request-Id': 'payin_%i' % payin.id
     }
-    response = _init_session().post(url, json=data, headers=headers)
+    response = _request('POST', url, json=data, headers=headers)
     if response.status_code not in (200, 201):
         error = _extract_error_message(response)
         return abort_payin(db, payin, error)
@@ -196,7 +218,7 @@ def capture_order(db, payin):
         url = 'https://api.%s/v2/checkout/orders/%s' % (
             website.app_conf.paypal_domain, payin.remote_id
         )
-        response = _init_session().get(url)
+        response = _request('GET', url)
         if response.status_code != 200:
             raise PaymentError('PayPal')
         order = response.json()
@@ -219,7 +241,7 @@ def capture_order(db, payin):
         'PayPal-Request-Id': 'capture_order_%i' % payin.id,
         'Prefer': 'return=representation',
     }
-    response = _init_session().post(url, json={}, headers=headers)
+    response = _request('POST', url, json={}, headers=headers)
     if response.status_code not in (200, 201):
         error = _extract_error_message(response)
         return abort_payin(db, payin, error)
@@ -302,7 +324,7 @@ def sync_order(db, payin):
     url = 'https://api.%s/v2/checkout/orders/%s' % (
         website.app_conf.paypal_domain, payin.remote_id
     )
-    response = _init_session().get(url)
+    response = _request('GET', url)
     if response.status_code != 200:
         if payin.status == 'failed':
             return payin
