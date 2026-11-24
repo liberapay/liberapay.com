@@ -12,6 +12,7 @@ from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping, Prohibite
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.cron import execute_reviewed_payins
+from liberapay.payin import paypal
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import settle_charge_and_transfers, try_other_destinations
@@ -659,6 +660,50 @@ class TestPayins(Harness):
 
         r = self.client.GxT(stripe_path, auth_as=self.donor)
         assert r.code == 400, str(r)
+
+
+class FakePayPalResponse:
+
+    def __init__(self, payload=None):
+        self.payload = payload
+
+    def json(self):
+        if self.payload is None:
+            raise ValueError("not JSON")
+        return self.payload
+
+
+class TestPayPalRequestRetry:
+
+    def run_request(self, side_effect):
+        fake_session = MagicMock()
+        fake_session.request.side_effect = side_effect
+        with patch.object(paypal, '_init_session', return_value=fake_session), \
+                patch.object(paypal, 'sleep', lambda seconds: None):
+            result = paypal._request('GET', 'https://example.com/order')
+        return fake_session, result
+
+    def test_retries_when_response_is_not_json(self):
+        good = FakePayPalResponse({'status': 'COMPLETED'})
+        fake_session, result = self.run_request([FakePayPalResponse(), good])
+        assert result is good
+        assert fake_session.request.call_count == 2
+
+    def test_retries_when_request_raises(self):
+        good = FakePayPalResponse({'status': 'COMPLETED'})
+        fake_session, result = self.run_request([
+            paypal.requests.ConnectionError("boom"), good,
+        ])
+        assert result is good
+        assert fake_session.request.call_count == 2
+
+    def test_returns_last_response_after_three_non_json_attempts(self):
+        last = FakePayPalResponse()
+        fake_session, result = self.run_request([
+            FakePayPalResponse(), FakePayPalResponse(), last,
+        ])
+        assert result is last
+        assert fake_session.request.call_count == 3
 
 
 class TestPayinsPayPal(Harness):
