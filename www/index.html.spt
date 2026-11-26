@@ -16,16 +16,6 @@ platforms_with_repos = [p.display_name for p in website.platforms.hasattr('api_r
 if not website.db:
     response.redirect('/about/')
 
-sponsors = website.db.all("""
-    SELECT username, giving, avatar_url
-      FROM ( SELECT *
-               FROM sponsors
-           ORDER BY convert(giving, 'EUR') * random()::numeric DESC
-              LIMIT 10 ) foo
-  ORDER BY convert(giving, 'EUR') DESC
-""", max_age=300)
-nsponsors = website.db.one("SELECT count(*) FROM sponsors", max_age=300)
-
 recent = website.db.one("""
     WITH _users AS (
              SELECT join_time
@@ -325,39 +315,6 @@ recent = website.db.one("""
                 ) }}</dd>
             </div>
         </dl>
-    </div>
-
-    <div class="section">
-        <h2>{{ _("Sponsors") }}</h2>
-        <p>{{ _(
-            "Donations from businesses and nonprofits are welcome on Liberapay. If "
-            "you have any questions, don't hesitate to {0}contact us{1}.",
-            '<a href="/about/contact">'|safe, '</a>'|safe
-        ) }}</p>
-        % if sponsors
-            <p>{{ ngettext(
-                "There is currently {n} sponsor on the platform, this section is our way of thanking them.",
-                "There are currently {n} sponsors on the platform, this section is our way of thanking them.",
-                nsponsors
-            ) }} {{ icon('smile') }}
-            % if nsponsors > len(sponsors)
-                {{ _("The list below is rotated pseudorandomly.") }}
-            % endif
-            </p>
-            % for p in sponsors
-                <div class="mini-user">
-                    <a href="/{{ p.username }}/">
-                        {{ avatar_img(p) }}
-                        <div class="name">{{ p.username }}</div>
-                    </a>
-                    <div class="amount">{{ _(
-                        "{money_amount}{small}/week{end_small}",
-                        money_amount=p.giving,
-                        small='<small>'|safe, end_small='</small>'|safe
-                    ) }}</div>
-                </div>
-            % endfor
-        % endif
     </div>
 
     <div class="section text-center">
